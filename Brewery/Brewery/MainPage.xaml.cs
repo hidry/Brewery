@@ -25,6 +25,15 @@ namespace Brewery
         public MainPage()
         {
             this.InitializeComponent();
+            RefreshDateTime(null, null);
+            var timer = new DispatcherTimer() { Interval = new TimeSpan(0,0,1) };
+            timer.Tick += RefreshDateTime;
+            timer.Start();
+        }
+
+        private void RefreshDateTime(object sender, object e)
+        {
+            DateTime.Text = System.DateTime.Now.ToString();
         }
     }
 }
