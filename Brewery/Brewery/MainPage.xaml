@@ -18,7 +18,8 @@
         </RelativePanel>
         <RelativePanel Name="ButtonRelativePanel" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.Below="TemperatureRelativePanel">
             <HyperlinkButton Name="MixerHyperlinkButton" Click="MixerHyperlinkButton_Click">Rührwerk</HyperlinkButton>
-            <TextBlock Name="MixerTextBlock" RelativePanel.RightOf="MixerHyperlinkButton" RelativePanel.AlignVerticalCenterWith="MixerHyperlinkButton" Margin="10,0,0,00">Aus</TextBlock>
+            <TextBlock Name="MixerTextBlock" RelativePanel.RightOf="MixerHyperlinkButton" RelativePanel.AlignVerticalCenterWith="MixerHyperlinkButton" Margin="10,0,0,0">Aus</TextBlock>
+            <ProgressRing Name="MixerProgressRing" IsActive="False" RelativePanel.RightOf="MixerTextBlock" RelativePanel.AlignVerticalCenterWith="MixerHyperlinkButton" Margin="10,0,0,0" />
         </RelativePanel>
     </RelativePanel>
 </Page>
