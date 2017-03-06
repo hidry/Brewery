@@ -6,20 +6,21 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
-
+    <Page.DataContext>
+        <Binding Path="Main" Source="{StaticResource ViewModelLocator}" />
+    </Page.DataContext>
     <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <RelativePanel Name="DateTimeRelativePanel" RelativePanel.AlignHorizontalCenterWithPanel="True">
-            <TextBlock Name="DateTimeHeaderTextBlock" Margin="10" Text="Uhrzeit"/>
-            <TextBlock Name="DateTimeTextBlock" RelativePanel.RightOf="DateTimeHeaderTextBlock" Margin="10" Text="???"/>
+            <TextBlock Name="DateTimeHeaderTextBlock" x:Uid="DateTimeHeaderTextBlock" Margin="10"/>
+            <TextBlock Name="DateTimeTextBlock" RelativePanel.RightOf="DateTimeHeaderTextBlock" Margin="10" Text="{Binding DateTime}"/>
         </RelativePanel>
         <RelativePanel Name="TemperatureRelativePanel" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.Below="DateTimeRelativePanel">
-            <TextBlock Name="TemperatureHeaderTextBlock" Margin="10" Text="Temperatur"/>
-            <TextBlock Name="TemperatureTextBlock" RelativePanel.RightOf="TemperatureHeaderTextBlock" Margin="10" Text="???"/>
+            <TextBlock Name="TemperatureHeaderTextBlock" x:Uid="TemperatureHeaderTextBlock" Margin="10"/>
+            <TextBlock Name="TemperatureTextBlock" RelativePanel.RightOf="TemperatureHeaderTextBlock" Margin="10" Text="{Binding Temperature}"/>
         </RelativePanel>
         <RelativePanel Name="ButtonRelativePanel" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.Below="TemperatureRelativePanel">
-            <HyperlinkButton Name="MixerHyperlinkButton" Click="MixerHyperlinkButton_Click">Rührwerk</HyperlinkButton>
-            <TextBlock Name="MixerTextBlock" RelativePanel.RightOf="MixerHyperlinkButton" RelativePanel.AlignVerticalCenterWith="MixerHyperlinkButton" Margin="10,0,0,0">Aus</TextBlock>
-            <ProgressRing Name="MixerProgressRing" IsActive="False" RelativePanel.RightOf="MixerTextBlock" RelativePanel.AlignVerticalCenterWith="MixerHyperlinkButton" Margin="10,0,0,0" />
+            <Button Name="MixerButton" x:Uid="MixerButton" Command="{Binding ToggleMixerCommand}"></Button>
+            <TextBlock Name="MixerTextBlock" RelativePanel.RightOf="MixerButton" RelativePanel.AlignVerticalCenterWith="MixerButton" Margin="10,0,0,0" Text="{Binding MixerStatus}"></TextBlock>
         </RelativePanel>
     </RelativePanel>
 </Page>
