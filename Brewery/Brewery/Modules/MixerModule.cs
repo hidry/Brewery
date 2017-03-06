@@ -33,7 +33,6 @@ namespace Brewery.Modules
 
         public MixerModel ToggleStatus()
         {
-            var model = new MixerModel();
             if (_running)
             {
                 _gpio12?.Write(GpioPinValue.Low);
@@ -41,10 +40,9 @@ namespace Brewery.Modules
             else
             {
                 _gpio12?.Write(GpioPinValue.High);
-                model.Status = true;
             }
             _running = !_running;
-            return new MixerModel();
+            return new MixerModel() { Status = _running };
         }
     }
 }

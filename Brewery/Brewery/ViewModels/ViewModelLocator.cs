@@ -23,7 +23,7 @@ namespace Brewery.ViewModels
         {
             SimpleIoc.Default.Register<IDateTimeModule, DateTimeModule>();
             SimpleIoc.Default.Register<IMixerModule, MixerModule>();
-            SimpleIoc.Default.Register<ITemperatureModule, ITemperatureModule>();
+            SimpleIoc.Default.Register<ITemperatureModule, TemperatureModule>();
         }
 
         public MainViewModel Main => ServiceLocator.Current.GetInstance<MainViewModel>();

@@ -10,14 +10,13 @@ namespace Brewery.Modules
     class TemperatureModule : ITemperatureModule
     {
         private IEnumerable<DS18B20> _devices;
+        private OneWireDeviceHandler _handler;
 
         public TemperatureModule()
         {
-            using (var handler = new OneWireDeviceHandler(false, false))
-            {
-                _devices = handler.OneWireDevices.GetDevices<DS18B20>();
-            }
-                
+            _handler = new OneWireDeviceHandler(false, false); //todo: dispose
+            _devices = _handler.OneWireDevices.GetDevices<DS18B20>();
+                            
             if (_devices == null || !_devices.Any())
             {
                 Debug.WriteLine("No temperature sensor (DS18B20) available.");
