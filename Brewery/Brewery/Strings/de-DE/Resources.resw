@@ -123,7 +123,16 @@
   <data name="MixerButton.Content" xml:space="preserve">
     <value>Rührwerk</value>
   </data>
-  <data name="TemperatureHeaderTextBlock.Text" xml:space="preserve">
-    <value>Temperatur</value>
+  <data name="TemperatureConfiguredDownButton.Content" xml:space="preserve">
+    <value>-</value>
+  </data>
+  <data name="TemperatureConfiguredHeaderTextBlock.Text" xml:space="preserve">
+    <value>Temperatur soll</value>
+  </data>
+  <data name="TemperatureConfiguredUpButton.Content" xml:space="preserve">
+    <value>+</value>
+  </data>
+  <data name="TemperatureCurrentHeaderTextBlock.Text" xml:space="preserve">
+    <value>Temperatur aktuell</value>
   </data>
 </root>

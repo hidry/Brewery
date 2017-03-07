@@ -2,7 +2,7 @@
 
 namespace Brewery.Core.Contracts
 {
-    interface IMixerModule
+    public interface IMixerModule
     {
         MixerModel ToggleStatus();
     }

@@ -3,9 +3,9 @@ using Windows.Devices.Gpio;
 using Brewery.Core.Contracts;
 using Brewery.Core.Models;
 
-namespace Brewery.Modules
+namespace Brewery.RaspberryPi.Modules
 {
-    class MixerModule : IMixerModule
+    public class MixerModule : IMixerModule
     {
         private GpioController _gpioController;
         private GpioPin _gpio12; //pin 32

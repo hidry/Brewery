@@ -1,5 +1,5 @@
 ﻿using Brewery.Core.Contracts;
-using Brewery.Modules;
+using Brewery.RaspberryPi.Modules;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
 

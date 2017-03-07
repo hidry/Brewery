@@ -2,7 +2,7 @@
 
 namespace Brewery.Core.Contracts
 {
-    interface ITemperatureModule
+    public interface ITemperatureModule
     {
         TemperatureModel GetCurrenTemperature();
     }

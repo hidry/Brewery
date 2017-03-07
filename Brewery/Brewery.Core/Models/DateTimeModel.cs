@@ -2,7 +2,7 @@
 
 namespace Brewery.Core.Models
 {
-    class DateTimeModel
+    public class DateTimeModel
     {
         public DateTime DateTime { get; set; }
     }

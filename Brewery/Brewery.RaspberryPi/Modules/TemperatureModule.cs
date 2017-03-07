@@ -5,9 +5,9 @@ using Brewery.Core.Contracts;
 using Brewery.Core.Models;
 using Rinsen.IoT.OneWire;
 
-namespace Brewery.Modules
+namespace Brewery.RaspberryPi.Modules
 {
-    class TemperatureModule : ITemperatureModule
+    public class TemperatureModule : ITemperatureModule
     {
         private IEnumerable<DS18B20> _devices;
         private OneWireDeviceHandler _handler;

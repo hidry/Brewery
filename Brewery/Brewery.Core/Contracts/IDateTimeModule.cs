@@ -2,7 +2,7 @@
 
 namespace Brewery.Core.Contracts
 {
-    interface IDateTimeModule
+    public interface IDateTimeModule
     {
         DateTimeModel GetCurrentDateTime();
     }

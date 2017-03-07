@@ -14,11 +14,17 @@
             <TextBlock Name="DateTimeHeaderTextBlock" x:Uid="DateTimeHeaderTextBlock" Margin="10"/>
             <TextBlock Name="DateTimeTextBlock" RelativePanel.RightOf="DateTimeHeaderTextBlock" Margin="10" Text="{Binding DateTime}"/>
         </RelativePanel>
-        <RelativePanel Name="TemperatureRelativePanel" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.Below="DateTimeRelativePanel">
-            <TextBlock Name="TemperatureHeaderTextBlock" x:Uid="TemperatureHeaderTextBlock" Margin="10"/>
-            <TextBlock Name="TemperatureTextBlock" RelativePanel.RightOf="TemperatureHeaderTextBlock" Margin="10" Text="{Binding Temperature}"/>
+        <RelativePanel Name="TemperatureConfiguredRelativePanel" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.Below="DateTimeRelativePanel">
+            <TextBlock Name="TemperatureConfiguredHeaderTextBlock" x:Uid="TemperatureConfiguredHeaderTextBlock" Margin="10"/>
+            <TextBlock Name="TemperatureConfiguredTextBlock" RelativePanel.RightOf="TemperatureConfiguredHeaderTextBlock" Margin="10" Text="{Binding TemperatureConfigured}"/>
+            <Button Name="TemperatureConfiguredDownButton" x:Uid="TemperatureConfiguredDownButton" Command="{Binding TemperatureDownCommand}" RelativePanel.RightOf="TemperatureConfiguredTextBlock" Margin="10"></Button>
+            <Button Name="TemperatureConfiguredUpButton" x:Uid="TemperatureConfiguredUpButton" Command="{Binding TemperatureUpCommand}" RelativePanel.RightOf="TemperatureConfiguredDownButton" Margin="10"></Button>
         </RelativePanel>
-        <RelativePanel Name="ButtonRelativePanel" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.Below="TemperatureRelativePanel">
+        <RelativePanel Name="TemperatureCurrentRelativePanel" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.Below="TemperatureConfiguredRelativePanel">
+            <TextBlock Name="TemperatureCurrentHeaderTextBlock" x:Uid="TemperatureCurrentHeaderTextBlock" Margin="10"/>
+            <TextBlock Name="TemperatureCurrentTextBlock" RelativePanel.RightOf="TemperatureCurrentHeaderTextBlock" Margin="10" Text="{Binding TemperatureCurrent}"/>
+        </RelativePanel>
+        <RelativePanel Name="ButtonRelativePanel" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.Below="TemperatureCurrentRelativePanel">
             <Button Name="MixerButton" x:Uid="MixerButton" Command="{Binding ToggleMixerCommand}"></Button>
             <TextBlock Name="MixerTextBlock" RelativePanel.RightOf="MixerButton" RelativePanel.AlignVerticalCenterWith="MixerButton" Margin="10,0,0,0" Text="{Binding MixerStatus}"></TextBlock>
         </RelativePanel>

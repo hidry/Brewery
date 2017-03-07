@@ -1,6 +1,6 @@
 ﻿namespace Brewery.Core.Models
 {
-    class TemperatureModel
+    public class TemperatureModel
     {
         public double Temperature { get; set; }
     }

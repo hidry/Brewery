@@ -2,9 +2,9 @@
 using Brewery.Core.Contracts;
 using Brewery.Core.Models;
 
-namespace Brewery.Modules
+namespace Brewery.RaspberryPi.Modules
 {
-    class DateTimeModule : IDateTimeModule
+    public class DateTimeModule : IDateTimeModule
     {
         public DateTimeModel GetCurrentDateTime()
         {

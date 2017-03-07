@@ -1,6 +1,6 @@
 ﻿namespace Brewery.Core.Models
 {
-    class MixerModel
+    public class MixerModel
     {
         public bool Status { get; set; }
     }
