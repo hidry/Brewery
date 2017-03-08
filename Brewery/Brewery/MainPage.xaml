@@ -9,24 +9,69 @@
     <Page.DataContext>
         <Binding Path="Main" Source="{StaticResource ViewModelLocator}" />
     </Page.DataContext>
-    <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        <RelativePanel Name="DateTimeRelativePanel" RelativePanel.AlignHorizontalCenterWithPanel="True">
-            <TextBlock Name="DateTimeHeaderTextBlock" x:Uid="DateTimeHeaderTextBlock" Margin="10"/>
-            <TextBlock Name="DateTimeTextBlock" RelativePanel.RightOf="DateTimeHeaderTextBlock" Margin="10" Text="{Binding DateTime}"/>
-        </RelativePanel>
-        <RelativePanel Name="TemperatureConfiguredRelativePanel" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.Below="DateTimeRelativePanel">
-            <TextBlock Name="TemperatureConfiguredHeaderTextBlock" x:Uid="TemperatureConfiguredHeaderTextBlock" Margin="10"/>
-            <TextBlock Name="TemperatureConfiguredTextBlock" RelativePanel.RightOf="TemperatureConfiguredHeaderTextBlock" Margin="10" Text="{Binding TemperatureConfigured}"/>
-            <Button Name="TemperatureConfiguredDownButton" x:Uid="TemperatureConfiguredDownButton" Command="{Binding TemperatureDownCommand}" RelativePanel.RightOf="TemperatureConfiguredTextBlock" Margin="10"></Button>
-            <Button Name="TemperatureConfiguredUpButton" x:Uid="TemperatureConfiguredUpButton" Command="{Binding TemperatureUpCommand}" RelativePanel.RightOf="TemperatureConfiguredDownButton" Margin="10"></Button>
-        </RelativePanel>
-        <RelativePanel Name="TemperatureCurrentRelativePanel" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.Below="TemperatureConfiguredRelativePanel">
-            <TextBlock Name="TemperatureCurrentHeaderTextBlock" x:Uid="TemperatureCurrentHeaderTextBlock" Margin="10"/>
-            <TextBlock Name="TemperatureCurrentTextBlock" RelativePanel.RightOf="TemperatureCurrentHeaderTextBlock" Margin="10" Text="{Binding TemperatureCurrent}"/>
-        </RelativePanel>
-        <RelativePanel Name="ButtonRelativePanel" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.Below="TemperatureCurrentRelativePanel">
-            <Button Name="MixerButton" x:Uid="MixerButton" Command="{Binding ToggleMixerCommand}"></Button>
-            <TextBlock Name="MixerTextBlock" RelativePanel.RightOf="MixerButton" RelativePanel.AlignVerticalCenterWith="MixerButton" Margin="10,0,0,0" Text="{Binding MixerStatus}"></TextBlock>
-        </RelativePanel>
-    </RelativePanel>
+    <Page.Resources>
+        <Style TargetType="Button">
+            <Setter Property="Margin" Value="5"></Setter>
+            <Setter Property="VerticalAlignment" Value="Center"></Setter>
+            <Setter Property="Background" Value="Transparent"></Setter>
+        </Style>
+        <Style TargetType="TextBlock">
+            <Setter Property="Margin" Value="5"></Setter>
+            <Setter Property="VerticalAlignment" Value="Center"></Setter>
+        </Style>
+        <Style TargetType="Image">
+            <Setter Property="Width" Value="20"></Setter>
+            <Setter Property="Height" Value="20"></Setter>
+        </Style>
+    </Page.Resources>
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" VerticalAlignment="Top" HorizontalAlignment="Center">
+        
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions >
+            <ColumnDefinition Width="300" />
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="100"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" x:Uid="DateTimeHeaderTextBlock"/>
+        <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding DateTime}"/>
+
+        <TextBlock Grid.Row="1" Grid.Column="0" x:Uid="TemperatureCurrentHeaderTextBlock"/>
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding TemperatureCurrent}"/>
+
+        <TextBlock Grid.Row="2" Grid.Column="0" x:Uid="TemperatureControlHeaderTextBlock"/>
+        <Button Grid.Row="2" Grid.Column="2" Command="{Binding ToggleTemperatureControlCommand}">
+            <Image Source="Assets/power-button.png"/>
+        </Button>
+        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding TemperatureControlStatus}"/>
+        
+        <TextBlock Grid.Row="3" Grid.Column="0" x:Uid="TemperatureConfiguredHeaderTextBlock" Visibility="{Binding TemperatureControlChildElementsVisibility}"/>
+        <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding TemperatureConfigured}" Visibility="{Binding TemperatureControlChildElementsVisibility}"/>
+        <Button Grid.Row="3" Grid.Column="2" Command="{Binding TemperatureDownCommand}" Visibility="{Binding TemperatureControlChildElementsVisibility}">
+            <Image Source="Assets/icon-arrow-down.png"/>
+        </Button>
+        <Button Grid.Row="3" Grid.Column="3" Command="{Binding TemperatureUpCommand}" Visibility="{Binding TemperatureControlChildElementsVisibility}">
+            <Image Source="Assets/icon-arrow-up.png"/>
+        </Button>
+
+        <TextBlock Grid.Row="4" Grid.Column="0" x:Uid="BoilingPlateHeaderTextBlock" Visibility="{Binding TemperatureControlChildElementsVisibility}"/>
+        <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding BoilingPlateStatus}" Visibility="{Binding TemperatureControlChildElementsVisibility}"/>
+      
+        <TextBlock Grid.Row="5" Grid.Column="0" x:Uid="MixerHeaderTextBlock"/>
+        <Button Grid.Row="5" Grid.Column="2" Command="{Binding ToggleMixerCommand}">
+            <Image Source="Assets/power-button.png"/>
+        </Button>
+        <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding MixerStatus}"/>
+        
+    </Grid>
+    
 </Page>

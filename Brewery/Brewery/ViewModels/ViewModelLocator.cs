@@ -24,6 +24,8 @@ namespace Brewery.ViewModels
             SimpleIoc.Default.Register<IDateTimeModule, DateTimeModule>();
             SimpleIoc.Default.Register<IMixerModule, MixerModule>();
             SimpleIoc.Default.Register<ITemperatureModule, TemperatureModule>();
+            SimpleIoc.Default.Register<IBoilingPlateModule, BoilingPlateModule>();
+            SimpleIoc.Default.Register<ITemperatureControlModule, TemperatureControlModule>();
         }
 
         public MainViewModel Main => ServiceLocator.Current.GetInstance<MainViewModel>();

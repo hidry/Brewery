@@ -107,8 +107,10 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Modules\BoilingPlateModule.cs" />
     <Compile Include="Modules\DateTimeModule.cs" />
     <Compile Include="Modules\MixerModule.cs" />
+    <Compile Include="Modules\TemperatureControlModule.cs" />
     <Compile Include="Modules\TemperatureModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Brewery.RaspberryPi.Mocks.rd.xml" />

@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Brewery.Core.Contracts;
 using Brewery.Core.Models;
@@ -16,11 +15,6 @@ namespace Brewery.RaspberryPi.Modules
         {
             _handler = new OneWireDeviceHandler(false, false); //todo: dispose
             _devices = _handler.OneWireDevices.GetDevices<DS18B20>();
-                            
-            if (_devices == null || !_devices.Any())
-            {
-                Debug.WriteLine("No temperature sensor (DS18B20) available.");
-            }
         }
 
         public TemperatureModel GetCurrenTemperature()
