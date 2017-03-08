@@ -17,8 +17,8 @@ namespace Brewery.ViewModels
         private readonly IMixerModule _mixerModule;
         private readonly ITemperatureModule _temperatureModule;
         private readonly ITemperatureControlModule _temperatureControlModule;
-        private DateTime _dateTime;
-        public DateTime DateTime { get { return _dateTime; } set { Set(() => DateTime, ref _dateTime, value); } }
+        private string _dateTime;
+        public string DateTime { get { return _dateTime; } set { Set(() => DateTime, ref _dateTime, value); } }
 
         private double _temperatureCurrent;
         public double TemperatureCurrent { get {return _temperatureCurrent;} set
@@ -87,7 +87,7 @@ namespace Brewery.ViewModels
         private void InitializeDateTimeTimer()
         {
             var timer = new DispatcherTimer() { Interval = new TimeSpan(0, 0, 1) };
-            timer.Tick += (sender, o) => DateTime = _dateTimeModule.GetCurrentDateTime().DateTime;
+            timer.Tick += (sender, o) => DateTime = _dateTimeModule.GetCurrentDateTime().DateTime.ToString("H:mm:ss");
             timer.Start();
         }
 
