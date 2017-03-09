@@ -10,8 +10,6 @@ namespace Brewery.Logic
     {
         private const string On = "An"; //todo: Resource
         private const string Off = "Aus"; //todo: Resource
-        private const string Visible = "Visible";
-        private const string Collapsed = "Collapsed";
         private const double TemperatureSteps = 1.0;
         private readonly IDateTimeModule _dateTimeModule;
         private readonly IMixerModule _mixerModule;
@@ -67,17 +65,6 @@ namespace Brewery.Logic
             }
         }
 
-        private string _temperatureControlChildElementsVisibility;
-        public string TemperatureControlChildElementsVisibility
-        {
-            get { return _temperatureControlChildElementsVisibility; }
-            set
-            {
-                Set(() => TemperatureControlChildElementsVisibility, ref _temperatureControlChildElementsVisibility,
-                    value);
-            }
-        }
-
         public MainViewModel(IDateTimeModule dateTimeModule, IMixerModule mixerModule, ITemperatureModule temperatureModule, ITemperatureControlModule temperatureControlModule)
         {
             _dateTimeModule = dateTimeModule;
@@ -87,7 +74,6 @@ namespace Brewery.Logic
             InitializeDateTimeTimer();
             InitializeTemperatureTimer();
             TemperatureConfigured = 50.0;
-            TemperatureControlChildElementsVisibility = Collapsed;
             TemperatureControl = false;
             BoilingPlateStatus = Off;
             InitializeTemperatureControlTimer();
@@ -149,12 +135,10 @@ namespace Brewery.Logic
             if (TemperatureControlStatus == Off)
             {
                 TemperatureControl = true;
-                TemperatureControlChildElementsVisibility = Visible;
             }
             else
             {
                 TemperatureControl = false;
-                TemperatureControlChildElementsVisibility = Collapsed;
             }
         }
     }

@@ -53,18 +53,18 @@
             <Image Source="Assets/power-button.png"/>
         </Button>
         <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding TemperatureControlStatus}"/>
-        
-        <TextBlock Grid.Row="3" Grid.Column="0" x:Uid="TemperatureConfiguredHeaderTextBlock" Visibility="{Binding TemperatureControlChildElementsVisibility}"/>
-        <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding TemperatureConfigured}" Visibility="{Binding TemperatureControlChildElementsVisibility}"/>
-        <Button Grid.Row="3" Grid.Column="2" Command="{Binding TemperatureDownCommand}" Visibility="{Binding TemperatureControlChildElementsVisibility}">
+
+        <TextBlock Grid.Row="3" Grid.Column="0" x:Uid="TemperatureConfiguredHeaderTextBlock" Visibility="{Binding TemperatureControl}"/>
+        <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding TemperatureConfigured}" Visibility="{Binding TemperatureControl}"/>
+        <Button Grid.Row="3" Grid.Column="2" Command="{Binding TemperatureDownCommand}" Visibility="{Binding TemperatureControl}">
             <Image Source="Assets/icon-arrow-down.png"/>
         </Button>
-        <Button Grid.Row="3" Grid.Column="3" Command="{Binding TemperatureUpCommand}" Visibility="{Binding TemperatureControlChildElementsVisibility}">
+        <Button Grid.Row="3" Grid.Column="3" Command="{Binding TemperatureUpCommand}" Visibility="{Binding TemperatureControl}">
             <Image Source="Assets/icon-arrow-up.png"/>
         </Button>
 
-        <TextBlock Grid.Row="4" Grid.Column="0" x:Uid="BoilingPlateHeaderTextBlock" Visibility="{Binding TemperatureControlChildElementsVisibility}"/>
-        <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding BoilingPlateStatus}" Visibility="{Binding TemperatureControlChildElementsVisibility}"/>
+        <TextBlock Grid.Row="4" Grid.Column="0" x:Uid="BoilingPlateHeaderTextBlock" Visibility="{Binding TemperatureControl}"/>
+        <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding BoilingPlateStatus}" Visibility="{Binding TemperatureControl}"/>
       
         <TextBlock Grid.Row="5" Grid.Column="0" x:Uid="MixerHeaderTextBlock"/>
         <Button Grid.Row="5" Grid.Column="2" Command="{Binding ToggleMixerCommand}">
