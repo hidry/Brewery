@@ -8,15 +8,14 @@ namespace Brewery.Logic
 {
     public class MainViewModel : ViewModelBase
     {
-        private const string On = "An"; //todo: Resource
-        private const string Off = "Aus"; //todo: Resource
         private const double TemperatureSteps = 1.0;
         private readonly IDateTimeModule _dateTimeModule;
         private readonly IMixerModule _mixerModule;
         private readonly ITemperatureModule _temperatureModule;
         private readonly ITemperatureControlModule _temperatureControlModule;
-        private string _dateTime;
-        public string DateTime { get { return _dateTime; } set { Set(() => DateTime, ref _dateTime, value); } }
+
+        private DateTime _dateTime;
+        public DateTime DateTime { get { return _dateTime; } private set { Set(() => DateTime, ref _dateTime, value); } }
 
         private double _temperatureCurrent;
         public double TemperatureCurrent
@@ -38,8 +37,8 @@ namespace Brewery.Logic
             }
         }
 
-        private string _mixerStatus;
-        public string MixerStatus { get { return _mixerStatus; } set { Set(() => MixerStatus, ref _mixerStatus, value); } }
+        private bool _mixerStatus;
+        public bool MixerStatus { get { return _mixerStatus; } set { Set(() => MixerStatus, ref _mixerStatus, value); } }
 
         private bool _temperatureControl;
         public bool TemperatureControl
@@ -48,20 +47,16 @@ namespace Brewery.Logic
             set
             {
                 Set(() => TemperatureControl, ref _temperatureControl, value);
-                Set(() => TemperatureControlStatus, ref _temperatureControlStatus, value ? On : Off);
             }
         }
 
-        private string _temperatureControlStatus;
-        public string TemperatureControlStatus { get { return _temperatureControlStatus; } set { Set(() => TemperatureControlStatus, ref _temperatureControlStatus, value); } }
-
-        private string _boilingPlateStatus;
-        public string BoilingPlateStatus
+        private bool _boilingPlate;
+        public bool BoilingPlate
         {
-            get { return _boilingPlateStatus; }
+            get { return _boilingPlate; }
             set
             {
-                Set(() => BoilingPlateStatus, ref _boilingPlateStatus, value);
+                Set(() => BoilingPlate, ref _boilingPlate, value);
             }
         }
 
@@ -75,9 +70,8 @@ namespace Brewery.Logic
             InitializeTemperatureTimer();
             TemperatureConfigured = 50.0;
             TemperatureControl = false;
-            BoilingPlateStatus = Off;
             InitializeTemperatureControlTimer();
-            MixerStatus = Off;
+            MixerStatus = false;
         }
 
         private void InitializeTemperatureTimer()
@@ -90,7 +84,7 @@ namespace Brewery.Logic
         private void InitializeDateTimeTimer()
         {
             var timer = new DispatcherTimer() { Interval = new TimeSpan(0, 0, 1) };
-            timer.Tick += (sender, o) => DateTime = _dateTimeModule.GetCurrentDateTime().DateTime.ToString("H:mm:ss");
+            timer.Tick += (sender, o) => DateTime = _dateTimeModule.GetCurrentDateTime().DateTime;
             timer.Start();
         }
 
@@ -99,17 +93,15 @@ namespace Brewery.Logic
             var timer = new DispatcherTimer() { Interval = new TimeSpan(0, 0, 1) };
             timer.Tick +=
                 (sender, o) =>
-                    BoilingPlateStatus =
+                    BoilingPlate =
                         _temperatureControlModule.ControlTemperature(TemperatureControl, TemperatureConfigured,
-                            TemperatureCurrent).Heating
-                            ? On
-                            : Off;
+                            TemperatureCurrent).Heating;
             timer.Start();
         }
 
         private void ToggleMixer()
         {
-            MixerStatus = _mixerModule.ToggleStatus().Status ? On : Off;
+            MixerStatus = _mixerModule.ToggleStatus().Status;
         }
 
         public RelayCommand ToggleMixerCommand => new RelayCommand(ToggleMixer);
@@ -132,14 +124,7 @@ namespace Brewery.Logic
 
         private void ToggleTemperatureControl()
         {
-            if (TemperatureControlStatus == Off)
-            {
-                TemperatureControl = true;
-            }
-            else
-            {
-                TemperatureControl = false;
-            }
+            TemperatureControl = !TemperatureControl;
         }
     }
 }

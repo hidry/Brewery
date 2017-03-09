@@ -4,8 +4,11 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:Brewery"
     xmlns:logic="using:Brewery.Logic"
+    xmlns:converter="using:Brewery.Converter"
     RequestedTheme="Light">
     <Application.Resources>
         <logic:ViewModelLocator x:Key="ViewModelLocator"></logic:ViewModelLocator>
+        <converter:DateTimeToTimeConverter x:Key="DateTimeToTimeConverter" ></converter:DateTimeToTimeConverter>
+        <converter:BooleanToOnOffStringConverter x:Key="BooleanToOnOffStringConverter"></converter:BooleanToOnOffStringConverter>
     </Application.Resources>
 </Application>
