@@ -3,9 +3,9 @@ using Brewery.RaspberryPi.Modules;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
 
-namespace Brewery.ViewModels
+namespace Brewery.Logic
 {
-    class ViewModelLocator
+    public class ViewModelLocator
     {
         static ViewModelLocator()
         {

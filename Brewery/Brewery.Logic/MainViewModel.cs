@@ -4,9 +4,9 @@ using Brewery.Core.Contracts;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 
-namespace Brewery.ViewModels
+namespace Brewery.Logic
 {
-    class MainViewModel : ViewModelBase
+    public class MainViewModel : ViewModelBase
     {
         private const string On = "An"; //todo: Resource
         private const string Off = "Aus"; //todo: Resource
@@ -21,40 +21,57 @@ namespace Brewery.ViewModels
         public string DateTime { get { return _dateTime; } set { Set(() => DateTime, ref _dateTime, value); } }
 
         private double _temperatureCurrent;
-        public double TemperatureCurrent { get {return _temperatureCurrent;} set
+        public double TemperatureCurrent
         {
-            Set(() => TemperatureCurrent, ref _temperatureCurrent, value);
-        } }
+            get { return _temperatureCurrent; }
+            set
+            {
+                Set(() => TemperatureCurrent, ref _temperatureCurrent, value);
+            }
+        }
 
         private double _temperatureConfigured;
-        public double TemperatureConfigured { get { return _temperatureConfigured; } set
+        public double TemperatureConfigured
         {
-            Set(() => TemperatureConfigured, ref _temperatureConfigured, value);
-        } }
+            get { return _temperatureConfigured; }
+            set
+            {
+                Set(() => TemperatureConfigured, ref _temperatureConfigured, value);
+            }
+        }
 
         private string _mixerStatus;
-        public string MixerStatus { get{return _mixerStatus;} set { Set(() => MixerStatus, ref _mixerStatus, value); } }
+        public string MixerStatus { get { return _mixerStatus; } set { Set(() => MixerStatus, ref _mixerStatus, value); } }
 
         private bool _temperatureControl;
-        public bool TemperatureControl { get { return _temperatureControl; }
-            set {
+        public bool TemperatureControl
+        {
+            get { return _temperatureControl; }
+            set
+            {
                 Set(() => TemperatureControl, ref _temperatureControl, value);
                 Set(() => TemperatureControlStatus, ref _temperatureControlStatus, value ? On : Off);
-        } }
+            }
+        }
 
         private string _temperatureControlStatus;
         public string TemperatureControlStatus { get { return _temperatureControlStatus; } set { Set(() => TemperatureControlStatus, ref _temperatureControlStatus, value); } }
 
         private string _boilingPlateStatus;
-        public string BoilingPlateStatus { get { return _boilingPlateStatus; } set
+        public string BoilingPlateStatus
         {
-            Set(() => BoilingPlateStatus, ref _boilingPlateStatus, value);
-        } }
+            get { return _boilingPlateStatus; }
+            set
+            {
+                Set(() => BoilingPlateStatus, ref _boilingPlateStatus, value);
+            }
+        }
 
         private string _temperatureControlChildElementsVisibility;
         public string TemperatureControlChildElementsVisibility
         {
-            get { return _temperatureControlChildElementsVisibility; } set
+            get { return _temperatureControlChildElementsVisibility; }
+            set
             {
                 Set(() => TemperatureControlChildElementsVisibility, ref _temperatureControlChildElementsVisibility,
                     value);
@@ -106,7 +123,7 @@ namespace Brewery.ViewModels
 
         private void ToggleMixer()
         {
-            MixerStatus = _mixerModule.ToggleStatus().Status ? On : Off; 
+            MixerStatus = _mixerModule.ToggleStatus().Status ? On : Off;
         }
 
         public RelayCommand ToggleMixerCommand => new RelayCommand(ToggleMixer);
@@ -119,7 +136,7 @@ namespace Brewery.ViewModels
         }
 
         public RelayCommand TemperatureUpCommand => new RelayCommand(TemperatureUp);
-        
+
         private void TemperatureUp()
         {
             TemperatureConfigured += TemperatureSteps;
