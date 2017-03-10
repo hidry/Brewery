@@ -3,6 +3,7 @@ using Windows.UI.Xaml;
 using Brewery.Core.Contracts;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
+using Windows.UI.Xaml.Input;
 
 namespace Brewery.Logic
 {
@@ -126,5 +127,17 @@ namespace Brewery.Logic
         {
             TemperatureControl = !TemperatureControl;
         }
+
+        //public RelayCommand TemperatureDownCommandHolding => new RelayCommand(TemperatureDownHolding);
+
+        //private void TemperatureDownCommandHolding()
+        //{
+
+        //}
+
+        //public void TemperatureDownCommandHolding(object sender, HoldingRoutedEventArgs e)
+        //{
+
+        //}
     }
 }

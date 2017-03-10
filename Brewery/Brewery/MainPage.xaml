@@ -56,12 +56,12 @@
 
         <TextBlock Grid.Row="3" Grid.Column="0" x:Uid="TemperatureConfiguredHeaderTextBlock" Visibility="{x:Bind ViewModel.TemperatureControl, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"/>
         <TextBlock Grid.Row="3" Grid.Column="1" Text="{x:Bind ViewModel.TemperatureConfigured, Converter={StaticResource DoubleToTemperatureStringConverter}, Mode=OneWay}" Visibility="{x:Bind ViewModel.TemperatureControl, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"/>
-        <Button Grid.Row="3" Grid.Column="2" Command="{x:Bind ViewModel.TemperatureDownCommand, Mode=OneWay}" Visibility="{x:Bind ViewModel.TemperatureControl, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
+        <RepeatButton Grid.Row="3" Grid.Column="2" Command="{x:Bind ViewModel.TemperatureDownCommand, Mode=OneWay}" Visibility="{x:Bind ViewModel.TemperatureControl, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
             <Image Source="Assets/icon-arrow-down.png"/>
-        </Button>
-        <Button Grid.Row="3" Grid.Column="3" Command="{x:Bind ViewModel.TemperatureUpCommand, Mode=OneWay}" Visibility="{x:Bind ViewModel.TemperatureControl, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
+        </RepeatButton>
+        <RepeatButton Grid.Row="3" Grid.Column="3" Command="{x:Bind ViewModel.TemperatureUpCommand, Mode=OneWay}" Visibility="{x:Bind ViewModel.TemperatureControl, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
             <Image Source="Assets/icon-arrow-up.png"/>
-        </Button>
+        </RepeatButton>
 
         <TextBlock Grid.Row="4" Grid.Column="0" x:Uid="BoilingPlateHeaderTextBlock" Visibility="{x:Bind ViewModel.TemperatureControl, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"/>
         <TextBlock Grid.Row="4" Grid.Column="1" Text="{x:Bind ViewModel.BoilingPlate, Converter={StaticResource BooleanToOnOffStringConverter}, Mode=OneWay}" Visibility="{x:Bind ViewModel.TemperatureControl, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"/>
