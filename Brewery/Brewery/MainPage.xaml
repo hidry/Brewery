@@ -2,12 +2,9 @@
     x:Class="Brewery.MainPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Brewery"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:animation="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:animation1="using:Windows.UI.Xaml.Controls"
-    xmlns:converter="using:Brewery.Converter"
     mc:Ignorable="d">
     <Page.DataContext>
         <Binding Path="Main" Source="{StaticResource ViewModelLocator}" />
@@ -46,34 +43,34 @@
         </Grid.ColumnDefinitions>
 
         <TextBlock Grid.Row="0" Grid.Column="0" x:Uid="DateTimeHeaderTextBlock"/>
-        <animation1:TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding DateTime, Converter={StaticResource DateTimeToTimeConverter}}"/>
+        <animation1:TextBlock Grid.Row="0" Grid.Column="1" Text="{x:Bind ViewModel.DateTime, Converter={StaticResource DateTimeToTimeConverter}, Mode=OneWay}"/>
 
         <TextBlock Grid.Row="1" Grid.Column="0" x:Uid="TemperatureCurrentHeaderTextBlock"/>
-        <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding TemperatureCurrent}"/>
+        <TextBlock Grid.Row="1" Grid.Column="1" Text="{x:Bind ViewModel.TemperatureCurrent, Converter={StaticResource DoubleToTemperatureStringConverter}, Mode=OneWay}"/>
 
         <TextBlock Grid.Row="2" Grid.Column="0" x:Uid="TemperatureControlHeaderTextBlock"/>
-        <Button Grid.Row="2" Grid.Column="2" Command="{Binding ToggleTemperatureControlCommand}">
+        <Button Grid.Row="2" Grid.Column="2" Command="{x:Bind ViewModel.ToggleTemperatureControlCommand, Mode=OneWay}">
             <Image Source="Assets/power-button.png"/>
         </Button>
-        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding TemperatureControl, Converter={StaticResource BooleanToOnOffStringConverter}}"/>
+        <TextBlock Grid.Row="2" Grid.Column="1" Text="{x:Bind ViewModel.TemperatureControl, Converter={StaticResource BooleanToOnOffStringConverter}, Mode=OneWay}"/>
 
-        <TextBlock Grid.Row="3" Grid.Column="0" x:Uid="TemperatureConfiguredHeaderTextBlock" Visibility="{Binding TemperatureControl}"/>
-        <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding TemperatureConfigured}" Visibility="{Binding TemperatureControl}"/>
-        <Button Grid.Row="3" Grid.Column="2" Command="{Binding TemperatureDownCommand}" Visibility="{Binding TemperatureControl}">
+        <TextBlock Grid.Row="3" Grid.Column="0" x:Uid="TemperatureConfiguredHeaderTextBlock" Visibility="{x:Bind ViewModel.TemperatureControl, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"/>
+        <TextBlock Grid.Row="3" Grid.Column="1" Text="{x:Bind ViewModel.TemperatureConfigured, Converter={StaticResource DoubleToTemperatureStringConverter}, Mode=OneWay}" Visibility="{x:Bind ViewModel.TemperatureControl, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"/>
+        <Button Grid.Row="3" Grid.Column="2" Command="{x:Bind ViewModel.TemperatureDownCommand, Mode=OneWay}" Visibility="{x:Bind ViewModel.TemperatureControl, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
             <Image Source="Assets/icon-arrow-down.png"/>
         </Button>
-        <Button Grid.Row="3" Grid.Column="3" Command="{Binding TemperatureUpCommand}" Visibility="{Binding TemperatureControl}">
+        <Button Grid.Row="3" Grid.Column="3" Command="{x:Bind ViewModel.TemperatureUpCommand, Mode=OneWay}" Visibility="{x:Bind ViewModel.TemperatureControl, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
             <Image Source="Assets/icon-arrow-up.png"/>
         </Button>
 
-        <TextBlock Grid.Row="4" Grid.Column="0" x:Uid="BoilingPlateHeaderTextBlock" Visibility="{Binding TemperatureControl}"/>
-        <TextBlock Grid.Row="4" Grid.Column="1" Text="{Binding BoilingPlate, Converter={StaticResource BooleanToOnOffStringConverter}}" Visibility="{Binding TemperatureControl}"/>
+        <TextBlock Grid.Row="4" Grid.Column="0" x:Uid="BoilingPlateHeaderTextBlock" Visibility="{x:Bind ViewModel.TemperatureControl, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"/>
+        <TextBlock Grid.Row="4" Grid.Column="1" Text="{x:Bind ViewModel.BoilingPlate, Converter={StaticResource BooleanToOnOffStringConverter}, Mode=OneWay}" Visibility="{x:Bind ViewModel.TemperatureControl, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"/>
       
         <TextBlock Grid.Row="5" Grid.Column="0" x:Uid="MixerHeaderTextBlock"/>
-        <Button Grid.Row="5" Grid.Column="2" Command="{Binding ToggleMixerCommand}">
+        <Button Grid.Row="5" Grid.Column="2" Command="{x:Bind ViewModel.ToggleMixerCommand, Mode=OneWay}">
             <Image Source="Assets/power-button.png"/>
         </Button>
-        <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding MixerStatus, Converter={StaticResource BooleanToOnOffStringConverter}}"/>
+        <TextBlock Grid.Row="5" Grid.Column="1" Text="{x:Bind ViewModel.MixerStatus, Converter={StaticResource BooleanToOnOffStringConverter}, Mode=OneWay}"/>
         
     </Grid>
     

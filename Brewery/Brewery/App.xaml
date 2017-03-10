@@ -10,5 +10,7 @@
         <logic:ViewModelLocator x:Key="ViewModelLocator"></logic:ViewModelLocator>
         <converter:DateTimeToTimeConverter x:Key="DateTimeToTimeConverter" ></converter:DateTimeToTimeConverter>
         <converter:BooleanToOnOffStringConverter x:Key="BooleanToOnOffStringConverter"></converter:BooleanToOnOffStringConverter>
+        <converter:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"></converter:BooleanToVisibilityConverter>
+        <converter:DoubleToTemperatureStringConverter x:Key="DoubleToTemperatureStringConverter"></converter:DoubleToTemperatureStringConverter>
     </Application.Resources>
 </Application>
