@@ -1,8 +1,9 @@
-﻿using Brewery.Core.Models;
+﻿using System;
+using Brewery.Core.Models;
 
 namespace Brewery.Core.Contracts
 {
-    public interface ITemperatureModule
+    public interface ITemperatureModule : IDisposable
     {
         TemperatureModel GetCurrenTemperature();
     }

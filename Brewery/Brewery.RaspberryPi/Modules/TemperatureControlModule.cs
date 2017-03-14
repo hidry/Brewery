@@ -6,6 +6,7 @@ namespace Brewery.RaspberryPi.Modules
     public class TemperatureControlModule : ITemperatureControlModule
     {
         private readonly IBoilingPlateModule _boilingPlateModule;
+        private readonly TemperatureControlModel _temperatureControlModel = new TemperatureControlModel();
 
         public TemperatureControlModule(IBoilingPlateModule boilingPlateModule)
         {
@@ -14,24 +15,27 @@ namespace Brewery.RaspberryPi.Modules
 
         public TemperatureControlModel ControlTemperature(bool temperaureControlActive, double temperatureConfigured, double temperatureCurrent)
         {
-            var result = new TemperatureControlModel();
             if (!temperaureControlActive)
             {
+                if (!_temperatureControlModel.Heating)
+                    return _temperatureControlModel;
+
                 _boilingPlateModule.PowerOff();
-                return result;
+                _temperatureControlModel.Heating = false;
+                return _temperatureControlModel;
             }
 
             if (temperatureCurrent < temperatureConfigured)
             {
                 _boilingPlateModule.PowerOn();
-                result.Heating = true;
+                _temperatureControlModel.Heating = true;
             }
             else
             {
                 _boilingPlateModule.PowerOff();
-                result.Heating = false;
+                _temperatureControlModel.Heating = false;
             }
-            return result;
+            return _temperatureControlModel;
         }
     }
 }

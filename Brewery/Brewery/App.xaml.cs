@@ -4,6 +4,7 @@ using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using Brewery.Logic;
 
 namespace Brewery
 {
@@ -84,6 +85,7 @@ namespace Brewery
         {
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
+            ViewModelLocator.DisposeCreatedInstances();
             deferral.Complete();
         }
     }

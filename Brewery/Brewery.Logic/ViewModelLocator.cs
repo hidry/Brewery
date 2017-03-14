@@ -28,6 +28,15 @@ namespace Brewery.Logic
             SimpleIoc.Default.Register<ITemperatureControlModule, TemperatureControlModule>();
         }
 
+        public static void DisposeCreatedInstances()
+        {
+            var createdTemperatureModules = SimpleIoc.Default.GetAllCreatedInstances<ITemperatureModule>();
+            foreach (var instance in createdTemperatureModules)
+            {
+                instance.Dispose();
+            }
+        }
+
         public MainViewModel Main => ServiceLocator.Current.GetInstance<MainViewModel>();
     }
 }
