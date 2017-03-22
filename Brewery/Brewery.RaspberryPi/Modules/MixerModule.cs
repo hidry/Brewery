@@ -6,25 +6,15 @@ namespace Brewery.RaspberryPi.Modules
     public class MixerModule : IMixerModule
     {
         private readonly GpioModule _gpioModule;
-        private bool _running;
 
-        public MixerModule()
+        public MixerModule(Settings settings)
         {
-            _gpioModule = new GpioModule(12); //pin 32
+            _gpioModule = new GpioModule(settings.MixerGpio.GpioNumber);
         }
 
-        public MixerModel ToggleStatus()
+        public void Power(bool on)
         {
-            if (_running)
-            {
-                _gpioModule.Power(false);
-            }
-            else
-            {
-                _gpioModule.Power(true);
-            }
-            _running = !_running;
-            return new MixerModel() { Status = _running };
+            _gpioModule.Power(on);
         }
     }
 }

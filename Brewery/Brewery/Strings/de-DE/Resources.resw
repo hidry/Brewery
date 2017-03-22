@@ -117,28 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="BoilingPlateHeaderTextBlock.Text" xml:space="preserve">
-    <value>Kochplatte</value>
+  <data name="BoilingPlate1HeaderTextBlock.Header" xml:space="preserve">
+    <value>Heizplatte 1</value>
   </data>
-  <data name="DateTimeHeaderTextBlock.Text" xml:space="preserve">
-    <value>Uhrzeit</value>
+  <data name="BoilingPlate2HeaderTextBlock.Header" xml:space="preserve">
+    <value>Heizplatte 2</value>
   </data>
-  <data name="MixerHeaderTextBlock.Text" xml:space="preserve">
+  <data name="MixerHeaderTextBlock.Header" xml:space="preserve">
     <value>Rührwerk</value>
   </data>
-  <data name="RelativePanelRow.Height" xml:space="preserve">
-    <value>50</value>
+  <data name="TemperatureSensor1OneWireAddressTextBlock.Header" xml:space="preserve">
+    <value>Temperatursensor 1</value>
   </data>
-  <data name="RelativePanelRow.RelativePanel.AlignHorizontalCenterWithPanel" xml:space="preserve">
-    <value>True</value>
-  </data>
-  <data name="TemperatureConfiguredHeaderTextBlock.Text" xml:space="preserve">
-    <value>Temperatur soll</value>
-  </data>
-  <data name="TemperatureControlHeaderTextBlock.Text" xml:space="preserve">
-    <value>Temperatursteuerung</value>
-  </data>
-  <data name="TemperatureCurrentHeaderTextBlock.Text" xml:space="preserve">
-    <value>Temperatur aktuell</value>
+  <data name="TemperatureSensor2OneWireAddressTextBlock.Header" xml:space="preserve">
+    <value>Temperatursensor 2</value>
   </data>
 </root>

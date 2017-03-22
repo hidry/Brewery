@@ -6,24 +6,29 @@ using Rinsen.IoT.OneWire;
 
 namespace Brewery.RaspberryPi.Modules
 {
-    public class TemperatureModule : ITemperatureModule
+    public abstract class TemperatureModule : ITemperatureModule
     {
         private readonly IEnumerable<DS18B20> _devices;
         private readonly OneWireDeviceHandler _handler;
+        private readonly string _oneWireAddressString;
 
-        public TemperatureModule()
+        public TemperatureModule(string oneWireAddressString)
         {
+            _oneWireAddressString = oneWireAddressString;
             _handler = new OneWireDeviceHandler(false, false);
             _devices = _handler.OneWireDevices.GetDevices<DS18B20>();
         }
 
         public TemperatureModel GetCurrenTemperature()
         {
-            return new TemperatureModel() {Temperature = _devices.First().GetTemperature() };
+            return new TemperatureModel() {Temperature = Device.GetTemperature() };
         }
+
+        private DS18B20 Device => _devices.First(d => d.OneWireAddressString == _oneWireAddressString);
 
         #region IDisposable Support
         private bool disposedValue = false; // Dient zur Erkennung redundanter Aufrufe.
+        
 
         protected virtual void Dispose(bool disposing)
         {

@@ -3,13 +3,13 @@ using Brewery.Core.Models;
 
 namespace Brewery.RaspberryPi.Modules
 {
-    public class BoilingPlateModule : IBoilingPlateModule
+    public abstract class BoilingPlateModule : IBoilingPlateModule
     {
         private readonly GpioModule _gpioModule;
 
-        public BoilingPlateModule()
+        public BoilingPlateModule(int gpioNumber)
         {
-            _gpioModule = new GpioModule(16); // Pin 36 
+            _gpioModule = new GpioModule(gpioNumber);
         }
 
         public BoilingPlateModel PowerOn()

@@ -4,7 +4,10 @@ using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using Brewery.Core.Models;
 using Brewery.Logic;
+using GalaSoft.MvvmLight.Messaging;
+using GalaSoft.MvvmLight.Views;
 
 namespace Brewery
 {
@@ -21,6 +24,14 @@ namespace Brewery
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+
+            Messenger.Default.Register<ShowMessageDialog>(this, ReceiveMessage);
+        }
+        
+        private async void ReceiveMessage(ShowMessageDialog action)
+        {
+            var dialogService = new DialogService();
+            await dialogService.ShowMessage(action.Message, action.Title, "OK", "Cancel", action.AfterHideCallback); //todo: ressourcen
         }
 
         /// <summary>

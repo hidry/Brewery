@@ -1,4 +1,5 @@
 ﻿using Brewery.Core.Contracts;
+using Brewery.Core.Models;
 using Brewery.RaspberryPi.Modules;
 using GalaSoft.MvvmLight.Ioc;
 using Microsoft.Practices.ServiceLocation;
@@ -12,20 +13,25 @@ namespace Brewery.Logic
             ServiceLocator.SetLocatorProvider(() => SimpleIoc.Default);
             SetUpModules();
             SetupViewModels();
+            SimpleIoc.Default.Register<Settings>();
         }
 
         private static void SetupViewModels()
         {
             SimpleIoc.Default.Register<MainViewModel>();
+            SimpleIoc.Default.Register<SettingsViewModel>();
+            SimpleIoc.Default.Register<BrewProcessViewModel>();
         }
 
         private static void SetUpModules()
         {
-            SimpleIoc.Default.Register<IDateTimeModule, DateTimeModule>();
             SimpleIoc.Default.Register<IMixerModule, MixerModule>();
-            SimpleIoc.Default.Register<ITemperatureModule, TemperatureModule>();
-            SimpleIoc.Default.Register<IBoilingPlateModule, BoilingPlateModule>();
-            SimpleIoc.Default.Register<ITemperatureControlModule, TemperatureControlModule>();
+            SimpleIoc.Default.Register<ITemperature1Module, Temperature1Module>();
+            SimpleIoc.Default.Register<ITemperature2Module, Temperature2Module>();
+            SimpleIoc.Default.Register<IBoilingPlate1Module, BoilingPlate1Module>();
+            SimpleIoc.Default.Register<IBoilingPlate2Module, BoilingPlate2Module>();
+            SimpleIoc.Default.Register<ITemperatureControl1Module, TemperatureControl1Module>();
+            SimpleIoc.Default.Register<ITemperatureControl2Module, TemperatureControl2Module>();
         }
 
         public static void DisposeCreatedInstances()
@@ -37,6 +43,10 @@ namespace Brewery.Logic
             }
         }
 
-        public MainViewModel Main => ServiceLocator.Current.GetInstance<MainViewModel>();
+        //public MainViewModel Main => ServiceLocator.Current.GetInstance<MainViewModel>();
+
+        public SettingsViewModel SettingsView => ServiceLocator.Current.GetInstance<SettingsViewModel>();
+
+        public BrewProcessViewModel BrewProcess => ServiceLocator.Current.GetInstance<BrewProcessViewModel>();
     }
 }

@@ -110,14 +110,20 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Contracts\IBoilingPlate2Module.cs" />
     <Compile Include="Contracts\IBoilingPlateModule.cs" />
-    <Compile Include="Contracts\IDateTimeModule.cs" />
+    <Compile Include="Contracts\IBoilingPlate1Module.cs" />
     <Compile Include="Contracts\IMixerModule.cs" />
+    <Compile Include="Contracts\ITemperature2Module.cs" />
+    <Compile Include="Contracts\ITemperature1Module.cs" />
+    <Compile Include="Contracts\ITemperatureControl2Module.cs" />
+    <Compile Include="Contracts\ITemperatureControl1Module.cs" />
     <Compile Include="Contracts\ITemperatureControlModule.cs" />
     <Compile Include="Contracts\ITemperatureModule.cs" />
     <Compile Include="Models\BoilingPlateModel.cs" />
-    <Compile Include="Models\DateTimeModel.cs" />
-    <Compile Include="Models\MixerModel.cs" />
+    <Compile Include="Models\GpioHeader.cs" />
+    <Compile Include="Models\Settings.cs" />
+    <Compile Include="Models\ShowMessageDialog.cs" />
     <Compile Include="Models\TemperatureControlModel.cs" />
     <Compile Include="Models\TemperatureModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

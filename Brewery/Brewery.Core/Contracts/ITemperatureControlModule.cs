@@ -4,6 +4,6 @@ namespace Brewery.Core.Contracts
 {
     public interface ITemperatureControlModule
     {
-        TemperatureControlModel ControlTemperature(bool temperaureControlActive, double temperatureConfigured, double temperatureCurrent);
+        TemperatureControlModel ManageTemperature(double temperatureConfigured, double temperatureCurrent);
     }
 }

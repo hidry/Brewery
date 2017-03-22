@@ -107,9 +107,14 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Modules\BoilingPlate1Module.cs" />
+    <Compile Include="Modules\BoilingPlate2Module.cs" />
     <Compile Include="Modules\BoilingPlateModule.cs" />
-    <Compile Include="Modules\DateTimeModule.cs" />
     <Compile Include="Modules\MixerModule.cs" />
+    <Compile Include="Modules\Temperature2Module.cs" />
+    <Compile Include="Modules\Temperature1Module.cs" />
+    <Compile Include="Modules\TemperatureControl2Module.cs" />
+    <Compile Include="Modules\TemperatureControl1Module.cs" />
     <Compile Include="Modules\TemperatureControlModule.cs" />
     <Compile Include="Modules\TemperatureModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

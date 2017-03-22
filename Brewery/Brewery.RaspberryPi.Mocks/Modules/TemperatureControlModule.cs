@@ -5,11 +5,9 @@ namespace Brewery.RaspberryPi.Modules
 {
     public class TemperatureControlModule : ITemperatureControlModule
     {
-        public TemperatureControlModel ControlTemperature(bool temperaureControlActive, double temperatureConfigured, double temperatureCurrent)
+        public TemperatureControlModel ManageTemperature(double temperatureConfigured, double temperatureCurrent)
         {
-            if (!temperaureControlActive)
-                return new TemperatureControlModel();
-            return temperatureCurrent < temperatureConfigured ? new TemperatureControlModel() { Heating = true } : new TemperatureControlModel();
+            return new TemperatureControlModel();
         }
     }
 }

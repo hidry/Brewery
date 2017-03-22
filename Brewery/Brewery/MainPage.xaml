@@ -4,74 +4,37 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:animation1="using:Windows.UI.Xaml.Controls"
+    xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
+    xmlns:brewery="using:Brewery"
     mc:Ignorable="d">
-    <Page.DataContext>
-        <Binding Path="Main" Source="{StaticResource ViewModelLocator}" />
-    </Page.DataContext>
-    <Page.Resources>
-        <Style TargetType="Button">
-            <Setter Property="Margin" Value="5"></Setter>
-            <Setter Property="VerticalAlignment" Value="Center"></Setter>
-            <Setter Property="Background" Value="Transparent"></Setter>
-        </Style>
-        <Style TargetType="TextBlock">
-            <Setter Property="Margin" Value="5"></Setter>
-            <Setter Property="VerticalAlignment" Value="Center"></Setter>
-        </Style>
-        <Style TargetType="Image">
-            <Setter Property="Width" Value="20"></Setter>
-            <Setter Property="Height" Value="20"></Setter>
-        </Style>
-    </Page.Resources>
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" VerticalAlignment="Top" HorizontalAlignment="Center">
-        
-        <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-            <RowDefinition />
-        </Grid.RowDefinitions>
-
-        <Grid.ColumnDefinitions >
-            <ColumnDefinition Width="300" />
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="100"/>
-        </Grid.ColumnDefinitions>
-
-        <TextBlock Grid.Row="0" Grid.Column="0" x:Uid="DateTimeHeaderTextBlock"/>
-        <animation1:TextBlock Grid.Row="0" Grid.Column="1" Text="{x:Bind ViewModel.DateTime, Converter={StaticResource DateTimeToTimeConverter}, Mode=OneWay}"/>
-
-        <TextBlock Grid.Row="1" Grid.Column="0" x:Uid="TemperatureCurrentHeaderTextBlock"/>
-        <TextBlock Grid.Row="1" Grid.Column="1" Text="{x:Bind ViewModel.TemperatureCurrent, Converter={StaticResource DoubleToTemperatureStringConverter}, Mode=OneWay}"/>
-
-        <TextBlock Grid.Row="2" Grid.Column="0" x:Uid="TemperatureControlHeaderTextBlock"/>
-        <Button Grid.Row="2" Grid.Column="2" Command="{x:Bind ViewModel.ToggleTemperatureControlCommand, Mode=OneWay}">
-            <Image Source="Assets/power-button.png"/>
-        </Button>
-        <TextBlock Grid.Row="2" Grid.Column="1" Text="{x:Bind ViewModel.TemperatureControl, Converter={StaticResource BooleanToOnOffStringConverter}, Mode=OneWay}"/>
-
-        <TextBlock Grid.Row="3" Grid.Column="0" x:Uid="TemperatureConfiguredHeaderTextBlock" Visibility="{x:Bind ViewModel.TemperatureControl, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"/>
-        <TextBlock Grid.Row="3" Grid.Column="1" Text="{x:Bind ViewModel.TemperatureConfigured, Converter={StaticResource DoubleToTemperatureStringConverter}, Mode=OneWay}" Visibility="{x:Bind ViewModel.TemperatureControl, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"/>
-        <RepeatButton Grid.Row="3" Grid.Column="2" Command="{x:Bind ViewModel.TemperatureDownCommand, Mode=OneWay}" Visibility="{x:Bind ViewModel.TemperatureControl, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
-            <Image Source="Assets/icon-arrow-down.png"/>
-        </RepeatButton>
-        <RepeatButton Grid.Row="3" Grid.Column="3" Command="{x:Bind ViewModel.TemperatureUpCommand, Mode=OneWay}" Visibility="{x:Bind ViewModel.TemperatureControl, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}">
-            <Image Source="Assets/icon-arrow-up.png"/>
-        </RepeatButton>
-
-        <TextBlock Grid.Row="4" Grid.Column="0" x:Uid="BoilingPlateHeaderTextBlock" Visibility="{x:Bind ViewModel.TemperatureControl, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"/>
-        <TextBlock Grid.Row="4" Grid.Column="1" Text="{x:Bind ViewModel.BoilingPlate, Converter={StaticResource BooleanToOnOffStringConverter}, Mode=OneWay}" Visibility="{x:Bind ViewModel.TemperatureControl, Converter={StaticResource BooleanToVisibilityConverter}, Mode=OneWay}"/>
-      
-        <TextBlock Grid.Row="5" Grid.Column="0" x:Uid="MixerHeaderTextBlock"/>
-        <Button Grid.Row="5" Grid.Column="2" Command="{x:Bind ViewModel.ToggleMixerCommand, Mode=OneWay}">
-            <Image Source="Assets/power-button.png"/>
-        </Button>
-        <TextBlock Grid.Row="5" Grid.Column="1" Text="{x:Bind ViewModel.MixerStatus, Converter={StaticResource BooleanToOnOffStringConverter}, Mode=OneWay}"/>
-        
-    </Grid>
     
+    <!--<Page.DataContext>
+        <Binding Path="Main" Source="{StaticResource ViewModelLocator}" />
+    </Page.DataContext>-->
+    
+    <Page.Resources>
+        <DataTemplate x:Key="DefaultTemplate" x:DataType="brewery:MenuItem">
+            <Grid Width="240" Height="48">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="48" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <SymbolIcon Grid.Column="0" Symbol="{x:Bind Icon, Mode=OneWay}" Foreground="White" />
+                <TextBlock Grid.Column="1" Text="{x:Bind Name, Mode=OneWay}" FontSize="16" VerticalAlignment="Center" Foreground="White" />
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <controls:HamburgerMenu x:Name="HamburgerMenuControl"
+                                PaneBackground="Black"
+                                Foreground="White"
+                                ItemTemplate="{StaticResource DefaultTemplate}"
+                                ItemClick="OnMenuItemClick"
+                                OptionsItemTemplate="{StaticResource DefaultTemplate}"
+                                OptionsItemClick="OnMenuItemClick">
+            <Frame x:Name="ContentFrame"/>
+        </controls:HamburgerMenu>
+    </Grid>
+
 </Page>
