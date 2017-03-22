@@ -30,6 +30,8 @@ namespace Brewery
         
         private async void ReceiveMessage(ShowMessageDialog action)
         {
+            //todo: https://www.reflectionit.nl/blog/2015/windows-10-xaml-tips-messagedialog-and-contentdialog
+            //contentDialog verwenden
             var dialogService = new DialogService();
             await dialogService.ShowMessage(action.Message, action.Title, "OK", "Cancel", action.AfterHideCallback); //todo: ressourcen
         }

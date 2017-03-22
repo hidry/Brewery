@@ -119,9 +119,9 @@
       <Project>{723ec350-d3cd-4f59-a432-50cc3d162069}</Project>
       <Name>Brewery.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Brewery.RaspberryPi.Mocks\Brewery.RaspberryPi.Mocks.csproj">
-      <Project>{b276969a-2193-49e8-80ab-890101650f33}</Project>
-      <Name>Brewery.RaspberryPi.Mocks</Name>
+    <ProjectReference Include="..\Brewery.RaspberryPi\Brewery.RaspberryPi.csproj">
+      <Project>{48c3ee86-d15b-44f6-b172-527c4768c29d}</Project>
+      <Name>Brewery.RaspberryPi</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

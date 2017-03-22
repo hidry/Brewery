@@ -31,15 +31,15 @@ namespace Brewery.Logic
 
             BrewProcessSteps.Add(new BrewProcessStep()
             {
-                Temperatur = 67,
-                Rast = 0,
+                Temperatur = 25,
+                Rast = 1,
                 Benachrichtigung = true,
                 Ruehrgeraet = false
             });
             BrewProcessSteps.Add(new BrewProcessStep()
             {
-                Temperatur = 76,
-                Rast = 90,
+                Temperatur = 30,
+                Rast = 3,
                 Benachrichtigung = true,
                 Ruehrgeraet = true
             });
