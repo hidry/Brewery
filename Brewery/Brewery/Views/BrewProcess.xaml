@@ -6,6 +6,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:telerikGrid="using:Telerik.UI.Xaml.Controls.Grid"
     xmlns:primitives="using:Telerik.UI.Xaml.Controls.Grid.Primitives"
+    xmlns:views="using:Brewery.Views"
     mc:Ignorable="d">
 
     <Page.DataContext>

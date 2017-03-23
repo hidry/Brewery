@@ -6,8 +6,8 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
 using Brewery.Core.Models;
 using Brewery.Logic;
+using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
-using GalaSoft.MvvmLight.Views;
 
 namespace Brewery
 {
@@ -30,10 +30,15 @@ namespace Brewery
         
         private async void ReceiveMessage(ShowMessageDialog action)
         {
-            //todo: https://www.reflectionit.nl/blog/2015/windows-10-xaml-tips-messagedialog-and-contentdialog
-            //contentDialog verwenden
-            var dialogService = new DialogService();
-            await dialogService.ShowMessage(action.Message, action.Title, "OK", "Cancel", action.AfterHideCallback); //todo: ressourcen
+            var contentDialog = new ContentDialog
+            {
+                Content = action.Message,
+                Title = action.Title,
+                PrimaryButtonText = "OK",
+                
+                PrimaryButtonCommand = new RelayCommand(action.AfterHideCallback)
+            };
+            await contentDialog.ShowAsync();
         }
 
         /// <summary>

@@ -6,6 +6,6 @@ namespace Brewery.Core.Models
     {
         public string Title { get; set; }
         public string Message { get; set; }
-        public Action<bool> AfterHideCallback { get; set; }
+        public Action AfterHideCallback { get; set; }
     }
 }

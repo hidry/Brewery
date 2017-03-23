@@ -6,6 +6,7 @@ using Brewery.Core.Models;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using Telerik.Data.Core;
 
 namespace Brewery.Logic
 {
@@ -106,6 +107,7 @@ namespace Brewery.Logic
             ButtonStartBrewProcessEnabled = false;
             ButtonPauseBrewProcessEnabled = true;
             ButtonStopBrewProcessEnabled = true;
+            ExecuteBrewProcessStep();
             _brewProcessTimer.Start();
         }
 
@@ -143,7 +145,7 @@ namespace Brewery.Logic
                             {
                                 Title = "Rast-Ende",
                                 Message = currentStep.ToString(),
-                                AfterHideCallback = (confirmed) =>
+                                AfterHideCallback = () =>
                                 {
                                     _messageOpen = false;
                                     _messageAcknowledged = true;
@@ -196,11 +198,15 @@ namespace Brewery.Logic
 
     public class BrewProcessStep
     {
-        //todo: prüfen ob Annotations verfügbar https://feedback.telerik.com/Project/167/Feedback/List/Your%20Items
+        //todo: prüfen ob Annotations auch für RadDataGrid verfügbar https://feedback.telerik.com/Project/167/Feedback/List/Your%20Items
+        [Display(Header = "Temperatur in °C")]
         public double Temperatur { get; set; }
+        [Display(Header = "Rast in Minuten")]
         public int Rast { get; set; }
-        public bool Benachrichtigung { get; set; }
+        [Display(Header = "Rührgerät")]
         public bool Ruehrgeraet { get; set; }
+        [Display(Header = "Benachrichtigung wenn Schritt abgesschlossen")]
+        public bool Benachrichtigung { get; set; }
         public override string ToString()
         {
             return $"{nameof(Temperatur)}: {Temperatur}, {nameof(Rast)}: {Rast}, {nameof(Benachrichtigung)}: {Benachrichtigung}, {nameof(Ruehrgeraet)}: {Ruehrgeraet}";
