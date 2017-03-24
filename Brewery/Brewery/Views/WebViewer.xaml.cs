@@ -13,12 +13,28 @@ namespace Brewery.Views
     {
         public WebViewer()
         {
+            //osk (on-screen-keyboard): https://code.msdn.microsoft.com/UWP-Custom-On-Screen-8fd8415e
             this.InitializeComponent();
+            Keyboard.RegisterTarget(UrlTextBox);
+            Keyboard.Visibility = Visibility.Collapsed;
+            WebView.Visibility = Visibility.Visible;
         }
 
         private void GoToUrl(object sender, RoutedEventArgs routedEventArgs)
         {
             WebView.Navigate(new Uri(UrlTextBox.Text));
+        }
+
+        private void TextBox_OnGotFocus(object sender, RoutedEventArgs e)
+        {
+            Keyboard.Visibility = Visibility.Visible;
+            WebView.Visibility = Visibility.Collapsed;
+        }
+
+        private void TextBox_OnLostFocus(object sender, RoutedEventArgs e)
+        {
+            Keyboard.Visibility = Visibility.Collapsed;
+            WebView.Visibility = Visibility.Visible;
         }
     }
 }
