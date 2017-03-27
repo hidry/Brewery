@@ -26,6 +26,10 @@
     </Page.Resources>
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition Height="48"></RowDefinition>
+        </Grid.RowDefinitions>
         <controls:HamburgerMenu x:Name="HamburgerMenuControl"
                                 PaneBackground="Black"
                                 Foreground="White"
@@ -35,6 +39,9 @@
                                 OptionsItemClick="OnMenuItemClick">
             <Frame x:Name="ContentFrame"/>
         </controls:HamburgerMenu>
+        <Grid Grid.Row="1" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" VerticalAlignment="Center">
+            <Frame x:Name="StatusFrame"></Frame>
+        </Grid>
     </Grid>
 
 </Page>

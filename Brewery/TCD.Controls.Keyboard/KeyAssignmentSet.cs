@@ -20,7 +20,6 @@
 **/
 
 using System;
-using Windows.System;
 
 namespace TCD.Controls.Keyboard
 {

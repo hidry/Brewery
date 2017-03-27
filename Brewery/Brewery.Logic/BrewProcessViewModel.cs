@@ -187,6 +187,7 @@ namespace Brewery.Logic
 
         private void StopBrewProcess()
         {
+            _temperatureControl1Module.BoilingPlateOff();
             ButtonStartBrewProcessEnabled = true;
             ButtonStopBrewProcessEnabled = false;
             ButtonPauseBrewProcessEnabled = false;

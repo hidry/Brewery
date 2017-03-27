@@ -21,7 +21,7 @@ namespace Brewery
             HamburgerMenuControl.OptionsItemsSource = MenuItem.GetOptionsItems();
 
             ContentFrame.Navigate(typeof(Views.BrewProcess));
-
+            StatusFrame.Navigate(typeof(Views.Status));
         }
 
         private void OnMenuItemClick(object sender, ItemClickEventArgs e)

@@ -7,7 +7,7 @@ namespace Brewery.RaspberryPi.Modules
     {
         public TemperatureModel GetCurrenTemperature()
         {
-            return new TemperatureModel() {Temperature = 25.0154 };
+            return new TemperatureModel() {Temperature = 25.2154 };
         }
 
         #region IDisposable Support
