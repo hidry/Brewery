@@ -42,7 +42,7 @@ namespace Brewery
             //todo: texte aus resource
             var items = new List<MenuItem>();
             items.Add(new MenuItem() { Icon = Symbol.Bold, Name = "Brauprozess", PageType = typeof(Views.BrewProcess) });
-            items.Add(new MenuItem() { Icon = Symbol.Globe, Name = "Website", PageType = typeof(Views.WebViewer) });
+            items.Add(new MenuItem() { Icon = Symbol.Globe, Name = "Internet", PageType = typeof(Views.WebViewer) });
             items.Add(new MenuItem() { Icon = Symbol.Setting, Name = "Einstellungen", PageType = typeof(Views.Settings) });
             return items;
         }

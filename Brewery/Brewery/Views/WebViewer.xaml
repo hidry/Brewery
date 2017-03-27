@@ -11,16 +11,20 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"></ColumnDefinition>
             <ColumnDefinition Width="45"></ColumnDefinition>
+            <ColumnDefinition Width="45"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="35"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
-        <TextBox Grid.Row="0" Grid.Column="0" Name="UrlTextBox" Text="http://www.google.de" GotFocus="TextBox_OnGotFocus" LostFocus="TextBox_OnLostFocus"></TextBox>
-        <Button Grid.Row="0" Grid.Column="1" Click="GoToUrl" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <TextBox Grid.Row="0" Grid.Column="0" Name="UrlTextBox" Text="http://www.google.de"></TextBox>
+        <Button Grid.Row="0" Grid.Column="1" Click="SwitchKeyboardVisibility" VerticalAlignment="Center" HorizontalAlignment="Center">
+            <SymbolIcon Symbol="Keyboard"></SymbolIcon>
+        </Button>
+        <Button Grid.Row="0" Grid.Column="2" Click="GoToUrl" VerticalAlignment="Center" HorizontalAlignment="Center">
             <SymbolIcon Symbol="Play"></SymbolIcon>
         </Button>
-        <WebView Name="WebView" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Source="http://www.google.de" />
+        <WebView Name="WebView" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Source="http://www.maischemalzundmehr.de/index.php?inhaltmitte=toolsiburechner" />
         <keyboard:OnScreenKeyBoard x:Name="Keyboard" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" InitialLayout="German" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="20" />
         
     </Grid>
