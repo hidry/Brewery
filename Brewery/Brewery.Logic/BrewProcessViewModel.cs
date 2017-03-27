@@ -22,7 +22,7 @@ namespace Brewery.Logic
             _temperature1Module = temperature1Module;
             _temperatureControl1Module = temperatureControl1Module;
 
-            _brewProcessTimer = new DispatcherTimer() { Interval = new TimeSpan(0, 0, 10) };
+            _brewProcessTimer = new DispatcherTimer() { Interval = new TimeSpan(0, 0, 1) };
             _brewProcessTimer.Tick += (sender, o) => { ExecuteBrewProcessStep(); };
 
             ButtonStartBrewProcessEnabled = true;

@@ -4,7 +4,7 @@ namespace Brewery.RaspberryPi.Modules
 {
     public class TemperatureControl2Module : TemperatureControlModule, ITemperatureControl2Module
     {
-        public TemperatureControl2Module(IBoilingPlate1Module boilingPlate1Module) : base(boilingPlate1Module)
+        public TemperatureControl2Module(IBoilingPlate2Module boilingPlate2Module) : base(boilingPlate2Module)
         {
         }
     }

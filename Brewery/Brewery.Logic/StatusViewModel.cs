@@ -12,13 +12,14 @@ namespace Brewery.Logic
         private readonly ITemperatureControl1Module _temperatureControl1Module;
         private readonly ITemperatureControl2Module _temperatureControl2Module;
 
-        public StatusViewModel(ITemperature1Module temperature1Module, ITemperature2Module temperature2Module, ITemperatureControl1Module temperatureControl1Module, ITemperatureControl2Module temperatureControl2Module)
+        public StatusViewModel(ITemperature1Module temperature1Module, ITemperatureControl1Module temperatureControl1Module, ITemperatureControl2Module temperatureControl2Module)
         {
             _temperature1Module = temperature1Module;
-            _temperature2Module = temperature2Module;
+            //_temperature2Module = temperature2Module; //todo
             _temperatureControl1Module = temperatureControl1Module;
             _temperatureControl2Module = temperatureControl2Module;
-            var timer = new DispatcherTimer {Interval = new TimeSpan(0, 0, 0, 1)};
+
+            var timer = new DispatcherTimer { Interval = new TimeSpan(0, 0, 0, 1) };
             timer.Tick += (sender, o) => { UpdateProperties(); };
             timer.Start();
         }
@@ -26,7 +27,7 @@ namespace Brewery.Logic
         private void UpdateProperties()
         {
             Temperature1 = _temperature1Module.GetCurrenTemperature().Temperature;
-            Temperature2 = _temperature2Module.GetCurrenTemperature().Temperature;
+            //Temperature2 = _temperature2Module.GetCurrenTemperature().Temperature; //todo
             BoilingPlate1 = _temperatureControl1Module.GetStatus().Heating;
             BoilingPlate2 = _temperatureControl2Module.GetStatus().Heating;
         }
@@ -50,7 +51,7 @@ namespace Brewery.Logic
                 Set(() => Temperature2, ref _temperature2, value);
             }
         }
-        
+
         private bool _boilingPlate1;
         public bool BoilingPlate1
         {
