@@ -108,6 +108,9 @@
     <Compile Include="Views\BrewProcess.xaml.cs">
       <DependentUpon>BrewProcess.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ManualHandling.xaml.cs">
+      <DependentUpon>ManualHandling.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>
     </Compile>
@@ -146,6 +149,10 @@
     <Page Include="Views\BrewProcess.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ManualHandling.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\Settings.xaml">
       <SubType>Designer</SubType>

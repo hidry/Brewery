@@ -22,6 +22,7 @@ namespace Brewery.Logic
             SimpleIoc.Default.Register<SettingsViewModel>();
             SimpleIoc.Default.Register<BrewProcessViewModel>();
             SimpleIoc.Default.Register<StatusViewModel>();
+            SimpleIoc.Default.Register<ManualHandlingViewModel>();
         }
 
         private static void SetUpModules()
@@ -51,5 +52,7 @@ namespace Brewery.Logic
         public BrewProcessViewModel BrewProcess => ServiceLocator.Current.GetInstance<BrewProcessViewModel>();
 
         public StatusViewModel Status => ServiceLocator.Current.GetInstance<StatusViewModel>();
+
+        public ManualHandlingViewModel ManualHandling => ServiceLocator.Current.GetInstance<ManualHandlingViewModel>();
     }
 }
