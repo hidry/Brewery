@@ -12,10 +12,10 @@ namespace Brewery.Logic
         private readonly ITemperatureControl1Module _temperatureControl1Module;
         private readonly ITemperatureControl2Module _temperatureControl2Module;
 
-        public StatusViewModel(ITemperature1Module temperature1Module, ITemperatureControl1Module temperatureControl1Module, ITemperatureControl2Module temperatureControl2Module)
+        public StatusViewModel(ITemperature1Module temperature1Module, ITemperature2Module temperature2Module, ITemperatureControl1Module temperatureControl1Module, ITemperatureControl2Module temperatureControl2Module)
         {
             _temperature1Module = temperature1Module;
-            //_temperature2Module = temperature2Module; //todo
+            _temperature2Module = temperature2Module;
             _temperatureControl1Module = temperatureControl1Module;
             _temperatureControl2Module = temperatureControl2Module;
 
@@ -27,7 +27,7 @@ namespace Brewery.Logic
         private void UpdateProperties()
         {
             Temperature1 = _temperature1Module.GetCurrenTemperature().Temperature;
-            //Temperature2 = _temperature2Module.GetCurrenTemperature().Temperature; //todo
+            Temperature2 = _temperature2Module.GetCurrenTemperature().Temperature;
             BoilingPlate1 = _temperatureControl1Module.GetStatus().Heating;
             BoilingPlate2 = _temperatureControl2Module.GetStatus().Heating;
         }

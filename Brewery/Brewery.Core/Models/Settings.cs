@@ -13,7 +13,7 @@ namespace Brewery.Core.Models
             // Heizplatte 1 - gpio 16 (Pin# 36)
             BoilingPlate1Gpio = GpioHeader.Pins.First(p => p.GpioNumber == 16);
             // Temperatursensor 2 - 2
-            TemperatureSensor2OneWireAddress = "#2"; //todo: richtige Adresse
+            TemperatureSensor2OneWireAddress = "28-FF-EE-6B-91-16-04-90";
             // Heizplatte 2 - gpio 20 (Pin# 38)
             BoilingPlate2Gpio = GpioHeader.Pins.First(p => p.GpioNumber == 20);
         }
