@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media.Imaging;
 using Brewery.Core.Contracts;
 using Brewery.Core.Models;
 using GalaSoft.MvvmLight;
@@ -107,6 +109,10 @@ namespace Brewery.Logic
             ButtonStartBrewProcessEnabled = false;
             ButtonPauseBrewProcessEnabled = true;
             ButtonStopBrewProcessEnabled = true;
+            foreach (var brewProcessStep in BrewProcessSteps)
+            {
+                brewProcessStep.ElapsedTime = null;
+            }
             ExecuteBrewProcessStep();
             _brewProcessTimer.Start();
         }
@@ -116,11 +122,17 @@ namespace Brewery.Logic
         private int _currentStep = 0;
         private bool _messageOpen;
         private bool _messageAcknowledged;
+        private DateTime _startedAt = default(DateTime);
 
         private void ExecuteBrewProcessStep()
         {
             var temperatureCurrent = _temperature1Module.GetCurrenTemperature().Temperature;
             var currentStep = BrewProcessSteps[_currentStep];
+
+            if (_startedAt == default(DateTime))
+                _startedAt = DateTime.Now;
+            
+            currentStep.ElapsedTime = new DateTime((DateTime.Now - _startedAt).Ticks).ToString("mm:ss");
 
             _temperatureControl1Module.ManageTemperature(currentStep.Temperatur, temperatureCurrent);
             
@@ -168,6 +180,7 @@ namespace Brewery.Logic
                             ButtonStopBrewProcessEnabled = false;
                         }
                         _tempReachedAt = default(DateTime);
+                        _startedAt = default(DateTime);
                         _messageAcknowledged = false;
                     }
                 }
@@ -193,11 +206,12 @@ namespace Brewery.Logic
             ButtonPauseBrewProcessEnabled = false;
             _brewProcessTimer.Stop();
             _tempReachedAt = default(DateTime);
+            _startedAt = default(DateTime);
             _currentStep = 0;
         }
     }
 
-    public class BrewProcessStep
+    public class BrewProcessStep : ViewModelBase
     {
         //todo: prüfen ob Annotations auch für RadDataGrid verfügbar https://feedback.telerik.com/Project/167/Feedback/List/Your%20Items
         [Display(Header = "Temperatur in °C")]
@@ -208,6 +222,14 @@ namespace Brewery.Logic
         public bool Ruehrgeraet { get; set; }
         [Display(Header = "Benachrichtigung wenn Schritt abgesschlossen")]
         public bool Benachrichtigung { get; set; }
+        private string _elapsedTime;
+        [ReadOnly]
+        public string ElapsedTime
+        {
+            get { return _elapsedTime; }
+            set { Set(() => ElapsedTime, ref _elapsedTime, value); }
+        }
+
         public override string ToString()
         {
             return $"{nameof(Temperatur)}: {Temperatur}, {nameof(Rast)}: {Rast}, {nameof(Benachrichtigung)}: {Benachrichtigung}, {nameof(Ruehrgeraet)}: {Ruehrgeraet}";
