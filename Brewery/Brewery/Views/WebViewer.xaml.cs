@@ -16,6 +16,7 @@ namespace Brewery.Views
             //todo: webview mit osk http://stackoverflow.com/questions/38502453/windows-10-iot-core-virtual-keyboard
             //osk (on-screen-keyboard): https://code.msdn.microsoft.com/UWP-Custom-On-Screen-8fd8415e
             this.InitializeComponent();
+            NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
             Keyboard.RegisterTarget(UrlTextBox);
             //Keyboard.RegisterTarget(WebView);
             Keyboard.Visibility = Visibility.Collapsed;

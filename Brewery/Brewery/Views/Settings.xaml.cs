@@ -13,6 +13,7 @@ namespace Brewery.Views
         public Settings()
         {
             this.InitializeComponent();
+            NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
         }
 
         public SettingsViewModel ViewViewModel => (SettingsViewModel)DataContext;

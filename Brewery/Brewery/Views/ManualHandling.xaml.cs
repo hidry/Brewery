@@ -13,6 +13,7 @@ namespace Brewery.Views
         public ManualHandling()
         {
             this.InitializeComponent();
+            NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
         }
 
         public ManualHandlingViewModel ViewModel => (ManualHandlingViewModel)DataContext;

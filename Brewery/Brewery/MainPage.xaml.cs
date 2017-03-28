@@ -16,6 +16,7 @@ namespace Brewery
         public MainPage()
         {
             InitializeComponent();
+            NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
 
             HamburgerMenuControl.ItemsSource = MenuItem.GetMainItems();
             HamburgerMenuControl.OptionsItemsSource = MenuItem.GetOptionsItems();
