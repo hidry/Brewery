@@ -34,6 +34,7 @@ namespace Brewery.Logic
             SimpleIoc.Default.Register<IBoilingPlate2Module, BoilingPlate2Module>();
             SimpleIoc.Default.Register<ITemperatureControl1Module, TemperatureControl1Module>();
             SimpleIoc.Default.Register<ITemperatureControl2Module, TemperatureControl2Module>();
+            SimpleIoc.Default.Register<ITimer, Timer>();
         }
 
         public static void DisposeCreatedInstances()

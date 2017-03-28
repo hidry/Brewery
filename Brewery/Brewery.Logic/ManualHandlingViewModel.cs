@@ -11,29 +11,47 @@ namespace Brewery.Logic
     {
         private readonly ITemperature1Module _temperature1Module;
         private readonly ITemperatureControl1Module _temperatureControl1Module;
-        private readonly DispatcherTimer _temperatureControl1Timer;
-        private readonly ITemperature1Module _temperature2Module;
-        private readonly ITemperatureControl1Module _temperatureControl2Module;
-        private readonly DispatcherTimer _temperatureControl2Timer;
+        //private readonly DispatcherTimer _temperatureControl1Timer;
+        private readonly ITemperature2Module _temperature2Module;
+        private readonly ITemperatureControl2Module _temperatureControl2Module;
+        //private readonly DispatcherTimer _temperatureControl2Timer;
+        private readonly ITimer _timer;
 
-        public ManualHandlingViewModel(ITemperature1Module temperature1Module, ITemperatureControl1Module temperatureControl1Module)
+        public ManualHandlingViewModel(ITimer timer, ITemperature1Module temperature1Module, ITemperatureControl1Module temperatureControl1Module, ITemperature2Module temperature2Module, ITemperatureControl2Module temperatureControl2Module)
         {
+            _timer = timer;
+
             _temperature1Module = temperature1Module;
             _temperatureControl1Module = temperatureControl1Module;
 
             TemperatureControl1Temperature = 50;
             TemperatureControl1OnOffSymbol = Symbol.Play;
 
+            _temperature2Module = temperature2Module;
+            _temperatureControl2Module = temperatureControl2Module;
+
             TemperatureControl2Temperature = 50;
             TemperatureControl2OnOffSymbol = Symbol.Play;
 
-            _temperatureControl1Timer = new DispatcherTimer() {Interval = new TimeSpan(0, 0, 0, 1)};
-            _temperatureControl1Timer.Tick += (sender, o) =>  _temperatureControl1Module.ManageTemperature(TemperatureControl1Temperature,
-                _temperature1Module.GetCurrenTemperature().Temperature);
+            //_temperatureControl1Timer = new DispatcherTimer() {Interval = new TimeSpan(0, 0, 0, 1)};
+            //_temperatureControl1Timer.Tick += (sender, o) =>  _temperatureControl1Module.ManageTemperature(TemperatureControl1Temperature,
+            //    _temperature1Module.GetCurrenTemperature().Temperature);
 
-            _temperatureControl2Timer = new DispatcherTimer() { Interval = new TimeSpan(0, 0, 0, 1) };
-            _temperatureControl2Timer.Tick += (sender, o) => _temperatureControl2Module.ManageTemperature(TemperatureControl2Temperature,
-                _temperature2Module.GetCurrenTemperature().Temperature);
+            //_temperatureControl2Timer = new DispatcherTimer() { Interval = new TimeSpan(0, 0, 0, 1) };
+            //_temperatureControl2Timer.Tick += (sender, o) => _temperatureControl2Module.ManageTemperature(TemperatureControl2Temperature,
+            //    _temperature2Module.GetCurrenTemperature().Temperature);
+        }
+
+        private void TemperatureControl1Tick()
+        {
+            if (TemperatureControl1OnOffSymbol == Symbol.Stop)
+                _temperatureControl1Module.ManageTemperature(TemperatureControl1Temperature, _temperature1Module.GetCurrenTemperature().Temperature);
+        }
+
+        private void TemperatureControl2Tick()
+        {
+            if (TemperatureControl2OnOffSymbol == Symbol.Stop)
+                _temperatureControl2Module.ManageTemperature(TemperatureControl2Temperature, _temperature2Module.GetCurrenTemperature().Temperature);
         }
 
         private int _temperatureControl1Temperature;
@@ -67,12 +85,12 @@ namespace Brewery.Logic
             if (TemperatureControl1OnOffSymbol == Symbol.Play)
             {
                 TemperatureControl1OnOffSymbol = Symbol.Stop;
-                _temperatureControl1Timer.Start();
+                _timer.AddEvent((o, e) => TemperatureControl1Tick());
             }
             else
             {
                 TemperatureControl1OnOffSymbol = Symbol.Play;
-                _temperatureControl1Timer.Stop();
+                _timer.RemoveEvent((o, e) => TemperatureControl1Tick());
                 _temperatureControl1Module.BoilingPlateOff();
             }
         }
@@ -122,12 +140,12 @@ namespace Brewery.Logic
             if (TemperatureControl2OnOffSymbol == Symbol.Play)
             {
                 TemperatureControl2OnOffSymbol = Symbol.Stop;
-                _temperatureControl2Timer.Start();
+                _timer.AddEvent((o, e) => TemperatureControl2Tick());
             }
             else
             {
                 TemperatureControl2OnOffSymbol = Symbol.Play;
-                _temperatureControl2Timer.Stop();
+                _timer.RemoveEvent((o, e) => TemperatureControl2Tick());
                 _temperatureControl2Module.BoilingPlateOff();
             }
         }

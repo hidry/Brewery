@@ -120,6 +120,7 @@
     <Compile Include="Contracts\ITemperatureControl1Module.cs" />
     <Compile Include="Contracts\ITemperatureControlModule.cs" />
     <Compile Include="Contracts\ITemperatureModule.cs" />
+    <Compile Include="Contracts\ITimer.cs" />
     <Compile Include="Models\BoilingPlateModel.cs" />
     <Compile Include="Models\GpioHeader.cs" />
     <Compile Include="Models\Settings.cs" />

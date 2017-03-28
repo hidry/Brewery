@@ -1,6 +1,4 @@
-﻿using System;
-using Windows.UI.Xaml;
-using Brewery.Core.Contracts;
+﻿using Brewery.Core.Contracts;
 using GalaSoft.MvvmLight;
 
 namespace Brewery.Logic
@@ -12,16 +10,14 @@ namespace Brewery.Logic
         private readonly ITemperatureControl1Module _temperatureControl1Module;
         private readonly ITemperatureControl2Module _temperatureControl2Module;
 
-        public StatusViewModel(ITemperature1Module temperature1Module, ITemperature2Module temperature2Module, ITemperatureControl1Module temperatureControl1Module, ITemperatureControl2Module temperatureControl2Module)
+        public StatusViewModel(ITimer timer, ITemperature1Module temperature1Module, ITemperature2Module temperature2Module, ITemperatureControl1Module temperatureControl1Module, ITemperatureControl2Module temperatureControl2Module)
         {
             _temperature1Module = temperature1Module;
             _temperature2Module = temperature2Module;
             _temperatureControl1Module = temperatureControl1Module;
             _temperatureControl2Module = temperatureControl2Module;
-
-            var timer = new DispatcherTimer { Interval = new TimeSpan(0, 0, 0, 1) };
-            timer.Tick += (sender, o) => { UpdateProperties(); };
-            timer.Start();
+                        
+            timer.AddEvent((sender, o) => UpdateProperties());
         }
 
         private void UpdateProperties()

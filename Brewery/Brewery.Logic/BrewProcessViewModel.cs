@@ -15,15 +15,17 @@ namespace Brewery.Logic
         private readonly IMixerModule _mixerModule;
         private readonly ITemperature1Module _temperature1Module;
         private readonly ITemperatureControl1Module _temperatureControl1Module;
+        private readonly ITimer _timer;
 
-        public BrewProcessViewModel(IMixerModule mixerModule, ITemperature1Module temperature1Module, ITemperatureControl1Module temperatureControl1Module)
+        public BrewProcessViewModel(ITimer timer, IMixerModule mixerModule, ITemperature1Module temperature1Module, ITemperatureControl1Module temperatureControl1Module)
         {
+            _timer = timer;
             _mixerModule = mixerModule;
             _temperature1Module = temperature1Module;
             _temperatureControl1Module = temperatureControl1Module;
 
-            _brewProcessTimer = new DispatcherTimer() { Interval = new TimeSpan(0, 0, 1) };
-            _brewProcessTimer.Tick += (sender, o) => { ExecuteBrewProcessStep(); };
+            //_brewProcessTimer = new DispatcherTimer() { Interval = new TimeSpan(0, 0, 1) };
+            //_brewProcessTimer.Tick += (sender, o) => { ExecuteBrewProcessStep(); };
 
             ButtonStartBrewProcessEnabled = true;
             ButtonPauseBrewProcessEnabled = false;
@@ -112,10 +114,10 @@ namespace Brewery.Logic
                 brewProcessStep.ElapsedTime = null;
             }
             ExecuteBrewProcessStep();
-            _brewProcessTimer.Start();
+            _timer.AddEvent((o, e) => ExecuteBrewProcessStep());
         }
 
-        private readonly DispatcherTimer _brewProcessTimer;
+        //private readonly DispatcherTimer _brewProcessTimer;
         private DateTime _tempReachedAt = default(DateTime);
         private int _currentStep = 0;
         private bool _messageOpen;
@@ -124,6 +126,9 @@ namespace Brewery.Logic
 
         private void ExecuteBrewProcessStep()
         {
+            if (ButtonStartBrewProcessEnabled == true)
+                return;
+
             var temperatureCurrent = _temperature1Module.GetCurrenTemperature().Temperature;
             var currentStep = BrewProcessSteps[_currentStep];
 
@@ -171,11 +176,11 @@ namespace Brewery.Logic
                         }
                         else
                         {
-                            _brewProcessTimer.Stop();
-                            _currentStep = 0;
                             ButtonStartBrewProcessEnabled = true;
                             ButtonPauseBrewProcessEnabled = false;
                             ButtonStopBrewProcessEnabled = false;
+                            _timer.RemoveEvent((o, e) => ExecuteBrewProcessStep());
+                            _currentStep = 0;
                         }
                         _tempReachedAt = default(DateTime);
                         _startedAt = default(DateTime);
@@ -191,7 +196,7 @@ namespace Brewery.Logic
         {
             ButtonPauseBrewProcessEnabled = false;
             ButtonStartBrewProcessEnabled = true;
-            _brewProcessTimer.Stop();
+            _timer.RemoveEvent((o, e) => ExecuteBrewProcessStep());
         }
 
         public RelayCommand StopBrewProcessCommand => new RelayCommand(StopBrewProcess);
@@ -202,7 +207,7 @@ namespace Brewery.Logic
             ButtonStartBrewProcessEnabled = true;
             ButtonStopBrewProcessEnabled = false;
             ButtonPauseBrewProcessEnabled = false;
-            _brewProcessTimer.Stop();
+            _timer.RemoveEvent((o, e) => ExecuteBrewProcessStep());
             _tempReachedAt = default(DateTime);
             _startedAt = default(DateTime);
             _currentStep = 0;
