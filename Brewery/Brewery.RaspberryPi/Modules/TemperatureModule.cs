@@ -8,15 +8,19 @@ namespace Brewery.RaspberryPi.Modules
 {
     public abstract class TemperatureModule : ITemperatureModule
     {
-        private readonly IEnumerable<DS18B20> _devices;
-        private readonly OneWireDeviceHandler _handler;
-        private readonly string _oneWireAddressString;
+        private static readonly IEnumerable<DS18B20> _devices;
+        private static readonly OneWireDeviceHandler _handler;
+        private  readonly string _oneWireAddressString;
+
+        static TemperatureModule()
+        {
+            _handler = new OneWireDeviceHandler(false, false);
+            _devices = _handler.OneWireDevices.GetDevices<DS18B20>();
+        }
 
         public TemperatureModule(string oneWireAddressString)
         {
-            _oneWireAddressString = oneWireAddressString;
-            _handler = new OneWireDeviceHandler(false, false);
-            _devices = _handler.OneWireDevices.GetDevices<DS18B20>();
+            _oneWireAddressString = oneWireAddressString;            
         }
 
         public TemperatureModel GetCurrenTemperature()
