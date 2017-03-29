@@ -35,9 +35,13 @@ namespace Brewery
                 Content = action.Message,
                 Title = action.Title,
                 PrimaryButtonText = "OK",
-                
-                PrimaryButtonCommand = new RelayCommand(action.AfterHideCallback)
+                PrimaryButtonCommand = new RelayCommand(action.OkButtonCommand)
             };
+            if (action.CancelButtonCommand != null)
+            {
+                contentDialog.SecondaryButtonText = "Abbruch";
+                contentDialog.SecondaryButtonCommand = new RelayCommand(action.CancelButtonCommand);
+            }
             await contentDialog.ShowAsync();
         }
 

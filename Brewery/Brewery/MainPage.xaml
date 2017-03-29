@@ -8,9 +8,9 @@
     xmlns:brewery="using:Brewery"
     mc:Ignorable="d">
     
-    <!--<Page.DataContext>
+    <Page.DataContext>
         <Binding Path="Main" Source="{StaticResource ViewModelLocator}" />
-    </Page.DataContext>-->
+    </Page.DataContext>
     
     <Page.Resources>
         <DataTemplate x:Key="DefaultTemplate" x:DataType="brewery:MenuItem">
@@ -30,7 +30,12 @@
             <RowDefinition></RowDefinition>
             <RowDefinition Height="48"></RowDefinition>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="48"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
         <controls:HamburgerMenu x:Name="HamburgerMenuControl"
+                                Grid.ColumnSpan="2"
                                 PaneBackground="Black"
                                 Foreground="White"
                                 ItemTemplate="{StaticResource DefaultTemplate}"
@@ -39,7 +44,10 @@
                                 OptionsItemClick="OnMenuItemClick">
             <Frame x:Name="ContentFrame"/>
         </controls:HamburgerMenu>
-        <Grid Grid.Row="1" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" VerticalAlignment="Center">
+        <Button Grid.Row="1" Grid.Column="0" Command="{x:Bind CloseApplicationCommand}">
+            <SymbolIcon Symbol="Clear"></SymbolIcon>
+        </Button>
+        <Grid Grid.Row="1" Grid.Column="1" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" VerticalAlignment="Center">
             <Frame x:Name="StatusFrame"></Frame>
         </Grid>
     </Grid>

@@ -6,6 +6,8 @@ namespace Brewery.Core.Models
     {
         public string Title { get; set; }
         public string Message { get; set; }
-        public Action AfterHideCallback { get; set; }
+        public Action OkButtonCommand { get; set; }
+
+        public Action CancelButtonCommand { get; set; }
     }
 }
