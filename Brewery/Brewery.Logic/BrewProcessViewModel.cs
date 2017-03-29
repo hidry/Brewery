@@ -160,12 +160,12 @@ namespace Brewery.Logic
                             {
                                 Title = "Rast-Ende",
                                 Message = currentStep.ToString(),
-                                AfterHideCallback = () =>
+                                OkButtonCommand = () =>
                                 {
                                     _messageOpen = false;
                                     _messageAcknowledged = true;
                                 }
-                            }); // todo: ressourcen
+                            });
                         }
                     }
                     else

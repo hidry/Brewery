@@ -46,7 +46,7 @@ namespace Brewery.Logic
             }
         }
 
-        //public MainViewModel Main => ServiceLocator.Current.GetInstance<MainViewModel>();
+        public MainViewModel Main => ServiceLocator.Current.GetInstance<MainViewModel>();
 
         public SettingsViewModel SettingsView => ServiceLocator.Current.GetInstance<SettingsViewModel>();
 

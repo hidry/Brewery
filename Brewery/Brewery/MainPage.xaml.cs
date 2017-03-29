@@ -1,6 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Windows.UI.Xaml.Controls;
+using Brewery.Core.Models;
+using Brewery.Logic;
+using GalaSoft.MvvmLight.Command;
+using GalaSoft.MvvmLight.Messaging;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -11,7 +15,7 @@ namespace Brewery
     /// </summary>
     public sealed partial class MainPage
     {
-        //public MainViewModel ViewModel => (MainViewModel)DataContext;
+        public MainViewModel ViewModel => (MainViewModel)DataContext;
 
         public MainPage()
         {
@@ -29,6 +33,22 @@ namespace Brewery
         {
             var menuItem = e.ClickedItem as MenuItem;
             if (menuItem != null) ContentFrame.Navigate(menuItem.PageType);
+        }
+
+        public RelayCommand CloseApplicationCommand => new RelayCommand(CloseApplication);
+
+        private void CloseApplication()
+        {
+            Messenger.Default.Send(new ShowMessageDialog()
+            {
+                Title = "Schließen",
+                Message = "Soll die App geschlossen werden?",
+                OkButtonCommand = () =>
+                {
+                    Windows.UI.Xaml.Application.Current.Exit();
+                },
+                CancelButtonCommand = () => {}
+            });
         }
     }
 
