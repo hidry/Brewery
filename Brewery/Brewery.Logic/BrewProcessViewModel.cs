@@ -6,6 +6,9 @@ using Brewery.Core.Models;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using PushbulletSharp;
+using PushbulletSharp.Models.Requests;
+using PushbulletSharp.Models.Responses;
 using Telerik.Data.Core;
 
 namespace Brewery.Logic
@@ -156,6 +159,7 @@ namespace Brewery.Logic
                         if (!_messageOpen)
                         {
                             _messageOpen = true;
+
                             Messenger.Default.Send(new ShowMessageDialog()
                             {
                                 Title = "Rast-Ende",
@@ -166,6 +170,16 @@ namespace Brewery.Logic
                                     _messageAcknowledged = true;
                                 }
                             });
+
+                            var client = new PushbulletClient("o.8eOhOCEf24WUSvlXsQQ05X5XOpWS40EY");
+                            var reqeust = new PushNoteRequest()
+                            {
+                                Email = "hidry@gmx.de",
+                                Title = "Rast-Ende",
+                                Body = currentStep.ToString()
+                            };
+                            var response = client.PushNote(reqeust);
+
                         }
                     }
                     else
