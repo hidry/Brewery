@@ -37,15 +37,22 @@ namespace Brewery.Logic
 
             BrewProcessSteps.Add(new BrewProcessStep()
             {
-                Temperatur = 25,
+                Temperatur = 70,
                 Rast = 1,
                 Benachrichtigung = true,
-                Ruehrgeraet = false
+                Ruehrgeraet = true
             });
             BrewProcessSteps.Add(new BrewProcessStep()
             {
-                Temperatur = 30,
-                Rast = 3,
+                Temperatur = 66.5,
+                Rast = 90,
+                Benachrichtigung = true,
+                Ruehrgeraet = true
+            });
+            BrewProcessSteps.Add(new BrewProcessStep()
+            {
+                Temperatur = 76,
+                Rast = 0,
                 Benachrichtigung = true,
                 Ruehrgeraet = true
             });
@@ -143,9 +150,17 @@ namespace Brewery.Logic
             _temperatureControl1Module.ManageTemperature(currentStep.Temperatur, temperatureCurrent);
             
             _mixerModule.Power(currentStep.Ruehrgeraet);
-            
+
+            //wenn ein nachfolgender Schritt eine niedrigere Temperatur benötigt als der Vorgängerschritt
+            if (_currentStep > 0 && currentStep.Temperatur < BrewProcessSteps[_currentStep - 1].Temperatur && _tempReachedAt == default(DateTime))
+            {
+                if (temperatureCurrent <= currentStep.Temperatur)
+                {
+                    _tempReachedAt = DateTime.Now;
+                }
+            }
             //wenn Solltemperatur erreicht
-            if (temperatureCurrent >= currentStep.Temperatur)
+            else if (temperatureCurrent >= currentStep.Temperatur)
             {
                 if (_tempReachedAt == default(DateTime))
                     _tempReachedAt = DateTime.Now;
@@ -160,26 +175,8 @@ namespace Brewery.Logic
                         {
                             _messageOpen = true;
 
-                            Messenger.Default.Send(new ShowMessageDialog()
-                            {
-                                Title = "Rast-Ende",
-                                Message = currentStep.ToString(),
-                                OkButtonCommand = () =>
-                                {
-                                    _messageOpen = false;
-                                    _messageAcknowledged = true;
-                                }
-                            });
-
-                            var client = new PushbulletClient("o.8eOhOCEf24WUSvlXsQQ05X5XOpWS40EY");
-                            var reqeust = new PushNoteRequest()
-                            {
-                                Email = "hidry@gmx.de",
-                                Title = "Rast-Ende",
-                                Body = currentStep.ToString()
-                            };
-                            var response = client.PushNote(reqeust);
-
+                            DisplayBrewStepMessage(currentStep);
+                            SendBrewStepNotification(currentStep);
                         }
                     }
                     else
@@ -202,6 +199,32 @@ namespace Brewery.Logic
                     }
                 }
             }
+        }
+
+        private void SendBrewStepNotification(BrewProcessStep currentStep)
+        {
+            var client = new PushbulletClient("o.8eOhOCEf24WUSvlXsQQ05X5XOpWS40EY");
+            var reqeust = new PushNoteRequest()
+            {
+                Email = "hidry@gmx.de",
+                Title = "Rast-Ende",
+                Body = currentStep.ToString()
+            };
+            var response = client.PushNote(reqeust);
+        }
+
+        private void DisplayBrewStepMessage(BrewProcessStep currentStep)
+        {
+            Messenger.Default.Send(new ShowMessageDialog()
+            {
+                Title = "Rast-Ende",
+                Message = currentStep.ToString(),
+                OkButtonCommand = () =>
+                {
+                    _messageOpen = false;
+                    _messageAcknowledged = true;
+                }
+            });
         }
 
         public RelayCommand PauseBrewProcessCommand => new RelayCommand(PauseBrewProcess);
