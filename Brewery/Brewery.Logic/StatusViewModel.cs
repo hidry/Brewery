@@ -17,7 +17,7 @@ namespace Brewery.Logic
             _temperatureControl1Module = temperatureControl1Module;
             _temperatureControl2Module = temperatureControl2Module;
                         
-            timer.AddEvent((sender, o) => UpdateProperties());
+            timer.AddEvent(nameof(UpdateProperties), (sender, o) => UpdateProperties());
         }
 
         private void UpdateProperties()

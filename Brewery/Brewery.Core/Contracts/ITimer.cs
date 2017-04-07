@@ -4,7 +4,7 @@ namespace Brewery.Core.Contracts
 {
     public interface ITimer
     {
-        void AddEvent(EventHandler<object> tick);
-        void RemoveEvent(EventHandler<object> tick);
+        void AddEvent(string eventName, EventHandler<object> tick);
+        void RemoveEvent(string eventName, EventHandler<object> tick);
     }
 }
