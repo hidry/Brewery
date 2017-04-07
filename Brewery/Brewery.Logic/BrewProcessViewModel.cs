@@ -6,48 +6,39 @@ using Brewery.Core.Models;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using PushbulletSharp;
+using PushbulletSharp.Models.Requests;
+using PushbulletSharp.Models.Responses;
 using Telerik.Data.Core;
 
 namespace Brewery.Logic
 {
     public class BrewProcessViewModel : ViewModelBase
     {
-        private readonly IMixerModule _mixerModule;
-        private readonly ITemperature1Module _temperature1Module;
-        private readonly ITemperatureControl1Module _temperatureControl1Module;
-        private readonly ITimer _timer;
+        private readonly IBrewProcessModule _brewProcessModule;
 
-        public BrewProcessViewModel(ITimer timer, IMixerModule mixerModule, ITemperature1Module temperature1Module, ITemperatureControl1Module temperatureControl1Module)
+        public BrewProcessViewModel(IBrewProcessModule brewProcessModule, BrewProcessSteps brewProcessSteps)
         {
-            _timer = timer;
-            _mixerModule = mixerModule;
-            _temperature1Module = temperature1Module;
-            _temperatureControl1Module = temperatureControl1Module;
-
-            //_brewProcessTimer = new DispatcherTimer() { Interval = new TimeSpan(0, 0, 1) };
-            //_brewProcessTimer.Tick += (sender, o) => { ExecuteBrewProcessStep(); };
+            _brewProcessModule = brewProcessModule;
 
             ButtonStartBrewProcessEnabled = true;
             ButtonPauseBrewProcessEnabled = false;
             ButtonStopBrewProcessEnabled = false;
             ButtonRemoveBrewProcessStepEnabled = false;
 
-            BrewProcessSteps.Add(new BrewProcessStep()
-            {
-                Temperatur = 25,
-                Rast = 1,
-                Benachrichtigung = true,
-                Ruehrgeraet = false
-            });
-            BrewProcessSteps.Add(new BrewProcessStep()
-            {
-                Temperatur = 30,
-                Rast = 3,
-                Benachrichtigung = true,
-                Ruehrgeraet = true
-            });
+            BrewProcessSteps = brewProcessSteps;
+
+            Messenger.Default.Register<BrewProcessFinishedMessage>(this, BrewProcessFinishedMessageReceived);
         }
-        public ObservableCollection<BrewProcessStep> BrewProcessSteps = new ObservableCollection<BrewProcessStep>();
+
+        private void BrewProcessFinishedMessageReceived(BrewProcessFinishedMessage obj)
+        {
+            ButtonStartBrewProcessEnabled = true;
+            ButtonPauseBrewProcessEnabled = false;
+            ButtonStopBrewProcessEnabled = false;
+        }
+
+        public readonly BrewProcessSteps BrewProcessSteps;
 
         public RelayCommand AddBrewProcessStepCommand => new RelayCommand(AddBrewProcessStep);
 
@@ -109,13 +100,85 @@ namespace Brewery.Logic
             ButtonStartBrewProcessEnabled = false;
             ButtonPauseBrewProcessEnabled = true;
             ButtonStopBrewProcessEnabled = true;
-            foreach (var brewProcessStep in BrewProcessSteps)
-            {
-                brewProcessStep.ElapsedTime = null;
-            }
-            ExecuteBrewProcessStep();
-            _timer.AddEvent((o, e) => ExecuteBrewProcessStep());
+            Messenger.Default.Send(new StartBrewProcessMessage());
         }
+        
+        public RelayCommand PauseBrewProcessCommand => new RelayCommand(PauseBrewProcess);
+
+        private void PauseBrewProcess()
+        {
+            ButtonPauseBrewProcessEnabled = false;
+            ButtonStartBrewProcessEnabled = true;
+            Messenger.Default.Send(new PauseBrewProcessMessage());
+        }
+
+        public RelayCommand StopBrewProcessCommand => new RelayCommand(StopBrewProcess);
+
+        private void StopBrewProcess()
+        {
+            ButtonStartBrewProcessEnabled = true;
+            ButtonStopBrewProcessEnabled = false;
+            ButtonPauseBrewProcessEnabled = false;
+            Messenger.Default.Send(new StopBrewProcessMessage());
+        }
+    }
+    
+
+
+
+    public class BrewProcessSteps : ObservableCollection<BrewProcessStep>
+    {
+        public BrewProcessSteps()
+        {
+            Add(new BrewProcessStep()
+            {
+                Temperatur = 70,
+                Rast = 1,
+                Benachrichtigung = true,
+                Ruehrgeraet = true
+            });
+            Add(new BrewProcessStep()
+            {
+                Temperatur = 66.5,
+                Rast = 90,
+                Benachrichtigung = true,
+                Ruehrgeraet = true
+            });
+            Add(new BrewProcessStep()
+            {
+                Temperatur = 76,
+                Rast = 0,
+                Benachrichtigung = true,
+                Ruehrgeraet = true
+            });
+        }
+    }
+
+    public class StartBrewProcessMessage { }
+    public class PauseBrewProcessMessage { }
+    public class StopBrewProcessMessage { }
+    public class BrewProcessFinishedMessage { }
+
+    public interface IBrewProcessModule
+    {
+        void ExecuteBrewProcessStep();
+    }
+
+    public class BrewProcessModule : IBrewProcessModule
+    {
+        private enum Status
+        {
+            Started,
+            Paused,
+            Stopped
+        }
+
+        private readonly ITimer _timer;
+        private readonly ITemperature1Module _temperature1Module;
+        private readonly ITemperatureControl1Module _temperatureControl1Module;
+        private readonly IMixerModule _mixerModule;
+        private readonly BrewProcessSteps _brewProcessSteps;
+        private Status _status = Status.Stopped;
 
         //private readonly DispatcherTimer _brewProcessTimer;
         private DateTime _tempReachedAt = default(DateTime);
@@ -124,25 +187,77 @@ namespace Brewery.Logic
         private bool _messageAcknowledged;
         private DateTime _startedAt = default(DateTime);
 
-        private void ExecuteBrewProcessStep()
+        public BrewProcessModule(ITimer timer, ITemperature1Module temperature1Module, ITemperatureControl1Module temperatureControl1Module, IMixerModule mixerModule, BrewProcessSteps brewProcessSteps)
         {
-            if (ButtonStartBrewProcessEnabled == true)
+            _timer = timer;
+            _temperature1Module = temperature1Module;
+            _temperatureControl1Module = temperatureControl1Module;
+            _mixerModule = mixerModule;
+            _brewProcessSteps = brewProcessSteps;
+            Messenger.Default.Register<StartBrewProcessMessage>(this, StartBrewProcessMessageReceived);
+            Messenger.Default.Register<PauseBrewProcessMessage>(this, PauseBrewProcessMessageReceived);
+            Messenger.Default.Register<StopBrewProcessMessage>(this, StopBrewProcessMessageReceived);
+        }
+
+        private void StopBrewProcessMessageReceived(StopBrewProcessMessage obj)
+        {
+            _status = Status.Stopped;
+            _temperatureControl1Module.BoilingPlateOff();
+            _tempReachedAt = default(DateTime);
+            _startedAt = default(DateTime);
+            _currentStep = 0;
+            _timer.RemoveEvent(nameof(ExecuteBrewProcessStep), (o, e) => ExecuteBrewProcessStep());
+        }
+
+        private void PauseBrewProcessMessageReceived(PauseBrewProcessMessage obj)
+        {
+            _status = Status.Paused;
+            _timer.RemoveEvent(nameof(ExecuteBrewProcessStep), (o, e) => ExecuteBrewProcessStep());
+        }
+
+        private void StartBrewProcessMessageReceived(StartBrewProcessMessage obj)
+        {
+            if (_status != Status.Paused)
+            {
+                foreach (var brewProcessStep in _brewProcessSteps)
+                {
+                    brewProcessStep.ElapsedTime = null;
+                }
+            }
+            _status = Status.Started;
+            ExecuteBrewProcessStep();
+            _timer.AddEvent(nameof(ExecuteBrewProcessStep), (o, e) => ExecuteBrewProcessStep());
+        }
+
+        public void ExecuteBrewProcessStep()
+        {
+            System.Diagnostics.Debug.WriteLine($"{DateTime.Now}: {nameof(ExecuteBrewProcessStep)}");
+
+            if (_status != Status.Started)
                 return;
 
             var temperatureCurrent = _temperature1Module.GetCurrenTemperature().Temperature;
-            var currentStep = BrewProcessSteps[_currentStep];
+            var currentStep = _brewProcessSteps[_currentStep];
 
             if (_startedAt == default(DateTime))
                 _startedAt = DateTime.Now;
-            
+
             currentStep.ElapsedTime = new DateTime((DateTime.Now - _startedAt).Ticks).ToString("mm:ss");
 
             _temperatureControl1Module.ManageTemperature(currentStep.Temperatur, temperatureCurrent);
-            
+
             _mixerModule.Power(currentStep.Ruehrgeraet);
-            
+
+            //wenn ein nachfolgender Schritt eine niedrigere Temperatur benötigt als der Vorgängerschritt
+            if (_currentStep > 0 && currentStep.Temperatur < _brewProcessSteps[_currentStep - 1].Temperatur && _tempReachedAt == default(DateTime))
+            {
+                if (temperatureCurrent <= currentStep.Temperatur)
+                {
+                    _tempReachedAt = DateTime.Now;
+                }
+            }
             //wenn Solltemperatur erreicht
-            if (temperatureCurrent >= currentStep.Temperatur)
+            else if (temperatureCurrent >= currentStep.Temperatur)
             {
                 if (_tempReachedAt == default(DateTime))
                     _tempReachedAt = DateTime.Now;
@@ -156,30 +271,21 @@ namespace Brewery.Logic
                         if (!_messageOpen)
                         {
                             _messageOpen = true;
-                            Messenger.Default.Send(new ShowMessageDialog()
-                            {
-                                Title = "Rast-Ende",
-                                Message = currentStep.ToString(),
-                                OkButtonCommand = () =>
-                                {
-                                    _messageOpen = false;
-                                    _messageAcknowledged = true;
-                                }
-                            });
+
+                            DisplayBrewStepMessage(currentStep, () => { _messageOpen = false; _messageAcknowledged = true; });
+                            SendBrewStepNotification(currentStep);
                         }
                     }
                     else
                     {
-                        if (BrewProcessSteps.Count - 1 > _currentStep)
+                        if (_brewProcessSteps.Count - 1 > _currentStep)
                         {
                             _currentStep += 1;
                         }
                         else
                         {
-                            ButtonStartBrewProcessEnabled = true;
-                            ButtonPauseBrewProcessEnabled = false;
-                            ButtonStopBrewProcessEnabled = false;
-                            _timer.RemoveEvent((o, e) => ExecuteBrewProcessStep());
+                            Messenger.Default.Send(new BrewProcessFinishedMessage());
+                            _timer.RemoveEvent(nameof(ExecuteBrewProcessStep), (o, e) => ExecuteBrewProcessStep());
                             _currentStep = 0;
                         }
                         _tempReachedAt = default(DateTime);
@@ -190,27 +296,26 @@ namespace Brewery.Logic
             }
         }
 
-        public RelayCommand PauseBrewProcessCommand => new RelayCommand(PauseBrewProcess);
-
-        private void PauseBrewProcess()
+        private void DisplayBrewStepMessage(BrewProcessStep currentStep, Action okButtonCommand)
         {
-            ButtonPauseBrewProcessEnabled = false;
-            ButtonStartBrewProcessEnabled = true;
-            _timer.RemoveEvent((o, e) => ExecuteBrewProcessStep());
+            Messenger.Default.Send(new ShowMessageDialog()
+            {
+                Title = "Rast-Ende",
+                Message = currentStep.ToString(),
+                OkButtonCommand = okButtonCommand
+            });
         }
 
-        public RelayCommand StopBrewProcessCommand => new RelayCommand(StopBrewProcess);
-
-        private void StopBrewProcess()
+        private void SendBrewStepNotification(BrewProcessStep currentStep)
         {
-            _temperatureControl1Module.BoilingPlateOff();
-            ButtonStartBrewProcessEnabled = true;
-            ButtonStopBrewProcessEnabled = false;
-            ButtonPauseBrewProcessEnabled = false;
-            _timer.RemoveEvent((o, e) => ExecuteBrewProcessStep());
-            _tempReachedAt = default(DateTime);
-            _startedAt = default(DateTime);
-            _currentStep = 0;
+            var client = new PushbulletClient("o.8eOhOCEf24WUSvlXsQQ05X5XOpWS40EY");
+            var reqeust = new PushNoteRequest()
+            {
+                Email = "hidry@gmx.de",
+                Title = "Rast-Ende",
+                Body = currentStep.ToString()
+            };
+            var response = client.PushNote(reqeust);
         }
     }
 

@@ -85,12 +85,12 @@ namespace Brewery.Logic
             if (TemperatureControl1OnOffSymbol == Symbol.Play)
             {
                 TemperatureControl1OnOffSymbol = Symbol.Stop;
-                _timer.AddEvent((o, e) => TemperatureControl1Tick());
+                _timer.AddEvent(nameof(TemperatureControl1Tick), (o, e) => TemperatureControl1Tick());
             }
             else
             {
                 TemperatureControl1OnOffSymbol = Symbol.Play;
-                _timer.RemoveEvent((o, e) => TemperatureControl1Tick());
+                _timer.RemoveEvent(nameof(TemperatureControl1Tick), (o, e) => TemperatureControl1Tick());
                 _temperatureControl1Module.BoilingPlateOff();
             }
         }
@@ -140,12 +140,12 @@ namespace Brewery.Logic
             if (TemperatureControl2OnOffSymbol == Symbol.Play)
             {
                 TemperatureControl2OnOffSymbol = Symbol.Stop;
-                _timer.AddEvent((o, e) => TemperatureControl2Tick());
+                _timer.AddEvent(nameof(TemperatureControl2Tick), (o, e) => TemperatureControl2Tick());
             }
             else
             {
                 TemperatureControl2OnOffSymbol = Symbol.Play;
-                _timer.RemoveEvent((o, e) => TemperatureControl2Tick());
+                _timer.RemoveEvent(nameof(TemperatureControl2Tick), (o, e) => TemperatureControl2Tick());
                 _temperatureControl2Module.BoilingPlateOff();
             }
         }

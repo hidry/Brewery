@@ -28,7 +28,7 @@
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
-            <RowDefinition Height="48"></RowDefinition>
+            <RowDefinition Height="30"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="48"></ColumnDefinition>
@@ -44,10 +44,10 @@
                                 OptionsItemClick="OnMenuItemClick">
             <Frame x:Name="ContentFrame"/>
         </controls:HamburgerMenu>
-        <Button Grid.Row="1" Grid.Column="0" Command="{x:Bind CloseApplicationCommand}" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <!--<Button Grid.Row="1" Grid.Column="0" Command="{x:Bind CloseApplicationCommand}" VerticalAlignment="Center" HorizontalAlignment="Center">
             <SymbolIcon Symbol="Clear"></SymbolIcon>
-        </Button>
-        <Grid Grid.Row="1" Grid.Column="1" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" VerticalAlignment="Center">
+        </Button>-->
+        <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center">
             <Frame x:Name="StatusFrame"></Frame>
         </Grid>
     </Grid>

@@ -23,6 +23,7 @@ namespace Brewery.Logic
             SimpleIoc.Default.Register<BrewProcessViewModel>();
             SimpleIoc.Default.Register<StatusViewModel>();
             SimpleIoc.Default.Register<ManualHandlingViewModel>();
+            SimpleIoc.Default.Register<BrewProcessSteps>();
         }
 
         private static void SetUpModules()
@@ -35,6 +36,7 @@ namespace Brewery.Logic
             SimpleIoc.Default.Register<ITemperatureControl1Module, TemperatureControl1Module>();
             SimpleIoc.Default.Register<ITemperatureControl2Module, TemperatureControl2Module>();
             SimpleIoc.Default.Register<ITimer, Timer>();
+            SimpleIoc.Default.Register<IBrewProcessModule, BrewProcessModule>();
         }
 
         public static void DisposeCreatedInstances()
