@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using Windows.UI.Xaml;
 using Brewery.Core.Contracts;
 using Brewery.Core.Models;
 using GalaSoft.MvvmLight;
@@ -8,7 +7,6 @@ using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using PushbulletSharp;
 using PushbulletSharp.Models.Requests;
-using PushbulletSharp.Models.Responses;
 using Telerik.Data.Core;
 
 namespace Brewery.Logic
@@ -19,7 +17,7 @@ namespace Brewery.Logic
 
         public BrewProcessViewModel(IBrewProcessModule brewProcessModule, BrewProcessSteps brewProcessSteps)
         {
-            _brewProcessModule = brewProcessModule;
+            _brewProcessModule = brewProcessModule; // aktuell nötgi, da sonst keine Instanz von BrewProcessModule erstellt wird
 
             ButtonStartBrewProcessEnabled = true;
             ButtonPauseBrewProcessEnabled = false;
@@ -231,8 +229,6 @@ namespace Brewery.Logic
 
         public void ExecuteBrewProcessStep()
         {
-            System.Diagnostics.Debug.WriteLine($"{DateTime.Now}: {nameof(ExecuteBrewProcessStep)}");
-
             if (_status != Status.Started)
                 return;
 
