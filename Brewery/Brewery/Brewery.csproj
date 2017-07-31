@@ -116,9 +116,6 @@
     <Compile Include="Views\Status.xaml.cs">
       <DependentUpon>Status.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\WebViewer.xaml.cs">
-      <DependentUpon>WebViewer.xaml</DependentUpon>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -160,10 +157,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\WebViewer.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Brewery.Core\Brewery.Core.csproj">
@@ -173,10 +166,6 @@
     <ProjectReference Include="..\Brewery.Logic\Brewery.Logic.csproj">
       <Project>{f8782999-60aa-4436-b898-3c4dec440440}</Project>
       <Name>Brewery.Logic</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\TCD.Controls.Keyboard\TCD.Controls.Keyboard.csproj">
-      <Project>{9e8b0d12-8145-4247-821c-4a603fa683f2}</Project>
-      <Name>TCD.Controls.Keyboard</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
