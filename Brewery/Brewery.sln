@@ -4,6 +4,10 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brewery", "Brewery\Brewery.csproj", "{C1D8E81F-1676-4D56-87E1-39D1285F1081}"
+	ProjectSection(ProjectDependencies) = postProject
+		{48C3EE86-D15B-44F6-B172-527C4768C29D} = {48C3EE86-D15B-44F6-B172-527C4768C29D}
+		{B276969A-2193-49E8-80AB-890101650F33} = {B276969A-2193-49E8-80AB-890101650F33}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brewery.Core", "Brewery.Core\Brewery.Core.csproj", "{723EC350-D3CD-4F59-A432-50CC3D162069}"
 EndProject
