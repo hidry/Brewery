@@ -114,6 +114,7 @@
     <Compile Include="Modules\BoilingPlateModule.cs" />
     <Compile Include="Modules\BoilingPlate1Module.cs" />
     <Compile Include="Modules\GpioModule.cs" />
+    <Compile Include="Modules\PiezoModule.cs" />
     <Compile Include="Modules\MixerModule.cs" />
     <Compile Include="Modules\Temperature2Module.cs" />
     <Compile Include="Modules\Temperature1Module.cs" />

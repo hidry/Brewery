@@ -8,7 +8,8 @@ namespace Brewery.Core.Models
         {
             new Gpio() {Description = "GPIO", GpioNumber = 12, PinNumber = 32},
             new Gpio() {Description = "GPIO", GpioNumber = 16, PinNumber = 36},
-            new Gpio() {Description = "GPIO", GpioNumber = 20, PinNumber = 38}
+            new Gpio() {Description = "GPIO", GpioNumber = 20, PinNumber = 38},
+            new Gpio() {Description = "GPIO", GpioNumber = 21, PinNumber = 40}
         };
     }
 

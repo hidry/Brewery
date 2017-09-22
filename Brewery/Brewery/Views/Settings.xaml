@@ -20,6 +20,7 @@
             <controls:HeaderedTextBlock x:Uid="TemperatureSensor2OneWireAddressTextBlock" Text="{x:Bind ViewViewModel.TemperatureSensor2OneWireAddress}"></controls:HeaderedTextBlock>
             <controls:HeaderedTextBlock x:Uid="BoilingPlate2HeaderTextBlock" Text="{x:Bind ViewViewModel.BoilingPlate2Gpio}"></controls:HeaderedTextBlock>
             <controls:HeaderedTextBlock  x:Uid="MixerHeaderTextBlock" Text="{x:Bind ViewViewModel.MixerGpio}"></controls:HeaderedTextBlock>
+            <controls:HeaderedTextBlock  x:Uid="PiezoHeaderTextBlock" Text="{x:Bind ViewViewModel.PiezoGpio}"></controls:HeaderedTextBlock>
         </controls:AdaptiveGridView.Items>
     </controls:AdaptiveGridView>
 

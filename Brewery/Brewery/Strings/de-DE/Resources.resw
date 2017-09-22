@@ -126,6 +126,9 @@
   <data name="MixerHeaderTextBlock.Header" xml:space="preserve">
     <value>Rührwerk</value>
   </data>
+  <data name="PiezoHeaderTextBlock.Header" xml:space="preserve">
+    <value>Piezo-Summer 1</value>
+  </data>
   <data name="TemperatureSensor1OneWireAddressTextBlock.Header" xml:space="preserve">
     <value>Temperatursensor 1</value>
   </data>

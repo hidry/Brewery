@@ -15,6 +15,7 @@ namespace Brewery.Logic
             TemperatureSensor2OneWireAddress = settings.TemperatureSensor2OneWireAddress;
             BoilingPlate1Gpio = settings.BoilingPlate1Gpio;
             BoilingPlate2Gpio = settings.BoilingPlate2Gpio;
+            PiezoGpio = settings.PiezoGpio;
         }
         
         private Gpio _mixerGpio;
@@ -59,6 +60,15 @@ namespace Brewery.Logic
             get { return _boilingPlate2Gpio; }
             private set { Set(() => BoilingPlate2Gpio, ref _boilingPlate2Gpio, value);
                 _settings.BoilingPlate2Gpio = value;
+            }
+        }
+
+        private Gpio _piezoGpio;
+        public Gpio PiezoGpio
+        {
+            get { return _piezoGpio; }
+            private set { Set(() => PiezoGpio, ref _piezoGpio, value);
+                _settings.PiezoGpio = value;
             }
         }
     }

@@ -3,7 +3,7 @@
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.4.0",
     "Microsoft.Toolkit.Uwp.UI.Controls": "2.0.0",
     "MvvmLightLibs": "5.4.0-alpha",
-    "Telerik.UI.for.UniversalWindowsPlatform": "1.0.0.5"
+    "Telerik.UI.for.UniversalWindowsPlatform": "1.0.0.6"
   },
   "frameworks": {
     "uap10.0.10586": {}

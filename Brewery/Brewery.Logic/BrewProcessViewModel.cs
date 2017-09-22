@@ -175,6 +175,7 @@ namespace Brewery.Logic
         private readonly ITemperature1Module _temperature1Module;
         private readonly ITemperatureControl1Module _temperatureControl1Module;
         private readonly IMixerModule _mixerModule;
+        private readonly IPiezoModule _piezoModule;
         private readonly BrewProcessSteps _brewProcessSteps;
         private Status _status = Status.Stopped;
 
@@ -185,12 +186,13 @@ namespace Brewery.Logic
         private bool _messageAcknowledged;
         private DateTime _startedAt = default(DateTime);
 
-        public BrewProcessModule(ITimer timer, ITemperature1Module temperature1Module, ITemperatureControl1Module temperatureControl1Module, IMixerModule mixerModule, BrewProcessSteps brewProcessSteps)
+        public BrewProcessModule(ITimer timer, ITemperature1Module temperature1Module, ITemperatureControl1Module temperatureControl1Module, IMixerModule mixerModule, IPiezoModule piezoModule, BrewProcessSteps brewProcessSteps)
         {
             _timer = timer;
             _temperature1Module = temperature1Module;
             _temperatureControl1Module = temperatureControl1Module;
             _mixerModule = mixerModule;
+            _piezoModule = piezoModule;
             _brewProcessSteps = brewProcessSteps;
             Messenger.Default.Register<StartBrewProcessMessage>(this, StartBrewProcessMessageReceived);
             Messenger.Default.Register<PauseBrewProcessMessage>(this, PauseBrewProcessMessageReceived);
@@ -229,6 +231,8 @@ namespace Brewery.Logic
 
         public void ExecuteBrewProcessStep()
         {
+            _piezoModule.Power(false);
+
             if (_status != Status.Started)
                 return;
 
@@ -271,6 +275,7 @@ namespace Brewery.Logic
                             DisplayBrewStepMessage(currentStep, () => { _messageOpen = false; _messageAcknowledged = true; });
                             SendBrewStepNotification(currentStep);
                         }
+                        _piezoModule.Power(true);
                     }
                     else
                     {

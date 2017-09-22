@@ -28,6 +28,7 @@ namespace Brewery.Logic
 
         private static void SetUpModules()
         {
+            SimpleIoc.Default.Register<IPiezoModule, PiezoModule>();
             SimpleIoc.Default.Register<IMixerModule, MixerModule>();
             SimpleIoc.Default.Register<ITemperature1Module, Temperature1Module>();
             SimpleIoc.Default.Register<ITemperature2Module, Temperature2Module>();
