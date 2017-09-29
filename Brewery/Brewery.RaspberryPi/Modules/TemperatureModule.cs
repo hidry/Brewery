@@ -25,10 +25,10 @@ namespace Brewery.RaspberryPi.Modules
 
         public TemperatureModel GetCurrenTemperature()
         {
-            return new TemperatureModel() {Temperature = Device.GetTemperature() };
+            return new TemperatureModel() {Temperature = Device == null ? 0 : Device.GetTemperature() };
         }
 
-        private DS18B20 Device => _devices.First(d => d.OneWireAddressString == _oneWireAddressString);
+        private DS18B20 Device => _devices.FirstOrDefault(d => d.OneWireAddressString == _oneWireAddressString);
 
         #region IDisposable Support
         private bool disposedValue = false; // Dient zur Erkennung redundanter Aufrufe.
