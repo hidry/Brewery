@@ -174,6 +174,7 @@ namespace Brewery.Logic
         private readonly ITimer _timer;
         private readonly ITemperature1Module _temperature1Module;
         private readonly ITemperatureControl1Module _temperatureControl1Module;
+        private readonly ITemperatureControl2Module _temperatureControl2Module;
         private readonly IMixerModule _mixerModule;
         private readonly IPiezoModule _piezoModule;
         private readonly BrewProcessSteps _brewProcessSteps;
@@ -185,11 +186,12 @@ namespace Brewery.Logic
         private bool _messageAcknowledged;
         private DateTime _startedAt = default(DateTime);
 
-        public BrewProcessModule(ITimer timer, ITemperature1Module temperature1Module, ITemperatureControl1Module temperatureControl1Module, IMixerModule mixerModule, IPiezoModule piezoModule, BrewProcessSteps brewProcessSteps)
+        public BrewProcessModule(ITimer timer, ITemperature1Module temperature1Module, ITemperatureControl1Module temperatureControl1Module, ITemperatureControl2Module temperatureControl2Module, IMixerModule mixerModule, IPiezoModule piezoModule, BrewProcessSteps brewProcessSteps)
         {
             _timer = timer;
             _temperature1Module = temperature1Module;
             _temperatureControl1Module = temperatureControl1Module;
+            _temperatureControl2Module = temperatureControl2Module;
             _mixerModule = mixerModule;
             _piezoModule = piezoModule;
             _brewProcessSteps = brewProcessSteps;
@@ -202,6 +204,7 @@ namespace Brewery.Logic
         {
             _status = Status.Stopped;
             _temperatureControl1Module.BoilingPlateOff();
+            _temperatureControl2Module.BoilingPlateOff();
             _tempReachedAt = default(DateTime);
             _startedAt = default(DateTime);
             _currentStep = 0;
@@ -244,6 +247,7 @@ namespace Brewery.Logic
             currentStep.ElapsedTime = new DateTime((DateTime.Now - _startedAt).Ticks).ToString("mm:ss");
 
             _temperatureControl1Module.ManageTemperature(currentStep.Temperatur, temperatureCurrent);
+            _temperatureControl2Module.ManageTemperature(currentStep.Temperatur, temperatureCurrent);
 
             _mixerModule.Power(currentStep.Ruehrgeraet);
 
