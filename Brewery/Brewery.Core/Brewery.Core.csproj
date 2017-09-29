@@ -114,6 +114,7 @@
     <Compile Include="Contracts\IBoilingPlateModule.cs" />
     <Compile Include="Contracts\IBoilingPlate1Module.cs" />
     <Compile Include="Contracts\IPiezoModule.cs" />
+    <Compile Include="Contracts\IManualHandlingModule.cs" />
     <Compile Include="Contracts\IMixerModule.cs" />
     <Compile Include="Contracts\ITemperature2Module.cs" />
     <Compile Include="Contracts\ITemperature1Module.cs" />

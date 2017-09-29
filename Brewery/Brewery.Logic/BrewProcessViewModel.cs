@@ -13,6 +13,7 @@ namespace Brewery.Logic
 {
     public class BrewProcessViewModel : ViewModelBase
     {
+        public readonly BrewProcessSteps BrewProcessSteps;
         private readonly IBrewProcessModule _brewProcessModule;
 
         public BrewProcessViewModel(IBrewProcessModule brewProcessModule, BrewProcessSteps brewProcessSteps)
@@ -36,7 +37,6 @@ namespace Brewery.Logic
             ButtonStopBrewProcessEnabled = false;
         }
 
-        public readonly BrewProcessSteps BrewProcessSteps;
 
         public RelayCommand AddBrewProcessStepCommand => new RelayCommand(AddBrewProcessStep);
 
@@ -48,7 +48,7 @@ namespace Brewery.Logic
         private BrewProcessStep _selectedBrewProcessStep;
         public BrewProcessStep SelectedBrewProcessStep
         {
-            get { return _selectedBrewProcessStep; }
+            get => _selectedBrewProcessStep;
             set {
                 Set(() => SelectedBrewProcessStep, ref _selectedBrewProcessStep, value);
                 ButtonRemoveBrewProcessStepEnabled = value != null;
@@ -58,28 +58,28 @@ namespace Brewery.Logic
         private bool _buttonStartBrewProcessEnabled;
         public bool ButtonStartBrewProcessEnabled
         {
-            get { return _buttonStartBrewProcessEnabled; }
+            get => _buttonStartBrewProcessEnabled;
             set { Set(() => ButtonStartBrewProcessEnabled, ref _buttonStartBrewProcessEnabled, value); }
         }
 
         private bool _buttonPauseBrewProcessEnabled;
         public bool ButtonPauseBrewProcessEnabled
         {
-            get { return _buttonPauseBrewProcessEnabled; }
+            get => _buttonPauseBrewProcessEnabled;
             set { Set(() => ButtonPauseBrewProcessEnabled, ref _buttonPauseBrewProcessEnabled, value); }
         }
 
         private bool _buttonStopBrewProcessEnabled;
         public bool ButtonStopBrewProcessEnabled
         {
-            get { return _buttonStopBrewProcessEnabled; }
+            get => _buttonStopBrewProcessEnabled;
             set { Set(() => ButtonStopBrewProcessEnabled, ref _buttonStopBrewProcessEnabled, value); }
         }
 
         private bool _buttonRemoveBrewProcessStepEnabled;
         public bool ButtonRemoveBrewProcessStepEnabled
         {
-            get { return _buttonRemoveBrewProcessStepEnabled; }
+            get => _buttonRemoveBrewProcessStepEnabled;
             set { Set(() => ButtonRemoveBrewProcessStepEnabled, ref _buttonRemoveBrewProcessStepEnabled, value ); }
         }
 
@@ -178,8 +178,7 @@ namespace Brewery.Logic
         private readonly IPiezoModule _piezoModule;
         private readonly BrewProcessSteps _brewProcessSteps;
         private Status _status = Status.Stopped;
-
-        //private readonly DispatcherTimer _brewProcessTimer;
+        
         private DateTime _tempReachedAt = default(DateTime);
         private int _currentStep = 0;
         private bool _messageOpen;
@@ -335,7 +334,7 @@ namespace Brewery.Logic
         [ReadOnly]
         public string ElapsedTime
         {
-            get { return _elapsedTime; }
+            get => _elapsedTime;
             set { Set(() => ElapsedTime, ref _elapsedTime, value); }
         }
 
