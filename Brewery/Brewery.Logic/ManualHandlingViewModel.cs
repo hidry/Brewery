@@ -16,6 +16,7 @@ namespace Brewery.Logic
             TemperatureControl1OnOffSymbol = Symbol.Play;
             TemperatureControl2Temperature = 50;
             TemperatureControl2OnOffSymbol = Symbol.Play;
+            MixerControlOnOffSymbol = Symbol.Play;
         }
 
         private int _temperatureControl1Temperature;
@@ -119,6 +120,58 @@ namespace Brewery.Logic
             private set
             {
                 Set(() => TemperatureControl2OnOffSymbol, ref _temperatureControl2OnOffSymbol, value);
+            }
+        }
+
+        public RelayCommand MixerControlOnOffCommand => new RelayCommand(MixerControlOnOff);
+
+        private void MixerControlOnOff()
+        {
+            if (MixerControlOnOffSymbol == Symbol.Play)
+            {
+                MixerControlOnOffSymbol = Symbol.Stop;
+                _manualHandlingModule.StartMixerControl();
+            }
+            else
+            {
+                MixerControlOnOffSymbol = Symbol.Play;
+                _manualHandlingModule.StopMixerControl();
+            }
+        }
+
+        private Symbol _mixerControlOnOffSymbol;
+        public Symbol MixerControlOnOffSymbol
+        {
+            get => _mixerControlOnOffSymbol;
+            private set
+            {
+                Set(() => MixerControlOnOffSymbol, ref _mixerControlOnOffSymbol, value);
+            }
+        }
+
+        public RelayCommand PiezoControlOnOffCommand => new RelayCommand(PiezoControlOnOff);
+
+        private void PiezoControlOnOff()
+        {
+            if (PiezoControlOnOffSymbol == Symbol.Play)
+            {
+                PiezoControlOnOffSymbol = Symbol.Stop;
+                _manualHandlingModule.StartPizeoControl();
+            }
+            else
+            {
+                PiezoControlOnOffSymbol = Symbol.Play;
+                _manualHandlingModule.StopPizeoControl();
+            }
+        }
+
+        private Symbol _piezoControlOnOffSymbol;
+        public Symbol PiezoControlOnOffSymbol
+        {
+            get => _piezoControlOnOffSymbol;
+            private set
+            {
+                Set(() => PiezoControlOnOffSymbol, ref _piezoControlOnOffSymbol, value);
             }
         }
     }

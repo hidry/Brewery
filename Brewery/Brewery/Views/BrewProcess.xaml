@@ -39,7 +39,7 @@
                 <telerikGrid:DataGridTextColumn PropertyName="ElapsedTime" Header="Zeit"></telerikGrid:DataGridTextColumn>
                 <telerikGrid:DataGridTextColumn PropertyName="Temperatur" Header="Temperatur in °C"></telerikGrid:DataGridTextColumn>
                 <telerikGrid:DataGridTextColumn PropertyName="Rast" Header="Rast in Minuten"></telerikGrid:DataGridTextColumn>
-                <!--<telerikGrid:DataGridTextColumn PropertyName="Ruehrgeraet" Header="Rührgerät"></telerikGrid:DataGridTextColumn>-->
+                <telerikGrid:DataGridTextColumn PropertyName="Ruehrgeraet" Header="Rührgerät"></telerikGrid:DataGridTextColumn>
                 <telerikGrid:DataGridTextColumn PropertyName="Benachrichtigung" Header="Benachrichtigung wenn Schritt abgesschlossen"></telerikGrid:DataGridTextColumn>
             </telerikGrid:RadDataGrid.Columns>
         </telerikGrid:RadDataGrid>

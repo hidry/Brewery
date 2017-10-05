@@ -13,8 +13,10 @@
 
     <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="50"></RowDefinition>
-            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="25"></RowDefinition>
+            <RowDefinition Height="25"></RowDefinition>
+            <RowDefinition Height="25"></RowDefinition>
+            <RowDefinition Height="25"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"></ColumnDefinition>
@@ -51,5 +53,14 @@
             <SymbolIcon Symbol="{x:Bind ViewModel.TemperatureControl2OnOffSymbol, Mode=OneWay}"></SymbolIcon>
         </Button>
 
+        <TextBox BorderBrush="Transparent" Grid.Column="0" Grid.Row="2" Text="Rührwerk:" IsReadOnly="True"></TextBox>
+        <Button Grid.Column="5" Grid.Row="2" Command="{x:Bind ViewModel.MixerControlOnOffCommand, Mode=OneWay}">
+            <SymbolIcon Symbol="{x:Bind ViewModel.MixerControlOnOffSymbol, Mode=OneWay}"></SymbolIcon>
+        </Button>
+
+        <TextBox BorderBrush="Transparent" Grid.Column="0" Grid.Row="3" Text="Summer:" IsReadOnly="True"></TextBox>
+        <Button Grid.Column="5" Grid.Row="3" Command="{x:Bind ViewModel.PiezoControlOnOffCommand, Mode=OneWay}">
+            <SymbolIcon Symbol="{x:Bind ViewModel.PiezoControlOnOffSymbol, Mode=OneWay}"></SymbolIcon>
+        </Button>
     </Grid>
 </Page>

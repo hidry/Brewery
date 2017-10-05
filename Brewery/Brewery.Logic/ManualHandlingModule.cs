@@ -8,12 +8,14 @@ namespace Brewery.Logic
         private readonly ITemperatureControl1Module _temperatureControl1Module;
         private readonly ITemperature2Module _temperature2Module;
         private readonly ITemperatureControl2Module _temperatureControl2Module;
+        private readonly IMixerModule _mixerModule;
+        private readonly IPiezoModule _piezoModule;
         private readonly ITimer _timer;
 
         private int _temperatureControl1Temperature;
         private int _temperatureControl2Temperature;
 
-        public ManualHandlingModule(ITimer timer, ITemperature1Module temperature1Module, ITemperatureControl1Module temperatureControl1Module, ITemperature2Module temperature2Module, ITemperatureControl2Module temperatureControl2Module)
+        public ManualHandlingModule(ITimer timer, ITemperature1Module temperature1Module, ITemperatureControl1Module temperatureControl1Module, ITemperature2Module temperature2Module, ITemperatureControl2Module temperatureControl2Module, IMixerModule mixerModule, IPiezoModule piezoModule)
         {
             _timer = timer;
 
@@ -22,6 +24,8 @@ namespace Brewery.Logic
 
             _temperature2Module = temperature2Module;
             _temperatureControl2Module = temperatureControl2Module;
+            _mixerModule = mixerModule;
+            _piezoModule = piezoModule;
         }
 
         private void ManageTemperature1(int temperatureControl1Temperature)
@@ -68,6 +72,26 @@ namespace Brewery.Logic
         public void ChangeTemperature2(int temperature)
         {
             _temperatureControl2Temperature += temperature;
+        }
+
+        public void StartPizeoControl()
+        {
+            _piezoModule.Power(true);
+        }
+
+        public void StopPizeoControl()
+        {
+            _piezoModule.Power(false);
+        }
+
+        public void StopMixerControl()
+        {
+            _mixerModule.Power(false);
+        }
+
+        public void StartMixerControl()
+        {
+            _mixerModule.Power(true);
         }
     }
 }
