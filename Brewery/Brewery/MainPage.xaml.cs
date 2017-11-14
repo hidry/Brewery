@@ -5,6 +5,7 @@ using Brewery.Core.Models;
 using Brewery.Logic;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using Windows.System;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
@@ -42,10 +43,10 @@ namespace Brewery
             Messenger.Default.Send(new ShowMessageDialog()
             {
                 Title = "Schließen",
-                Message = "Soll die App geschlossen werden?",
+                Message = "Soll das Gerät heruntergefahren werden?",
                 OkButtonCommand = () =>
                 {
-                    Windows.UI.Xaml.Application.Current.Exit();
+                    ShutdownManager.BeginShutdown(ShutdownKind.Shutdown, TimeSpan.FromSeconds(0));
                 },
                 CancelButtonCommand = () => {}
             });
@@ -73,7 +74,7 @@ namespace Brewery
         public static List<MenuItem> GetOptionsItems()
         {
             var items = new List<MenuItem>();
-            //items.Add(new MenuItem() { Icon = Symbol.Setting, Name = "Einstellungen", PageType = typeof(Views.SettingsView) });
+            //items.Add(new MenuItem() { Icon = Symbol.Setting, Name = "Einstellungen", PageType = typeof(Views.Settings) });
             return items;
         }
     }
