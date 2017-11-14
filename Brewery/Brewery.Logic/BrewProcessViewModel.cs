@@ -131,7 +131,7 @@ namespace Brewery.Logic
             Add(new BrewProcessStep()
             {
                 Temperatur = 70,
-                Rast = 1,
+                Rast = 0,
                 Benachrichtigung = true,
                 Ruehrgeraet = true
             });

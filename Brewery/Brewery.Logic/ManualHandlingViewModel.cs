@@ -12,9 +12,9 @@ namespace Brewery.Logic
         public ManualHandlingViewModel(IManualHandlingModule manualHandlingModule)
         {
             _manualHandlingModule = manualHandlingModule;
-            TemperatureControl1Temperature = 50;
+            TemperatureControl1Temperature = 77;
             TemperatureControl1OnOffSymbol = Symbol.Play;
-            TemperatureControl2Temperature = 50;
+            TemperatureControl2Temperature = 77;
             TemperatureControl2OnOffSymbol = Symbol.Play;
             MixerControlOnOffSymbol = Symbol.Play;
         }
