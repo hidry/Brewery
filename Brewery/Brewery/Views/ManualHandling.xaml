@@ -19,15 +19,15 @@
             <RowDefinition Height="25"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
+            <ColumnDefinition Width="50"></ColumnDefinition>
+            <ColumnDefinition Width="50"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="50"></ColumnDefinition>
+            <ColumnDefinition Width="50"></ColumnDefinition>
+            <ColumnDefinition Width="50"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         
-        <TextBox BorderBrush="Transparent" Text="Temp-steuerung 1:" IsReadOnly="True"></TextBox>
+        <!--<TextBox BorderBrush="Transparent" Text="Temp-steuerung 1:" IsReadOnly="True"></TextBox>
         <TextBox BorderBrush="Transparent" Grid.Column="1" Grid.Row="0" IsReadOnly="True" Text="{x:Bind ViewModel.TemperatureControl1Temperature, Mode=OneWay}"></TextBox>
         <TextBox BorderBrush="Transparent" Grid.Column="2" Grid.Row="0" Text="°C" IsReadOnly="True"></TextBox>
         <RepeatButton Grid.Column="3" Grid.Row="0" Command="{x:Bind ViewModel.TemperatureControl1TemperatureDownCommand, Mode=OneWay}">
@@ -38,7 +38,7 @@
         </RepeatButton>
         <Button Grid.Column="5" Grid.Row="0" Command="{x:Bind ViewModel.TemperatureControl1OnOffCommand, Mode=OneWay}">
             <SymbolIcon Symbol="{x:Bind ViewModel.TemperatureControl1OnOffSymbol, Mode=OneWay}"></SymbolIcon>
-        </Button>
+        </Button>-->
 
         <TextBox BorderBrush="Transparent" Grid.Column="0" Grid.Row="1" Text="Temp-steuerung 2:" IsReadOnly="True"></TextBox>
         <TextBox BorderBrush="Transparent" Grid.Column="1" Grid.Row="1" IsReadOnly="True" Text="{x:Bind ViewModel.TemperatureControl2Temperature, Mode=OneWay}"></TextBox>
@@ -53,7 +53,7 @@
             <SymbolIcon Symbol="{x:Bind ViewModel.TemperatureControl2OnOffSymbol, Mode=OneWay}"></SymbolIcon>
         </Button>
 
-        <TextBox BorderBrush="Transparent" Grid.Column="0" Grid.Row="2" Text="Rührwerk:" IsReadOnly="True"></TextBox>
+        <!--<TextBox BorderBrush="Transparent" Grid.Column="0" Grid.Row="2" Text="Rührwerk:" IsReadOnly="True"></TextBox>
         <Button Grid.Column="5" Grid.Row="2" Command="{x:Bind ViewModel.MixerControlOnOffCommand, Mode=OneWay}">
             <SymbolIcon Symbol="{x:Bind ViewModel.MixerControlOnOffSymbol, Mode=OneWay}"></SymbolIcon>
         </Button>
@@ -61,6 +61,6 @@
         <TextBox BorderBrush="Transparent" Grid.Column="0" Grid.Row="3" Text="Summer:" IsReadOnly="True"></TextBox>
         <Button Grid.Column="5" Grid.Row="3" Command="{x:Bind ViewModel.PiezoControlOnOffCommand, Mode=OneWay}">
             <SymbolIcon Symbol="{x:Bind ViewModel.PiezoControlOnOffSymbol, Mode=OneWay}"></SymbolIcon>
-        </Button>
+        </Button>-->
     </Grid>
 </Page>
