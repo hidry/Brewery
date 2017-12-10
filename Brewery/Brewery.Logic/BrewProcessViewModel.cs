@@ -130,6 +130,7 @@ namespace Brewery.Logic
         {
             Add(new BrewProcessStep()
             {
+                Schritt = "Aufheizen & Einmaischen",
                 Temperatur = 70,
                 Rast = 0,
                 Benachrichtigung = true,
@@ -137,16 +138,26 @@ namespace Brewery.Logic
             });
             Add(new BrewProcessStep()
             {
+                Schritt = "1. Rast",
                 Temperatur = 66.5,
                 Rast = 90,
+                Benachrichtigung = false,
+                Ruehrgeraet = true
+            });
+            Add(new BrewProcessStep()
+            {
+                Schritt = "Aufheizen",
+                Temperatur = 76,
+                Rast = 0,
                 Benachrichtigung = true,
                 Ruehrgeraet = true
             });
             Add(new BrewProcessStep()
             {
-                Temperatur = 76,
-                Rast = 0,
-                Benachrichtigung = true,
+                Schritt = "Abmaischen",
+                Temperatur = 0,
+                Rast = 60,
+                Benachrichtigung = false,
                 Ruehrgeraet = true
             });
         }
@@ -272,7 +283,14 @@ namespace Brewery.Logic
                             _messageOpen = true;
 
                             DisplayBrewStepMessage(currentStep, () => { _messageOpen = false; _messageAcknowledged = true; });
-                            SendBrewStepNotification(currentStep);
+                            try
+                            {
+                                SendBrewStepNotification(currentStep); // wenn kein Netzwerk verfügbar Exception!?
+                            }
+                            catch (Exception)
+                            {
+                                //todo: logging
+                            }   
                         }
                         _piezoModule.Power(true);
                     }
@@ -328,7 +346,7 @@ namespace Brewery.Logic
         public int Rast { get; set; }
         [Display(Header = "Rührgerät")]
         public bool Ruehrgeraet { get; set; }
-        [Display(Header = "Benachrichtigung wenn Schritt abgeschlossen")]
+        [Display(Header = "Alarm wenn fertig")]
         public bool Benachrichtigung { get; set; }
         private string _elapsedTime;
         [ReadOnly]
@@ -338,9 +356,12 @@ namespace Brewery.Logic
             set { Set(() => ElapsedTime, ref _elapsedTime, value); }
         }
 
+        [Display(Header = "Schritt")]
+        public string Schritt { get; internal set; }
+
         public override string ToString()
         {
-            return $"{nameof(Temperatur)}: {Temperatur}, {nameof(Rast)}: {Rast}, {nameof(Benachrichtigung)}: {Benachrichtigung}, {nameof(Ruehrgeraet)}: {Ruehrgeraet}";
+            return $"{nameof(Temperatur)}: {Temperatur}, {nameof(Schritt)}: {Schritt}, {nameof(Rast)}: {Rast}, {nameof(Benachrichtigung)}: {Benachrichtigung}, {nameof(Ruehrgeraet)}: {Ruehrgeraet}";
         }
     }
 }
