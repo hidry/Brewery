@@ -130,35 +130,75 @@ namespace Brewery.Logic
         {
             Add(new BrewProcessStep()
             {
-                Schritt = "Aufheizen & Einmaischen",
-                Temperatur = 70,
+                Step = "Aufheizen & Einmaischen",
+                Temperature = 70,
                 Rast = 0,
-                Benachrichtigung = true,
-                Ruehrgeraet = true
+                Alert = true,
+                Mixer = true,
+                Active = true
             });
             Add(new BrewProcessStep()
             {
-                Schritt = "1. Rast",
-                Temperatur = 66.5,
+                Step = "1. Rast",
+                Temperature = 66.5,
                 Rast = 90,
-                Benachrichtigung = false,
-                Ruehrgeraet = true
+                Alert = false,
+                Mixer = true,
+                Active = true
             });
             Add(new BrewProcessStep()
             {
-                Schritt = "Aufheizen",
-                Temperatur = 76,
+                Step = "2. Rast",
+                Temperature = 66.5,
+                Rast = 90,
+                Alert = false,
+                Mixer = true,
+                Active = false
+            });
+            Add(new BrewProcessStep()
+            {
+                Step = "3. Rast",
+                Temperature = 66.5,
+                Rast = 90,
+                Alert = false,
+                Mixer = true,
+                Active = false
+            });
+            Add(new BrewProcessStep()
+            {
+                Step = "4. Rast",
+                Temperature = 66.5,
+                Rast = 90,
+                Alert = false,
+                Mixer = true,
+                Active = false
+            });
+            Add(new BrewProcessStep()
+            {
+                Step = "5. Rast",
+                Temperature = 66.5,
+                Rast = 90,
+                Alert = false,
+                Mixer = true,
+                Active = false
+            });
+            Add(new BrewProcessStep()
+            {
+                Step = "Aufheizen",
+                Temperature = 76,
                 Rast = 0,
-                Benachrichtigung = true,
-                Ruehrgeraet = true
+                Alert = true,
+                Mixer = true,
+                Active = true
             });
             Add(new BrewProcessStep()
             {
-                Schritt = "Abmaischen",
-                Temperatur = 0,
+                Step = "Abmaischen",
+                Temperature = 0,
                 Rast = 60,
-                Benachrichtigung = false,
-                Ruehrgeraet = true
+                Alert = false,
+                Mixer = true,
+                Active = true
             });
         }
     }
@@ -247,27 +287,35 @@ namespace Brewery.Logic
                 return;
 
             var currentStep = _brewProcessSteps[_currentStep];
+            if (!currentStep.Active)
+            {
+                SetNextStep();
+                return;
+            }
+
             var temperatureCurrent = _temperature1Module.GetCurrenTemperature().Temperature;
 
             if (_startedAt == default(DateTime))
                 _startedAt = DateTime.Now;
 
-            currentStep.ElapsedTime = new DateTime((DateTime.Now - _startedAt).Ticks).ToString("mm:ss");
+            var elapsed = (DateTime.Now - _startedAt);
 
-            _temperatureControl1Module.ManageTemperature(currentStep.Temperatur, temperatureCurrent);
+            currentStep.ElapsedTime = $"{elapsed.Hours.ToString("00")}:{elapsed.Minutes.ToString("00")}:{elapsed.Seconds.ToString("00")}";
 
-            _mixerModule.Power(currentStep.Ruehrgeraet);
+            _temperatureControl1Module.ManageTemperature(currentStep.Temperature, temperatureCurrent);
+
+            _mixerModule.Power(currentStep.Mixer);
 
             //wenn ein nachfolgender Schritt eine niedrigere Temperatur benötigt als der Vorgängerschritt
-            if (_currentStep > 0 && currentStep.Temperatur < _brewProcessSteps[_currentStep - 1].Temperatur && _tempReachedAt == default(DateTime))
+            if (_currentStep > 0 && currentStep.Temperature < _brewProcessSteps[_currentStep - 1].Temperature && _tempReachedAt == default(DateTime))
             {
-                if (temperatureCurrent <= currentStep.Temperatur)
+                if (temperatureCurrent <= currentStep.Temperature)
                 {
                     _tempReachedAt = DateTime.Now;
                 }
             }
             //wenn Solltemperatur erreicht
-            else if (temperatureCurrent >= currentStep.Temperatur)
+            else if (temperatureCurrent >= currentStep.Temperature)
             {
                 if (_tempReachedAt == default(DateTime))
                     _tempReachedAt = DateTime.Now;
@@ -276,7 +324,7 @@ namespace Brewery.Logic
                 if (_tempReachedAt.AddMinutes(currentStep.Rast) <= DateTime.Now)
                 {
                     //Evtl. Meldung anzeigen und warten bis bestätigt
-                    if (currentStep.Benachrichtigung && !_messageAcknowledged)
+                    if (currentStep.Alert && !_messageAcknowledged)
                     {
                         if (!_messageOpen)
                         {
@@ -296,22 +344,27 @@ namespace Brewery.Logic
                     }
                     else
                     {
-                        if (_brewProcessSteps.Count - 1 > _currentStep)
-                        {
-                            _currentStep += 1;
-                        }
-                        else
-                        {
-                            Messenger.Default.Send(new BrewProcessFinishedMessage());
-                            _timer.RemoveEvent(nameof(ExecuteBrewProcessStep), (o, e) => ExecuteBrewProcessStep());
-                            _currentStep = 0;
-                        }
-                        _tempReachedAt = default(DateTime);
-                        _startedAt = default(DateTime);
-                        _messageAcknowledged = false;
+                        SetNextStep();
                     }
                 }
             }
+        }
+
+        private void SetNextStep()
+        {
+            if (_brewProcessSteps.Count - 1 > _currentStep)
+            {
+                _currentStep += 1;
+            }
+            else
+            {
+                Messenger.Default.Send(new BrewProcessFinishedMessage());
+                _timer.RemoveEvent(nameof(ExecuteBrewProcessStep), (o, e) => ExecuteBrewProcessStep());
+                _currentStep = 0;
+            }
+            _tempReachedAt = default(DateTime);
+            _startedAt = default(DateTime);
+            _messageAcknowledged = false;
         }
 
         private void DisplayBrewStepMessage(BrewProcessStep currentStep, Action okButtonCommand)
@@ -340,14 +393,14 @@ namespace Brewery.Logic
     public class BrewProcessStep : ViewModelBase
     {
         //todo: prüfen ob Annotations auch für RadDataGrid verfügbar https://feedback.telerik.com/Project/167/Feedback/List/Your%20Items
-        [Display(Header = "Temperatur in °C")]
-        public double Temperatur { get; set; }
+        [Display(Header = "°C")]
+        public double Temperature { get; set; }
         [Display(Header = "Rast in Minuten")]
         public int Rast { get; set; }
         [Display(Header = "Rührgerät")]
-        public bool Ruehrgeraet { get; set; }
-        [Display(Header = "Alarm wenn fertig")]
-        public bool Benachrichtigung { get; set; }
+        public bool Mixer { get; set; }
+        [Display(Header = "Alarm")]
+        public bool Alert { get; set; }
         private string _elapsedTime;
         [ReadOnly]
         public string ElapsedTime
@@ -357,11 +410,14 @@ namespace Brewery.Logic
         }
 
         [Display(Header = "Schritt")]
-        public string Schritt { get; internal set; }
+        public string Step { get; internal set; }
+
+        [Display(Header = "Aktiv")]
+        public bool Active { get; set; }
 
         public override string ToString()
         {
-            return $"{nameof(Temperatur)}: {Temperatur}, {nameof(Schritt)}: {Schritt}, {nameof(Rast)}: {Rast}, {nameof(Benachrichtigung)}: {Benachrichtigung}, {nameof(Ruehrgeraet)}: {Ruehrgeraet}";
+            return $"Temperatur: {Temperature}, Schritt: {Step}, Rast: {Rast}, Benachrichtigung: {Alert}, Rührgerät: {Mixer}";
         }
     }
 }

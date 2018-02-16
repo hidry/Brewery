@@ -38,11 +38,12 @@
             AutoGenerateColumns="False">
             <telerikGrid:RadDataGrid.Columns>                
                 <telerikGrid:DataGridTextColumn PropertyName="ElapsedTime" Header="Zeit"></telerikGrid:DataGridTextColumn>
-                <telerikGrid:DataGridTextColumn PropertyName="Schritt" Header="Schritt"></telerikGrid:DataGridTextColumn>
-                <telerikGrid:DataGridTextColumn PropertyName="Temperatur" Header="Temperatur in °C"></telerikGrid:DataGridTextColumn>
+                <telerikGrid:DataGridTextColumn PropertyName="Step" Header="Schritt"></telerikGrid:DataGridTextColumn>
+                <telerikGrid:DataGridTextColumn PropertyName="Temperature" Header="°C"></telerikGrid:DataGridTextColumn>
+                <telerikGrid:DataGridTextColumn PropertyName="Active" Header="Aktiv"></telerikGrid:DataGridTextColumn>
                 <telerikGrid:DataGridTextColumn PropertyName="Rast" Header="Rast in Minuten"></telerikGrid:DataGridTextColumn>
-                <telerikGrid:DataGridTextColumn PropertyName="Ruehrgeraet" Header="Rührgerät"></telerikGrid:DataGridTextColumn>
-                <telerikGrid:DataGridTextColumn PropertyName="Benachrichtigung" Header="Alarm wenn fertig"></telerikGrid:DataGridTextColumn>
+                <telerikGrid:DataGridTextColumn PropertyName="Mixer" Header="Rührgerät"></telerikGrid:DataGridTextColumn>
+                <telerikGrid:DataGridTextColumn PropertyName="Alert" Header="Alarm"></telerikGrid:DataGridTextColumn>
             </telerikGrid:RadDataGrid.Columns>
         </telerikGrid:RadDataGrid>
         <Button Margin="10,0,0,0" Grid.Row="1" Grid.Column="0" Command="{x:Bind ViewModel.AddBrewProcessStepCommand, Mode=OneWay}">
