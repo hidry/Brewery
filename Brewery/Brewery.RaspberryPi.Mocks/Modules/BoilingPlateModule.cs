@@ -7,11 +7,13 @@ namespace Brewery.RaspberryPi.Modules
     {
         public BoilingPlateModel PowerOn()
         {
+            ModuleDelay.Sleep();
             return new BoilingPlateModel() { Status = true };
         }
 
         public BoilingPlateModel PowerOff()
         {
+            ModuleDelay.Sleep();
             return new BoilingPlateModel() { Status = false };
         }
     }

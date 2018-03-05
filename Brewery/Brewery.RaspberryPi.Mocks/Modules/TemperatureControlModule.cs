@@ -17,16 +17,19 @@ namespace Brewery.RaspberryPi.Modules
             {
                 _temperatureControlModel.Heating = false;
             }
+            ModuleDelay.Sleep();
             return _temperatureControlModel;
         }
 
         public TemperatureControlModel GetStatus()
         {
+            ModuleDelay.Sleep();
             return _temperatureControlModel;
         }
 
         public void BoilingPlateOff()
         {
+            ModuleDelay.Sleep();
             _temperatureControlModel.Heating = false;
         }
     }

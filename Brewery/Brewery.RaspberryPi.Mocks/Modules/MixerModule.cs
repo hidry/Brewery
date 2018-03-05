@@ -6,6 +6,7 @@ namespace Brewery.RaspberryPi.Modules
     {
         public void Power(bool on)
         {
+            ModuleDelay.Sleep();
         }
     }
 }

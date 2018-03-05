@@ -1,5 +1,7 @@
 ﻿using Brewery.Core.Contracts;
 using Brewery.Core.Models;
+using System;
+using System.Diagnostics;
 
 namespace Brewery.RaspberryPi.Modules
 {
@@ -7,6 +9,7 @@ namespace Brewery.RaspberryPi.Modules
     {
         public TemperatureModel GetCurrenTemperature()
         {
+            ModuleDelay.Sleep();
             return new TemperatureModel() {Temperature = 25.2154 };
         }
 
