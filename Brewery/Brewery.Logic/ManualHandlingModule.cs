@@ -4,9 +4,7 @@ namespace Brewery.Logic
 {
     public class ManualHandlingModule : IManualHandlingModule
     {
-        private readonly ITemperature1Module _temperature1Module;
         private readonly ITemperatureControl1Module _temperatureControl1Module;
-        private readonly ITemperature2Module _temperature2Module;
         private readonly ITemperatureControl2Module _temperatureControl2Module;
         private readonly IMixerModule _mixerModule;
         private readonly IPiezoModule _piezoModule;
@@ -15,29 +13,34 @@ namespace Brewery.Logic
         private int _temperatureControl1Temperature;
         private int _temperatureControl2Temperature;
 
-        public ManualHandlingModule(ITimer timer, ITemperature1Module temperature1Module, ITemperatureControl1Module temperatureControl1Module, ITemperature2Module temperature2Module, ITemperatureControl2Module temperatureControl2Module, IMixerModule mixerModule, IPiezoModule piezoModule)
+        public ManualHandlingModule(ITimer timer, ITemperatureControl1Module temperatureControl1Module, ITemperatureControl2Module temperatureControl2Module, IMixerModule mixerModule, IPiezoModule piezoModule, IDevicesService devicesService)
         {
             _timer = timer;
-
-            _temperature1Module = temperature1Module;
+            
             _temperatureControl1Module = temperatureControl1Module;
-
-            _temperature2Module = temperature2Module;
             _temperatureControl2Module = temperatureControl2Module;
+
             _mixerModule = mixerModule;
             _piezoModule = piezoModule;
+
+            devicesService.Temperature1ChangedEvent += (sender, args) => Temperature1 = args.Temperature;
+            devicesService.Temperature2ChangedEvent += (sender, args) => Temperature2 = args.Temperature;
         }
+
+        private double Temperature2 { get; set; }
+
+        private double Temperature1 { get; set; }
 
         private void ManageTemperature1(int temperatureControl1Temperature)
         {
             _temperatureControl1Temperature = temperatureControl1Temperature;
-            _temperatureControl1Module.ManageTemperature(temperatureControl1Temperature, _temperature1Module.GetCurrenTemperature().Temperature);
+            _temperatureControl1Module.ManageTemperature(temperatureControl1Temperature, Temperature1);
         }
 
         private void ManageTemperature2(int temperatureControl2Temperature)
         {
             _temperatureControl2Temperature = temperatureControl2Temperature;
-            _temperatureControl2Module.ManageTemperature(temperatureControl2Temperature, _temperature2Module.GetCurrenTemperature().Temperature);
+            _temperatureControl2Module.ManageTemperature(temperatureControl2Temperature, Temperature2);
         }
 
         public void StartTemperatureControl1(int temperatureControl1Temperature)

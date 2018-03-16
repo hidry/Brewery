@@ -4,6 +4,7 @@ using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using Brewery.Core.Contracts;
 using Brewery.Core.Models;
 using Brewery.Logic;
 using GalaSoft.MvvmLight.Command;
@@ -16,6 +17,10 @@ namespace Brewery
     /// </summary>
     sealed partial class App : Application
     {
+        private readonly ITimer _timer;
+        private readonly IDevicesService _devicesService;
+
+
         /// <summary>
         /// Initializes the singleton application object.  This is the first line of authored code
         /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -26,6 +31,11 @@ namespace Brewery
             this.Suspending += OnSuspending;
 
             Messenger.Default.Register<ShowMessageDialog>(this, ReceiveMessage);
+
+            _timer = ViewModelLocator.GetInstance<ITimer>(); //todo: ctor-Resolve
+            _devicesService = ViewModelLocator.GetInstance<IDevicesService>(); //todo: ctor-Resolve
+
+            _timer.AddEvent(nameof(_devicesService.RefreshTemperatures),(sender, o) => _devicesService.RefreshTemperatures());
         }
         
         private async void ReceiveMessage(ShowMessageDialog action)
@@ -107,7 +117,10 @@ namespace Brewery
         {
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
+
+            _timer.RemoveEvent(nameof(_devicesService.RefreshTemperatures), (o, o1) => _devicesService.RefreshTemperatures());
             ViewModelLocator.DisposeCreatedInstances();
+            
             deferral.Complete();
         }
     }

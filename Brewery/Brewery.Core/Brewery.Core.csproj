@@ -110,6 +110,7 @@
     <Compile Include="Contracts\IBoilingPlate2Module.cs" />
     <Compile Include="Contracts\IBoilingPlateModule.cs" />
     <Compile Include="Contracts\IBoilingPlate1Module.cs" />
+    <Compile Include="Contracts\IDevicesService.cs" />
     <Compile Include="Contracts\IPiezoModule.cs" />
     <Compile Include="Contracts\IManualHandlingModule.cs" />
     <Compile Include="Contracts\IMixerModule.cs" />

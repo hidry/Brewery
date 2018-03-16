@@ -14,6 +14,7 @@ namespace Brewery.Logic
             SetUpModules();
             SetupViewModels();
             SimpleIoc.Default.Register<Settings>();
+            SimpleIoc.Default.Register<IDevicesService, DevicesService>();
         }
 
         private static void SetupViewModels()
@@ -39,6 +40,11 @@ namespace Brewery.Logic
             SimpleIoc.Default.Register<ITimer, Timer>();
             SimpleIoc.Default.Register<IBrewProcessModule, BrewProcessModule>();
             SimpleIoc.Default.Register<IManualHandlingModule, ManualHandlingModule>();
+        }
+
+        public static T GetInstance<T>()
+        {
+            return SimpleIoc.Default.GetInstance<T>();
         }
 
         public static void DisposeCreatedInstances()

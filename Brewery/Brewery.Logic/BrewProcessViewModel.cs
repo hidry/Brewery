@@ -223,7 +223,6 @@ namespace Brewery.Logic
         }
 
         private readonly ITimer _timer;
-        private readonly ITemperature1Module _temperature1Module;
         private readonly ITemperatureControl1Module _temperatureControl1Module;
         private readonly IMixerModule _mixerModule;
         private readonly IPiezoModule _piezoModule;
@@ -236,10 +235,9 @@ namespace Brewery.Logic
         private bool _messageAcknowledged;
         private DateTime _startedAt = default(DateTime);
 
-        public BrewProcessModule(ITimer timer, ITemperature1Module temperature1Module, ITemperatureControl1Module temperatureControl1Module, IMixerModule mixerModule, IPiezoModule piezoModule, BrewProcessSteps brewProcessSteps)
+        public BrewProcessModule(ITimer timer, ITemperatureControl1Module temperatureControl1Module, IMixerModule mixerModule, IPiezoModule piezoModule, BrewProcessSteps brewProcessSteps, IDevicesService devicesService)
         {
             _timer = timer;
-            _temperature1Module = temperature1Module;
             _temperatureControl1Module = temperatureControl1Module;
             _mixerModule = mixerModule;
             _piezoModule = piezoModule;
@@ -247,7 +245,11 @@ namespace Brewery.Logic
             Messenger.Default.Register<StartBrewProcessMessage>(this, StartBrewProcessMessageReceived);
             Messenger.Default.Register<PauseBrewProcessMessage>(this, PauseBrewProcessMessageReceived);
             Messenger.Default.Register<StopBrewProcessMessage>(this, StopBrewProcessMessageReceived);
+            
+            devicesService.Temperature1ChangedEvent += (sender, args) => Temperature1 = args.Temperature;
         }
+        
+        private double Temperature1 { get; set; }
 
         private void StopBrewProcessMessageReceived(StopBrewProcessMessage obj)
         {
@@ -292,9 +294,7 @@ namespace Brewery.Logic
                 SetNextStep();
                 return;
             }
-
-            var temperatureCurrent = _temperature1Module.GetCurrenTemperature().Temperature;
-
+            
             if (_startedAt == default(DateTime))
                 _startedAt = DateTime.Now;
 
@@ -302,20 +302,20 @@ namespace Brewery.Logic
 
             currentStep.ElapsedTime = $"{elapsed.Hours.ToString("00")}:{elapsed.Minutes.ToString("00")}:{elapsed.Seconds.ToString("00")}";
 
-            _temperatureControl1Module.ManageTemperature(currentStep.Temperature, temperatureCurrent);
+            _temperatureControl1Module.ManageTemperature(currentStep.Temperature, Temperature1);
 
             _mixerModule.Power(currentStep.Mixer);
 
             //wenn ein nachfolgender Schritt eine niedrigere Temperatur benötigt als der Vorgängerschritt
             if (_currentStep > 0 && currentStep.Temperature < _brewProcessSteps[_currentStep - 1].Temperature && _tempReachedAt == default(DateTime))
             {
-                if (temperatureCurrent <= currentStep.Temperature)
+                if (Temperature1 <= currentStep.Temperature)
                 {
                     _tempReachedAt = DateTime.Now;
                 }
             }
             //wenn Solltemperatur erreicht
-            else if (temperatureCurrent >= currentStep.Temperature)
+            else if (Temperature1 >= currentStep.Temperature)
             {
                 if (_tempReachedAt == default(DateTime))
                     _tempReachedAt = DateTime.Now;
