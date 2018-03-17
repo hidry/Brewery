@@ -25,31 +25,19 @@ namespace Brewery.Logic
         public event EventHandler<HeatingStatusChangedEventArgs> HeatingStatus1ChangedEvent;
         public event EventHandler<HeatingStatusChangedEventArgs> HeatingStatus2ChangedEvent;
 
-        public async void RefreshTemperatures()
+        public void RefreshTemperatures()
         {
-            var t1 = Task.Run(() =>
-            {
-                return _temperature1Module.GetCurrenTemperature().Temperature;
-            });
-            var t2 = Task.Run(() =>
-            {
-                return _temperature2Module.GetCurrenTemperature().Temperature;
-            });
-            var h1 = Task.Run(() =>
-            {
-                return _temperatureControl1Module.GetStatus().Heating;
-            });
-            var h2 = Task.Run(() =>
-            {
-                return _temperatureControl2Module.GetStatus().Heating;
-            });
+            var t = _temperature1Module.GetCurrenTemperature().Temperature;
+            OnTemperature1ChangedEvent(new TemperatureChangedEventArgs(t));
+
+            var t2 = _temperature2Module.GetCurrenTemperature().Temperature;
+            OnTemperature2ChangedEvent(new TemperatureChangedEventArgs(t2));
             
-            await Task.WhenAll(t1, t2, h1, h2);
+            var h = _temperatureControl1Module.GetStatus().Heating;
+            OnHeatingStatus1ChangedEvent(new HeatingStatusChangedEventArgs(h));
             
-            OnTemperature1ChangedEvent(new TemperatureChangedEventArgs(t1.Result));
-            OnTemperature2ChangedEvent(new TemperatureChangedEventArgs(t2.Result));
-            OnHeatingStatus1ChangedEvent(new HeatingStatusChangedEventArgs(h1.Result));
-            OnHeatingStatus2ChangedEvent(new HeatingStatusChangedEventArgs(h2.Result));
+            var h2 = _temperatureControl2Module.GetStatus().Heating;
+            OnHeatingStatus2ChangedEvent(new HeatingStatusChangedEventArgs(h2));           
         }
 
         protected virtual void OnTemperature1ChangedEvent(TemperatureChangedEventArgs e)

@@ -12,11 +12,11 @@
         <converters:BoolToVisibilityConverter x:Key="BooleanToVisibilityConverter"></converters:BoolToVisibilityConverter>
         <converters1:DoubleToTemperatureConverter x:Key="DoubleToTemperatureConverter"></converters1:DoubleToTemperatureConverter>
         <converters1:BooleanToOnOffStringConverter x:Key="BooleanToOnOffStringConverter"></converters1:BooleanToOnOffStringConverter>
-        
+
         <Style TargetType="controls:HeaderedTextBlock">
             <Setter Property="Margin" Value="20"></Setter>
         </Style>
-        
+
     </Application.Resources>
     
 </Application>
