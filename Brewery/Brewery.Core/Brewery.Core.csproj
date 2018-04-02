@@ -107,32 +107,21 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Contracts\IBoilingPlate2Module.cs" />
-    <Compile Include="Contracts\IBoilingPlateModule.cs" />
-    <Compile Include="Contracts\IBoilingPlate1Module.cs" />
     <Compile Include="Contracts\IDevicesService.cs" />
-    <Compile Include="Contracts\IPiezoModule.cs" />
     <Compile Include="Contracts\IManualHandlingModule.cs" />
-    <Compile Include="Contracts\IMixerModule.cs" />
-    <Compile Include="Contracts\ITemperature2Module.cs" />
-    <Compile Include="Contracts\ITemperature1Module.cs" />
-    <Compile Include="Contracts\ITemperatureControl2Module.cs" />
-    <Compile Include="Contracts\ITemperatureControl1Module.cs" />
-    <Compile Include="Contracts\ITemperatureControlModule.cs" />
-    <Compile Include="Contracts\ITemperatureModule.cs" />
+    <Compile Include="Contracts\ServiceAdapter\IBoilingPlate2Service.cs" />
+    <Compile Include="Contracts\ServiceAdapter\IBoilingPlate1Service.cs" />
+    <Compile Include="Contracts\ServiceAdapter\IMixerService.cs" />
     <Compile Include="Contracts\ITimer.cs" />
-    <Compile Include="Models\BoilingPlateModel.cs" />
-    <Compile Include="Models\GpioHeader.cs" />
-    <Compile Include="Models\Settings.cs" />
+    <Compile Include="Contracts\ServiceAdapter\IPiezoService.cs" />
     <Compile Include="Models\ShowMessageDialog.cs" />
     <Compile Include="Models\TemperatureControlModel.cs" />
-    <Compile Include="Models\TemperatureModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Brewery.Core.rd.xml" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>5.4.0</Version>
+      <Version>6.0.8</Version>
     </PackageReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

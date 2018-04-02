@@ -29,6 +29,6 @@ namespace Brewery.Core.Contracts
         event EventHandler<HeatingStatusChangedEventArgs> HeatingStatus1ChangedEvent;
         event EventHandler<HeatingStatusChangedEventArgs> HeatingStatus2ChangedEvent;
 
-        void RefreshTemperatures();
+        void RefreshDeviceStatus();
     }
 }

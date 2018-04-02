@@ -66,7 +66,7 @@ namespace Brewery
                 new MenuItem() {Icon = Symbol.Bold, Name = "Brauprozess", PageType = typeof(Views.BrewProcess)},
                 new MenuItem() {Icon = Symbol.Manage, Name = "Manuell", PageType = typeof(Views.ManualHandling)},
                 //new MenuItem() {Icon = Symbol.Globe, Name = "Internet", PageType = typeof(Views.WebViewer)},
-                new MenuItem() {Icon = Symbol.Setting, Name = "Einstellungen", PageType = typeof(Views.Settings)}
+                //new MenuItem() {Icon = Symbol.Setting, Name = "Einstellungen", PageType = typeof(Views.Settings)}
             };
             return items;
         }

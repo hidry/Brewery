@@ -12,114 +12,114 @@ namespace Brewery.Logic
         public ManualHandlingViewModel(IManualHandlingModule manualHandlingModule)
         {
             _manualHandlingModule = manualHandlingModule;
-            TemperatureControl1Temperature = 77;
-            TemperatureControl1OnOffSymbol = Symbol.Play;
-            TemperatureControl2Temperature = 77;
-            TemperatureControl2OnOffSymbol = Symbol.Play;
+            BoilingPlate1Temperature = 77;
+            BoilingPlate1OnOffSymbol = Symbol.Play;
+            BoilingPlate2Temperature = 77;
+            BoilingPlate2OnOffSymbol = Symbol.Play;
             MixerControlOnOffSymbol = Symbol.Play;
         }
 
-        private int _temperatureControl1Temperature;
-        public int TemperatureControl1Temperature
+        private int _boilingPlate1Temperature;
+        public int BoilingPlate1Temperature
         {
-            get => _temperatureControl1Temperature;
+            get => _boilingPlate1Temperature;
             private set
             {
-                Set(() => TemperatureControl1Temperature, ref _temperatureControl1Temperature, value);
+                Set(() => BoilingPlate1Temperature, ref _boilingPlate1Temperature, value);
             }
         }
 
-        public RelayCommand TemperatureControl1TemperatureDownCommand => new RelayCommand(TemperatureControl1TemperatureDown);
+        public RelayCommand BoilingPlate1TemperatureDownCommand => new RelayCommand(BoilingPlate1TemperatureDown);
 
-        private void TemperatureControl1TemperatureDown()
+        private void BoilingPlate1TemperatureDown()
         {
-            TemperatureControl1Temperature -= 1;
-            _manualHandlingModule.ChangeTemperature1(-1);
+            BoilingPlate1Temperature -= 1;
+            _manualHandlingModule.ChangeBoilingPlate1Temperature(-1);
         }
 
-        public RelayCommand TemperatureControl1TemperatureUpCommand => new RelayCommand(TemperatureControl1TemperatureUp);
+        public RelayCommand BoilingPlate1TemperatureUpCommand => new RelayCommand(BoilingPlate1TemperatureUp);
 
-        private void TemperatureControl1TemperatureUp()
+        private void BoilingPlate1TemperatureUp()
         {
-            TemperatureControl1Temperature += 1;
-            _manualHandlingModule.ChangeTemperature1(+1);
+            BoilingPlate1Temperature += 1;
+            _manualHandlingModule.ChangeBoilingPlate1Temperature(+1);
         }
 
-        public RelayCommand TemperatureControl1OnOffCommand => new RelayCommand(TemperatureControl1OnOff);
+        public RelayCommand Boilingplate1TemperatureControlOnOffCommand => new RelayCommand(BoilingPlate1TemperatureControlOnOff);
 
-        private void TemperatureControl1OnOff()
+        private void BoilingPlate1TemperatureControlOnOff()
         {
-            if (TemperatureControl1OnOffSymbol == Symbol.Play)
+            if (BoilingPlate1OnOffSymbol == Symbol.Play)
             {
-                TemperatureControl1OnOffSymbol = Symbol.Stop;
-                _manualHandlingModule.StartTemperatureControl1(TemperatureControl1Temperature);
+                BoilingPlate1OnOffSymbol = Symbol.Stop;
+                _manualHandlingModule.StartBoilingPlate1TemperatureControl(BoilingPlate1Temperature);
             }
             else
             {
-                TemperatureControl1OnOffSymbol = Symbol.Play;
-                _manualHandlingModule.StopTemperatureControl1();
+                BoilingPlate1OnOffSymbol = Symbol.Play;
+                _manualHandlingModule.StopBoilingPlate1TemperatureControl();
             }
         }
         
-        private Symbol _temperatureControl1OnOffSymbol;
-        public Symbol TemperatureControl1OnOffSymbol
+        private Symbol _boilingPlate1OnOffSymbol;
+        public Symbol BoilingPlate1OnOffSymbol
         {
-            get => _temperatureControl1OnOffSymbol;
+            get => _boilingPlate1OnOffSymbol;
             private set
             {
-                Set(() => TemperatureControl1OnOffSymbol, ref _temperatureControl1OnOffSymbol, value);
+                Set(() => BoilingPlate1OnOffSymbol, ref _boilingPlate1OnOffSymbol, value);
             }
         }
 
-        private int _temperatureControl2Temperature;
-        public int TemperatureControl2Temperature
+        private int _boilingPlate2Temperature;
+        public int BoilingPlate2Temperature
         {
-            get => _temperatureControl2Temperature;
+            get => _boilingPlate2Temperature;
             private set
             {
-                Set(() => TemperatureControl2Temperature, ref _temperatureControl2Temperature, value);
+                Set(() => BoilingPlate2Temperature, ref _boilingPlate2Temperature, value);
             }
         }
 
-        public RelayCommand TemperatureControl2TemperatureDownCommand => new RelayCommand(TemperatureControl2TemperatureDown);
+        public RelayCommand BoilingPlate2TemperatureDownCommand => new RelayCommand(BoilingPlate2TemperatureDown);
 
-        private void TemperatureControl2TemperatureDown()
+        private void BoilingPlate2TemperatureDown()
         {
-            TemperatureControl2Temperature -= 1;
-            _manualHandlingModule.ChangeTemperature2(-1);
+            BoilingPlate2Temperature -= 1;
+            _manualHandlingModule.ChangeBoilingPlate2Temperature(-1);
         }
 
-        public RelayCommand TemperatureControl2TemperatureUpCommand => new RelayCommand(TemperatureControl2TemperatureUp);
+        public RelayCommand BoilingPlate2TemperatureUpCommand => new RelayCommand(BoilingPlate2TemperatureUp);
 
-        private void TemperatureControl2TemperatureUp()
+        private void BoilingPlate2TemperatureUp()
         {
-            TemperatureControl2Temperature += 1;
-            _manualHandlingModule.ChangeTemperature2(+1);
+            BoilingPlate2Temperature += 1;
+            _manualHandlingModule.ChangeBoilingPlate2Temperature(+1);
         }
 
-        public RelayCommand TemperatureControl2OnOffCommand => new RelayCommand(TemperatureControl2OnOff);
+        public RelayCommand BoilingPlate2OnOffCommand => new RelayCommand(BoilingPlate2OnOff);
 
-        private void TemperatureControl2OnOff()
+        private void BoilingPlate2OnOff()
         {
-            if (TemperatureControl2OnOffSymbol == Symbol.Play)
+            if (BoilingPlate2OnOffSymbol == Symbol.Play)
             {
-                TemperatureControl2OnOffSymbol = Symbol.Stop;
-                _manualHandlingModule.StartTemperatureControl2(TemperatureControl2Temperature);
+                BoilingPlate2OnOffSymbol = Symbol.Stop;
+                _manualHandlingModule.StartBoilingPlate2TemperatureControl(BoilingPlate2Temperature);
             }
             else
             {
-                TemperatureControl2OnOffSymbol = Symbol.Play;
-                _manualHandlingModule.StopTemperatureControl2();
+                BoilingPlate2OnOffSymbol = Symbol.Play;
+                _manualHandlingModule.StopBoilingPlate2();
             }
         }
 
-        private Symbol _temperatureControl2OnOffSymbol;
-        public Symbol TemperatureControl2OnOffSymbol
+        private Symbol _boilingPlate2OnOffSymbol;
+        public Symbol BoilingPlate2OnOffSymbol
         {
-            get => _temperatureControl2OnOffSymbol;
+            get => _boilingPlate2OnOffSymbol;
             private set
             {
-                Set(() => TemperatureControl2OnOffSymbol, ref _temperatureControl2OnOffSymbol, value);
+                Set(() => BoilingPlate2OnOffSymbol, ref _boilingPlate2OnOffSymbol, value);
             }
         }
 

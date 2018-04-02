@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using Brewery.Core.Contracts;
+using Brewery.Core.Contracts.ServiceAdapter;
 using Brewery.Core.Models;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
@@ -223,9 +224,9 @@ namespace Brewery.Logic
         }
 
         private readonly ITimer _timer;
-        private readonly ITemperatureControl1Module _temperatureControl1Module;
-        private readonly IMixerModule _mixerModule;
-        private readonly IPiezoModule _piezoModule;
+        private readonly IBoilingPlate1Service _boilingPlate1Module;
+        private readonly IMixerService _mixerModule;
+        private readonly IPiezoService _piezoModule;
         private readonly BrewProcessSteps _brewProcessSteps;
         private Status _status = Status.Stopped;
         
@@ -235,10 +236,10 @@ namespace Brewery.Logic
         private bool _messageAcknowledged;
         private DateTime _startedAt = default(DateTime);
 
-        public BrewProcessModule(ITimer timer, ITemperatureControl1Module temperatureControl1Module, IMixerModule mixerModule, IPiezoModule piezoModule, BrewProcessSteps brewProcessSteps, IDevicesService devicesService)
+        public BrewProcessModule(ITimer timer, IBoilingPlate1Service boilingPlate1Module, IMixerService mixerModule, IPiezoService piezoModule, BrewProcessSteps brewProcessSteps, IDevicesService devicesService)
         {
             _timer = timer;
-            _temperatureControl1Module = temperatureControl1Module;
+            _boilingPlate1Module = boilingPlate1Module;
             _mixerModule = mixerModule;
             _piezoModule = piezoModule;
             _brewProcessSteps = brewProcessSteps;
@@ -254,7 +255,7 @@ namespace Brewery.Logic
         private void StopBrewProcessMessageReceived(StopBrewProcessMessage obj)
         {
             _status = Status.Stopped;
-            _temperatureControl1Module.BoilingPlateOff();
+            _boilingPlate1Module.PowerOff();
             _tempReachedAt = default(DateTime);
             _startedAt = default(DateTime);
             _currentStep = 0;
@@ -302,7 +303,7 @@ namespace Brewery.Logic
 
             currentStep.ElapsedTime = $"{elapsed.Hours.ToString("00")}:{elapsed.Minutes.ToString("00")}:{elapsed.Seconds.ToString("00")}";
 
-            _temperatureControl1Module.ManageTemperature(currentStep.Temperature, Temperature1);
+            _boilingPlate1Module.ManageTemperature(currentStep.Temperature);
 
             _mixerModule.Power(currentStep.Mixer);
 

@@ -1,80 +1,81 @@
 ﻿using Brewery.Core.Contracts;
+using Brewery.Core.Contracts.ServiceAdapter;
 
 namespace Brewery.Logic
 {
     public class ManualHandlingModule : IManualHandlingModule
     {
-        private readonly ITemperatureControl1Module _temperatureControl1Module;
-        private readonly ITemperatureControl2Module _temperatureControl2Module;
-        private readonly IMixerModule _mixerModule;
-        private readonly IPiezoModule _piezoModule;
+        private readonly IBoilingPlate1Service _boilingPlate1Module;
+        private readonly IBoilingPlate2Service _boilingPlate2Module;
+        private readonly IMixerService _mixerModule;
+        private readonly IPiezoService _piezoModule;
         private readonly ITimer _timer;
 
-        private int _temperatureControl1Temperature;
-        private int _temperatureControl2Temperature;
+        private int _boilingPlate1Temperature;
+        private int _boilingPlate2Temperature;
 
-        public ManualHandlingModule(ITimer timer, ITemperatureControl1Module temperatureControl1Module, ITemperatureControl2Module temperatureControl2Module, IMixerModule mixerModule, IPiezoModule piezoModule, IDevicesService devicesService)
+        public ManualHandlingModule(ITimer timer, IBoilingPlate1Service boilingPlate1Module, IBoilingPlate2Service boilingPlate2Module, IMixerService mixerModule, IPiezoService piezoModule, IDevicesService devicesService)
         {
             _timer = timer;
             
-            _temperatureControl1Module = temperatureControl1Module;
-            _temperatureControl2Module = temperatureControl2Module;
+            _boilingPlate1Module = boilingPlate1Module;
+            _boilingPlate2Module = boilingPlate2Module;
 
             _mixerModule = mixerModule;
             _piezoModule = piezoModule;
 
-            devicesService.Temperature1ChangedEvent += (sender, args) => Temperature1 = args.Temperature;
-            devicesService.Temperature2ChangedEvent += (sender, args) => Temperature2 = args.Temperature;
+            devicesService.Temperature1ChangedEvent += (sender, args) => BoilingPlate1Temperature = args.Temperature;
+            devicesService.Temperature2ChangedEvent += (sender, args) => BoilingPlate2Temperature = args.Temperature;
         }
 
-        private double Temperature2 { get; set; }
+        private double BoilingPlate2Temperature { get; set; }
 
-        private double Temperature1 { get; set; }
+        private double BoilingPlate1Temperature { get; set; }
 
-        private void ManageTemperature1(int temperatureControl1Temperature)
+        private void ManageBoilingPlate1Temperature(int boilingPlate1Temperature)
         {
-            _temperatureControl1Temperature = temperatureControl1Temperature;
-            _temperatureControl1Module.ManageTemperature(temperatureControl1Temperature, Temperature1);
+            _boilingPlate1Temperature = boilingPlate1Temperature;
+            _boilingPlate1Module.ManageTemperature(boilingPlate1Temperature);
         }
 
-        private void ManageTemperature2(int temperatureControl2Temperature)
+        private void ManageBoilingPlate2Temperature(int boilingPlate2Temperature)
         {
-            _temperatureControl2Temperature = temperatureControl2Temperature;
-            _temperatureControl2Module.ManageTemperature(temperatureControl2Temperature, Temperature2);
+            _boilingPlate2Temperature = boilingPlate2Temperature;
+            _boilingPlate2Module.ManageTemperature(boilingPlate2Temperature);
         }
 
-        public void StartTemperatureControl1(int temperatureControl1Temperature)
+        public void StartBoilingPlate1TemperatureControl(int boilingPlate1Temperature)
         {
-            _temperatureControl1Temperature = temperatureControl1Temperature;
-            _timer.AddEvent(nameof(ManageTemperature1), (o, e) => ManageTemperature1(_temperatureControl1Temperature));
+            _boilingPlate1Temperature = boilingPlate1Temperature;
+            _timer.AddEvent(nameof(ManageBoilingPlate1Temperature), (o, e) => ManageBoilingPlate1Temperature(_boilingPlate1Temperature));
         }
 
-        public void StartTemperatureControl2(int temperatureControl2Temperature)
+        public void StartBoilingPlate2TemperatureControl(int boilingPlate2Temperature)
         {
-            _temperatureControl2Temperature = temperatureControl2Temperature;
-            _timer.AddEvent(nameof(ManageTemperature2), (o, e) => ManageTemperature2(_temperatureControl2Temperature));
+            _boilingPlate2Temperature = boilingPlate2Temperature;
+            _timer.AddEvent(nameof(ManageBoilingPlate2Temperature), (o, e) => ManageBoilingPlate2Temperature(_boilingPlate2Temperature));
         }
 
-        public void StopTemperatureControl1()
+        public void StopBoilingPlate1TemperatureControl()
         {
-            _timer.RemoveEvent(nameof(ManageTemperature1), (o, e) => ManageTemperature1(_temperatureControl1Temperature));
-            _temperatureControl1Module.BoilingPlateOff();
+            _timer.RemoveEvent(nameof(ManageBoilingPlate1Temperature), (o, e) => ManageBoilingPlate1Temperature(_boilingPlate1Temperature));
+            _boilingPlate1Module.PowerOff();
         }
 
-        public void StopTemperatureControl2()
+        public void StopBoilingPlate2()
         {
-            _timer.RemoveEvent(nameof(ManageTemperature2), (o, e) => ManageTemperature2(_temperatureControl2Temperature));
-            _temperatureControl2Module.BoilingPlateOff();
+            _timer.RemoveEvent(nameof(ManageBoilingPlate2Temperature), (o, e) => ManageBoilingPlate2Temperature(_boilingPlate2Temperature));
+            _boilingPlate2Module.PowerOff();
         }
 
-        public void ChangeTemperature1(int temperature)
+        public void ChangeBoilingPlate1Temperature(int temperature)
         {
-            _temperatureControl1Temperature += temperature;
+            _boilingPlate1Temperature += temperature;
         }
 
-        public void ChangeTemperature2(int temperature)
+        public void ChangeBoilingPlate2Temperature(int temperature)
         {
-            _temperatureControl2Temperature += temperature;
+            _boilingPlate2Temperature += temperature;
         }
 
         public void StartPizeoControl()

@@ -35,7 +35,7 @@ namespace Brewery
             _timer = ViewModelLocator.GetInstance<ITimer>(); //todo: ctor-Resolve
             _devicesService = ViewModelLocator.GetInstance<IDevicesService>(); //todo: ctor-Resolve
 
-            _timer.AddEvent(nameof(_devicesService.RefreshTemperatures),(sender, o) => _devicesService.RefreshTemperatures());
+            _timer.AddEvent(nameof(_devicesService.RefreshDeviceStatus),(sender, o) => _devicesService.RefreshDeviceStatus());
         }
         
         private async void ReceiveMessage(ShowMessageDialog action)
@@ -117,10 +117,7 @@ namespace Brewery
         {
             var deferral = e.SuspendingOperation.GetDeferral();
             //TODO: Save application state and stop any background activity
-
-            _timer.RemoveEvent(nameof(_devicesService.RefreshTemperatures), (o, o1) => _devicesService.RefreshTemperatures());
-            ViewModelLocator.DisposeCreatedInstances();
-            
+                        
             deferral.Complete();
         }
     }
