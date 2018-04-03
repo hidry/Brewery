@@ -34,7 +34,7 @@ namespace Brewery.Logic
         }
         private void InitTimer()
         {
-            _dispatcherTimer = new DispatcherTimer {Interval = new TimeSpan(0, 0, 0, 2)};
+            _dispatcherTimer = new DispatcherTimer {Interval = new TimeSpan(0, 0, 0, 1)};
             _dispatcherTimer.Start();
         }
     }
