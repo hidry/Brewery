@@ -6,7 +6,7 @@
     xmlns:converters="using:Microsoft.Toolkit.Uwp.UI.Converters"
     xmlns:controls="using:Microsoft.Toolkit.Uwp.UI.Controls"
     xmlns:converters1="using:Brewery.Converters"
-    RequestedTheme="Light">
+    RequestedTheme="Dark">
     <Application.Resources>
         <logic:ViewModelLocator x:Key="ViewModelLocator"></logic:ViewModelLocator>
         <converters:BoolToVisibilityConverter x:Key="BooleanToVisibilityConverter"></converters:BoolToVisibilityConverter>
