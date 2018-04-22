@@ -1,9 +1,9 @@
-﻿using Brewery.Server.Core;
+﻿using Brewery.Server.Core.Api;
 using Restup.Webserver.Attributes;
 using Restup.Webserver.Models.Contracts;
 using Restup.Webserver.Models.Schemas;
 
-namespace Brewery.Server.Logic.Controller
+namespace Brewery.Server.Logic.Api.Controller
 {
     [RestController(InstanceCreationType.Singleton)]
     class MixerController

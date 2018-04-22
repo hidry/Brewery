@@ -106,9 +106,9 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="GpioModule.cs" />
+    <Compile Include="Api\GpioModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TemperatureModule.cs" />
+    <Compile Include="Api\TemperatureModule.cs" />
     <EmbeddedResource Include="Properties\Brewery.Server.Logic.RaspberryPi.rd.xml" />
   </ItemGroup>
   <ItemGroup>

@@ -1,11 +1,11 @@
-﻿using Brewery.Server.Core;
+﻿using Brewery.Server.Core.Api;
 using Rinsen.IoT.OneWire;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 
-namespace Brewery.Server.Logic.RaspberryPi
+namespace Brewery.Server.Logic.RaspberryPi.Api
 {
     public class TemperatureModule : ITemperatureModule, IDisposable
     {

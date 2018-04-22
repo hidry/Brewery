@@ -1,9 +1,9 @@
-﻿using Brewery.Server.Core;
+﻿using Brewery.Server.Core.Api;
 using System.Diagnostics;
 using System;
 using System.Collections.Generic;
 
-namespace Brewery.Server.Logic.RaspberryPi
+namespace Brewery.Server.Logic.RaspberryPi.Api
 {
     public class GpioModule : IGpioModule
     {

@@ -106,18 +106,23 @@
     <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="GpioHeader.cs" />
-    <Compile Include="IGpioModule.cs" />
+    <Compile Include="Api\GpioHeader.cs" />
+    <Compile Include="Api\IGpioModule.cs" />
     <Compile Include="IServer.cs" />
-    <Compile Include="ITemperatureModule.cs" />
+    <Compile Include="Api\ITemperatureModule.cs" />
+    <Compile Include="Models\MashStep.cs" />
+    <Compile Include="Models\MashSteps.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Settings.cs" />
+    <Compile Include="Api\Settings.cs" />
     <EmbeddedResource Include="Properties\Brewery.Server.Core.rd.xml" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.0.8</Version>
     </PackageReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Service\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

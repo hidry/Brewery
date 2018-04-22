@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Brewery.Server.Core
+namespace Brewery.Server.Core.Api
 {
     public static class GpioHeader
     {

@@ -1,5 +1,5 @@
 ﻿using Brewery.Server.Core;
-using Brewery.Server.Logic.Controller;
+using Brewery.Server.Logic.Api.Controller;
 using Restup.Webserver.Http;
 using Restup.Webserver.Rest;
 using System;

@@ -1,7 +1,7 @@
-﻿using Brewery.Server.Core;
+﻿using Brewery.Server.Core.Api;
 using System.Diagnostics;
 
-namespace Brewery.Server.Logic.RaspberryPi
+namespace Brewery.Server.Logic.RaspberryPi.Api
 {
     public class TemperatureModule : ITemperatureModule
     {

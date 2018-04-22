@@ -1,4 +1,4 @@
-﻿namespace Brewery.Server.Core
+﻿namespace Brewery.Server.Core.Api
 {
     public interface IGpioModule
     {

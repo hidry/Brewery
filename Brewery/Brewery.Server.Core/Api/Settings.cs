@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace Brewery.Server.Core
+namespace Brewery.Server.Core.Api
 {
     public static class Settings
     {

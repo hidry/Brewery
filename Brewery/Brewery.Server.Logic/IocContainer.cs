@@ -1,5 +1,7 @@
 ﻿using Brewery.Server.Core;
-using Brewery.Server.Logic.RaspberryPi;
+using Brewery.Server.Core.Api;
+using Brewery.Server.Core.Models;
+using Brewery.Server.Logic.RaspberryPi.Api;
 using GalaSoft.MvvmLight.Ioc;
 
 namespace Brewery.Server.Logic
@@ -8,6 +10,7 @@ namespace Brewery.Server.Logic
     {
         static IocContainer()
         {
+            Register<MashSteps>();
             Register<IServer, Server>();
             Register<IGpioModule, GpioModule>();
             Register<ITemperatureModule, TemperatureModule>();
@@ -18,6 +21,12 @@ namespace Brewery.Server.Logic
             where TClass : class, TInterface
         {
             SimpleIoc.Default.Register<TInterface, TClass>();
+        }
+
+        private static void Register<TClass>()
+            where TClass : class
+        {
+            SimpleIoc.Default.Register<TClass>();
         }
 
         public static T GetInstance<T>()

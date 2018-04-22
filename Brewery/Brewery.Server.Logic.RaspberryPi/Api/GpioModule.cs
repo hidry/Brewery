@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using Windows.Devices.Gpio;
-using Brewery.Server.Core;
+using Brewery.Server.Core.Api;
 
-namespace Brewery.Server.Logic.RaspberryPi
+namespace Brewery.Server.Logic.RaspberryPi.Api
 {
     public class GpioModule : IGpioModule
     {
