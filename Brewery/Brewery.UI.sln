@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brewery.UI.Logic", "Brewery
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brewery.ServiceAdapter", "Brewery.ServiceAdapter\Brewery.ServiceAdapter.csproj", "{E0B2EFB2-7E01-4CC2-8AED-2971DDF53281}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brewery", "Brewery\Brewery.csproj", "{C1D8E81F-1676-4D56-87E1-39D1285F1081}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Brewery.UI", "Brewery\Brewery.UI.csproj", "{C1D8E81F-1676-4D56-87E1-39D1285F1081}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{8FAC0DDC-9A14-48B1-84EB-5891548D40C4}"
 EndProject

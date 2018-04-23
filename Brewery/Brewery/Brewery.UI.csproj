@@ -7,8 +7,8 @@
     <ProjectGuid>{C1D8E81F-1676-4D56-87E1-39D1285F1081}</ProjectGuid>
     <OutputType>AppContainerExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Brewery</RootNamespace>
-    <AssemblyName>Brewery</AssemblyName>
+    <RootNamespace>Brewery.UI</RootNamespace>
+    <AssemblyName>Brewery.UI</AssemblyName>
     <DefaultLanguage>de-DE</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.15063.0</TargetPlatformVersion>
