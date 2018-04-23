@@ -1,4 +1,5 @@
-﻿using Brewery.Server.Core.Api;
+﻿using Brewery.Core;
+using Brewery.Server.Core.Api;
 using Restup.Webserver.Attributes;
 using Restup.Webserver.Models.Contracts;
 using Restup.Webserver.Models.Schemas;

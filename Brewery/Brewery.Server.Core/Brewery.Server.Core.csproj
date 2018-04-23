@@ -114,6 +114,7 @@
     <Compile Include="Models\MashSteps.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Api\Settings.cs" />
+    <Compile Include="Service\IMashService.cs" />
     <EmbeddedResource Include="Properties\Brewery.Server.Core.rd.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -122,7 +123,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Service\" />
+    <ProjectReference Include="..\Brewery.Core\Brewery.Core.csproj">
+      <Project>{723ec350-d3cd-4f59-a432-50cc3d162069}</Project>
+      <Name>Brewery.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

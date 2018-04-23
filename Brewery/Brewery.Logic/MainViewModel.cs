@@ -1,6 +1,6 @@
 ﻿using GalaSoft.MvvmLight;
 
-namespace Brewery.Logic
+namespace Brewery.UI.Logic
 {
     public class MainViewModel : ViewModelBase
     {

@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using Windows.UI.Xaml.Controls;
 using Brewery.Core.Models;
-using Brewery.Logic;
+using Brewery.UI.Logic;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
 using Windows.System;
+using Brewery.UI.Core.Models;
 
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 

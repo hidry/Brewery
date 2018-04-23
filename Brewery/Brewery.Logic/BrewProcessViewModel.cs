@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
-using Brewery.Core.Contracts;
+using Brewery.UI.Core.Contracts;
 using Brewery.Core.Contracts.ServiceAdapter;
-using Brewery.Core.Models;
+using Brewery.UI.Core.Models;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
@@ -10,7 +10,7 @@ using PushbulletSharp;
 using PushbulletSharp.Models.Requests;
 using Telerik.Data.Core;
 
-namespace Brewery.Logic
+namespace Brewery.UI.Logic
 {
     public class BrewProcessViewModel : ViewModelBase
     {

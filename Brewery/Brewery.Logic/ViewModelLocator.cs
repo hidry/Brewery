@@ -1,10 +1,9 @@
-﻿using Brewery.Core.Contracts;
-using Brewery.Core.Contracts.ServiceAdapter;
-using Brewery.Core.Models;
+﻿using Brewery.Core;
+using Brewery.Core.Contracts;
 using Brewery.ServiceAdapter;
-using GalaSoft.MvvmLight.Ioc;
+using Brewery.UI.Core.Contracts;
 
-namespace Brewery.Logic
+namespace Brewery.UI.Logic
 {
     public class ViewModelLocator
     {
@@ -12,35 +11,29 @@ namespace Brewery.Logic
         {
             SetUpModules();
             SetupViewModels();
-            SimpleIoc.Default.Register<IDevicesService, DevicesService>();
-            SimpleIoc.Default.Register<IBoilingPlate1Service, BoilingPlate1Service>();
-            SimpleIoc.Default.Register<IBoilingPlate2Service, BoilingPlate2Service>();
+            IocContainer.Register<IDevicesService, DevicesService>();
         }
 
         private static void SetupViewModels()
         {
-            SimpleIoc.Default.Register<MainViewModel>();
-            SimpleIoc.Default.Register<BrewProcessViewModel>();
-            SimpleIoc.Default.Register<StatusViewModel>();
-            SimpleIoc.Default.Register<ManualHandlingViewModel>();
-            SimpleIoc.Default.Register<BrewProcessSteps>();
+            IocContainer.Register<MainViewModel>();
+            IocContainer.Register<BrewProcessViewModel>();
+            IocContainer.Register<StatusViewModel>();
+            IocContainer.Register<ManualHandlingViewModel>();
+            IocContainer.Register<BrewProcessSteps>();
         }
 
         private static void SetUpModules()
         {
-            SimpleIoc.Default.Register<RequestHelper>();
-            SimpleIoc.Default.Register<IPiezoService, PiezoService>();
-            SimpleIoc.Default.Register<IMixerService, MixerService>();
-            SimpleIoc.Default.Register<IBoilingPlate1Service, BoilingPlate1Service>();
-            SimpleIoc.Default.Register<IBoilingPlate2Service, BoilingPlate2Service>();
-            SimpleIoc.Default.Register<ITimer, Timer>();
-            SimpleIoc.Default.Register<IBrewProcessModule, BrewProcessModule>();
-            SimpleIoc.Default.Register<IManualHandlingModule, ManualHandlingModule>();
+            Bootstrapper.SetUpServiceAdapter();
+            IocContainer.Register<ITimer, Timer>();
+            IocContainer.Register<IBrewProcessModule, BrewProcessModule>();
+            IocContainer.Register<IManualHandlingModule, ManualHandlingModule>();
         }
 
         public static T GetInstance<T>()
         {
-            return SimpleIoc.Default.GetInstance<T>();
+            return IocContainer.GetInstance<T>();
         }
 
         public MainViewModel Main => GetInstance<MainViewModel>();

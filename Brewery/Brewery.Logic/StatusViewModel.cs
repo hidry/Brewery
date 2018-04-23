@@ -1,7 +1,7 @@
-﻿using Brewery.Core.Contracts;
+﻿using Brewery.UI.Core.Contracts;
 using GalaSoft.MvvmLight;
 
-namespace Brewery.Logic
+namespace Brewery.UI.Logic
 {
     public class StatusViewModel : ViewModelBase
     {

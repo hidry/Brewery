@@ -1,8 +1,8 @@
 ﻿using System;
-using Brewery.Core.Contracts;
 using Brewery.Core.Contracts.ServiceAdapter;
+using Brewery.UI.Core.Contracts;
 
-namespace Brewery.Logic
+namespace Brewery.UI.Logic
 {
 
     class DevicesService : IDevicesService

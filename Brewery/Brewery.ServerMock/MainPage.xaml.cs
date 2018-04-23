@@ -1,4 +1,5 @@
-﻿using Brewery.Server.Core;
+﻿using Brewery.Core;
+using Brewery.Server.Core;
 using Brewery.Server.Logic;
 using Newtonsoft.Json;
 using Restup.Webserver;

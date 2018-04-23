@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Brewery.Core.Models
+namespace Brewery.UI.Core.Models
 {
     public class ShowMessageDialog
     {

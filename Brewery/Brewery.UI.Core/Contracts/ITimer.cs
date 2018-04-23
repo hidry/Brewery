@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Brewery.Core.Contracts
+namespace Brewery.UI.Core.Contracts
 {
     public interface ITimer
     {

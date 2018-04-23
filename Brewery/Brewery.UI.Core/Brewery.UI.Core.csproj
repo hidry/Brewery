@@ -4,19 +4,18 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F8782999-60AA-4436-B898-3C4DEC440440}</ProjectGuid>
+    <ProjectGuid>{CEB1B674-3C6D-4F27-A9ED-AF49C514BBD9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Brewery.Logic</RootNamespace>
-    <AssemblyName>Brewery.Logic</AssemblyName>
+    <RootNamespace>Brewery.UI.Core</RootNamespace>
+    <AssemblyName>Brewery.UI.Core</AssemblyName>
     <DefaultLanguage>de-DE</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion>10.0.15063.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.15063.0</TargetPlatformMinVersion>
+    <TargetPlatformVersion Condition=" '$(TargetPlatformVersion)' == '' ">10.0.16299.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.10586.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <RuntimeIdentifiers>win10-arm;win10-arm-aot;win10-x86;win10-x86-aot;win10-x64;win10-x64-aot</RuntimeIdentifiers>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -103,51 +102,24 @@
     <UseVSHostingProcess>false</UseVSHostingProcess>
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
+  <PropertyGroup>
+    <RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+  </PropertyGroup>
   <ItemGroup>
-    <Compile Include="BrewProcessViewModel.cs" />
-    <Compile Include="DevicesService.cs" />
-    <Compile Include="MainViewModel.cs" />
-    <Compile Include="ManualHandlingModule.cs" />
-    <Compile Include="ManualHandlingViewModel.cs" />
+    <Compile Include="Contracts\IDevicesService.cs" />
+    <Compile Include="Contracts\IManualHandlingModule.cs" />
+    <Compile Include="Contracts\ITimer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StatusViewModel.cs" />
-    <Compile Include="Timer.cs" />
-    <Compile Include="ViewModelLocator.cs" />
-    <EmbeddedResource Include="Properties\Brewery.Logic.rd.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Brewery.Core\Brewery.Core.csproj">
-      <Project>{723ec350-d3cd-4f59-a432-50cc3d162069}</Project>
-      <Name>Brewery.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Brewery.ServiceAdapter\Brewery.ServiceAdapter.csproj">
-      <Project>{e0b2efb2-7e01-4cc2-8aed-2971ddf53281}</Project>
-      <Name>Brewery.ServiceAdapter</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup Condition="$(Platform.StartsWith('ARM'))">
-  </ItemGroup>
-  <ItemGroup Condition="!$(Platform.StartsWith('ARM'))">
+    <Compile Include="Models\ShowMessageDialog.cs" />
+    <EmbeddedResource Include="Properties\Brewery.UI.Core.rd.xml" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.0.8</Version>
     </PackageReference>
-    <PackageReference Include="MvvmLightLibs">
-      <Version>5.4.1</Version>
-    </PackageReference>
-    <PackageReference Include="PushBulletSharp">
-      <Version>3.0.1</Version>
-    </PackageReference>
-    <PackageReference Include="Telerik.UI.for.UniversalWindowsPlatform">
-      <Version>1.0.0.6</Version>
-    </PackageReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

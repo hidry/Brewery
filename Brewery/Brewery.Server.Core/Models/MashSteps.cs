@@ -2,13 +2,11 @@
 
 namespace Brewery.Server.Core.Models
 {
-    public class MashSteps
+    public class MashSteps : List<MashStep>
     {
-        private List<MashStep> _steps = new List<MashStep>();
-
         public MashSteps()
         {
-            _steps.Add(new MashStep()
+            Add(new MashStep()
             {
                 Step = "Aufheizen & Einmaischen",
                 Temperature = 70,
@@ -17,7 +15,7 @@ namespace Brewery.Server.Core.Models
                 Mixer = true,
                 Active = true
             });
-            _steps.Add(new MashStep()
+            Add(new MashStep()
             {
                 Step = "1. Rast",
                 Temperature = 66.5,
@@ -26,7 +24,7 @@ namespace Brewery.Server.Core.Models
                 Mixer = true,
                 Active = true
             });
-            _steps.Add(new MashStep()
+            Add(new MashStep()
             {
                 Step = "2. Rast",
                 Temperature = 66.5,
@@ -35,7 +33,7 @@ namespace Brewery.Server.Core.Models
                 Mixer = true,
                 Active = false
             });
-            _steps.Add(new MashStep()
+            Add(new MashStep()
             {
                 Step = "3. Rast",
                 Temperature = 66.5,
@@ -44,7 +42,7 @@ namespace Brewery.Server.Core.Models
                 Mixer = true,
                 Active = false
             });
-            _steps.Add(new MashStep()
+            Add(new MashStep()
             {
                 Step = "4. Rast",
                 Temperature = 66.5,
@@ -53,7 +51,7 @@ namespace Brewery.Server.Core.Models
                 Mixer = true,
                 Active = false
             });
-            _steps.Add(new MashStep()
+            Add(new MashStep()
             {
                 Step = "5. Rast",
                 Temperature = 66.5,
@@ -62,7 +60,7 @@ namespace Brewery.Server.Core.Models
                 Mixer = true,
                 Active = false
             });
-            _steps.Add(new MashStep()
+            Add(new MashStep()
             {
                 Step = "Aufheizen",
                 Temperature = 76,
@@ -71,7 +69,7 @@ namespace Brewery.Server.Core.Models
                 Mixer = true,
                 Active = true
             });
-            _steps.Add(new MashStep()
+            Add(new MashStep()
             {
                 Step = "Abmaischen",
                 Temperature = 0,

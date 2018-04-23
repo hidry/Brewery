@@ -1,9 +1,9 @@
-﻿using Brewery.Core.Contracts;
+﻿using Brewery.UI.Core.Contracts;
 using System;
 using System.Collections.Generic;
 using Windows.UI.Xaml;
 
-namespace Brewery.Logic
+namespace Brewery.UI.Logic
 {
     public class Timer : ITimer
     {

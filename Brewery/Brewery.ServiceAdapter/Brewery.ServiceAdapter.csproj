@@ -108,6 +108,8 @@
   <ItemGroup>
     <Compile Include="BoilingPlate1Service.cs" />
     <Compile Include="BoilingPlate2Service.cs" />
+    <Compile Include="Bootstrapper.cs" />
+    <Compile Include="MashService.cs" />
     <Compile Include="MixerService.cs" />
     <Compile Include="PiezoService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -117,6 +119,9 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
       <Version>6.0.8</Version>
+    </PackageReference>
+    <PackageReference Include="MvvmLightLibs">
+      <Version>5.4.1</Version>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>11.0.1</Version>

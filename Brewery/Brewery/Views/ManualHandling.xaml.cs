@@ -1,5 +1,5 @@
 ﻿using Windows.UI.Xaml.Controls;
-using Brewery.Logic;
+using Brewery.UI.Logic;
 
 // Die Elementvorlage "Leere Seite" wird unter https://go.microsoft.com/fwlink/?LinkId=234238 dokumentiert.
 

@@ -1,9 +1,9 @@
 ﻿using Windows.UI.Xaml.Controls;
-using Brewery.Core.Contracts;
+using Brewery.UI.Core.Contracts;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 
-namespace Brewery.Logic
+namespace Brewery.UI.Logic
 {
     public class ManualHandlingViewModel : ViewModelBase
     {

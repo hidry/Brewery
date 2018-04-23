@@ -4,11 +4,11 @@ using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-using Brewery.Core.Contracts;
-using Brewery.Core.Models;
-using Brewery.Logic;
+using Brewery.UI.Logic;
 using GalaSoft.MvvmLight.Command;
 using GalaSoft.MvvmLight.Messaging;
+using Brewery.UI.Core.Models;
+using Brewery.UI.Core.Contracts;
 
 namespace Brewery
 {

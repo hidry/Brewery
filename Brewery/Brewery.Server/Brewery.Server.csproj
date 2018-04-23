@@ -134,6 +134,10 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Brewery.Core\Brewery.Core.csproj">
+      <Project>{723ec350-d3cd-4f59-a432-50cc3d162069}</Project>
+      <Name>Brewery.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Brewery.Server.Core\Brewery.Server.Core.csproj">
       <Project>{4c5f0724-e31b-47df-ab97-27da92670a0f}</Project>
       <Name>Brewery.Server.Core</Name>

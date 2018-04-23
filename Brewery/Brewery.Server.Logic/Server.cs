@@ -1,4 +1,5 @@
 ﻿using Brewery.Server.Core;
+using Brewery.Server.Core.Service;
 using Brewery.Server.Logic.Api.Controller;
 using Restup.Webserver.Http;
 using Restup.Webserver.Rest;
@@ -10,6 +11,13 @@ namespace Brewery.Server.Logic
 {
     class Server : IServer
     {
+        private readonly IMashService _mashService;
+
+        public Server(IMashService mashService)
+        {
+            _mashService = mashService;
+        }
+
         public async Task StartServerAsync()
         {
             await Task.WhenAll(StartApiAsync(), StartBackgroundServiceAsync());
@@ -43,7 +51,7 @@ namespace Brewery.Server.Logic
                 {
                     if (DateTime.Now - dateTimeLastRun >= new TimeSpan(0, 0, 0, 1))
                     {
-                        Debug.WriteLine(DateTime.Now.ToString());
+                        _mashService.Execute();
                         dateTimeLastRun = DateTime.Now;
                     }
                 }

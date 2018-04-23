@@ -156,9 +156,13 @@
       <Project>{723ec350-d3cd-4f59-a432-50cc3d162069}</Project>
       <Name>Brewery.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Brewery.Logic\Brewery.Logic.csproj">
+    <ProjectReference Include="..\Brewery.Logic\Brewery.UI.Logic.csproj">
       <Project>{f8782999-60aa-4436-b898-3c4dec440440}</Project>
-      <Name>Brewery.Logic</Name>
+      <Name>Brewery.UI.Logic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Brewery.UI.Core\Brewery.UI.Core.csproj">
+      <Project>{ceb1b674-3c6d-4f27-a9ed-af49c514bbd9}</Project>
+      <Name>Brewery.UI.Core</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
