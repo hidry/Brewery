@@ -31,6 +31,7 @@ namespace Brewery.Server.Logic
             restRouteHandler.RegisterController<StatusController>();
             restRouteHandler.RegisterController<BoilingPlate1Controller>();
             restRouteHandler.RegisterController<BoilingPlate2Controller>();
+            restRouteHandler.RegisterController<MashServiceController>();
 
             var configuration = new HttpServerConfiguration()
               .ListenOnPort(8800)
