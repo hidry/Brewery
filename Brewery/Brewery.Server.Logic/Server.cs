@@ -44,14 +44,14 @@ namespace Brewery.Server.Logic
 
         private async Task StartBackgroundServiceAsync()
         {
-            var backgroundService = new Task(() =>
+            var backgroundService = new Task(async () =>
             {
                 var dateTimeLastRun = default(DateTime);
                 while (true)
                 {
                     if (DateTime.Now - dateTimeLastRun >= new TimeSpan(0, 0, 0, 1))
                     {
-                        _mashService.Execute();
+                        await _mashService.Execute();
                         dateTimeLastRun = DateTime.Now;
                     }
                 }

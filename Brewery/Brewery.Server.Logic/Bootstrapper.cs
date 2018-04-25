@@ -12,12 +12,12 @@ namespace Brewery.Server.Logic
     {
         public static void SetUpServerLogic()
         {
+            ServiceAdapter.Bootstrapper.SetUpServiceAdapter();
             IocContainer.Register<MashSteps>();
             IocContainer.Register<IServer, Server>();
             IocContainer.Register<IGpioModule, GpioModule>();
             IocContainer.Register<ITemperatureModule, TemperatureModule>();
-            IocContainer.Register<IMashService, MashService>();
-            ServiceAdapter.Bootstrapper.SetUpServiceAdapter();
+            IocContainer.Register<IMashService, MashService>();            
         }
     }
 }

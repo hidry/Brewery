@@ -2,6 +2,9 @@
 using Brewery.Server.Logic;
 using Brewery.Server.Core;
 using Brewery.Core;
+using Brewery.Server.Core.Models;
+using Brewery.Server.Core.Api;
+using Brewery.Core.Contracts.ServiceAdapter;
 
 // The Background Application template is documented at http://go.microsoft.com/fwlink/?LinkID=533884&clcid=0x409
 
@@ -15,7 +18,7 @@ namespace Brewery.Server
         {
             deferral = taskInstance.GetDeferral();
 
-            Bootstrapper.SetUpServerLogic();
+            Bootstrapper.SetUpServerLogic();            
             
             var server = IocContainer.GetInstance<IServer>();
             await server.StartServerAsync();

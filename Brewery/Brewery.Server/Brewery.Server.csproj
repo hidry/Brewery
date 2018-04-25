@@ -146,6 +146,10 @@
       <Project>{2b639cd0-c186-415e-9ee9-6aab0fefeb28}</Project>
       <Name>Brewery.Server.Logic</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Brewery.ServiceAdapter\Brewery.ServiceAdapter.csproj">
+      <Project>{e0b2efb2-7e01-4cc2-8aed-2971ddf53281}</Project>
+      <Name>Brewery.ServiceAdapter</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '15.0' ">
     <VisualStudioVersion>15.0</VisualStudioVersion>

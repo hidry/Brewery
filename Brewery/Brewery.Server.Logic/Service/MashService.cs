@@ -2,6 +2,8 @@
 using Brewery.Core.Models;
 using Brewery.Server.Core.Models;
 using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace Brewery.Server.Logic.Service
 {
@@ -65,7 +67,7 @@ namespace Brewery.Server.Logic.Service
             _mashServiceStatus.Message = null;
         }
 
-        public async void Execute()
+        public async Task Execute()
         {
             await _piezoService.Power(false);
 

@@ -27,7 +27,7 @@ namespace Brewery.UI.Logic
         {
             Bootstrapper.SetUpServiceAdapter();
             IocContainer.Register<ITimer, Timer>();
-            IocContainer.Register<IBrewProcessModule, BrewProcessModule>();
+            //IocContainer.Register<IBrewProcessModule, BrewProcessModule>();
             IocContainer.Register<IManualHandlingModule, ManualHandlingModule>();
         }
 
