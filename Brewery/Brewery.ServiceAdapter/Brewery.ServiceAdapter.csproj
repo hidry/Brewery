@@ -109,7 +109,6 @@
     <Compile Include="BoilingPlate1Service.cs" />
     <Compile Include="BoilingPlate2Service.cs" />
     <Compile Include="Bootstrapper.cs" />
-    <Compile Include="MashService.cs" />
     <Compile Include="MixerService.cs" />
     <Compile Include="PiezoService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

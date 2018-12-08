@@ -7,7 +7,6 @@ namespace Brewery.Core.Contracts.ServiceAdapter
         Task PowerOn();
         Task PowerOff();
         Task<double> GetCurrenTemperature();
-        Task ManageTemperature(double temperatureConfigured);
         Task<bool> GetPowerStatus();
     }
 }

@@ -1,15 +1,21 @@
 ﻿using Brewery.Core.Contracts.ServiceAdapter;
-using Brewery.Core.Models;
 using Brewery.Server.Core.Models;
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Brewery.Server.Logic.Service
 {
-    class MashService : Core.Service.IMashService
+    class BoilingPlate1Worker : Core.Service.IBoilingPlate1Worker
     {
-        private MashServiceStatus _mashServiceStatus;
+        enum ServiceStatus
+        {
+            Started,
+            Paused,
+            Stopped,
+            Finished
+        }
+
+        private ServiceStatus _serviceStatus = ServiceStatus.Stopped;
         private readonly IBoilingPlate1Service _boilingPlate1Service;
         private readonly IPiezoService _piezoService;
         private readonly IMixerService _mixerService;
@@ -20,23 +26,24 @@ namespace Brewery.Server.Logic.Service
         private bool _messageAcknowledged;
         private DateTime _startedAt = default(DateTime);
 
-        public MashService(IBoilingPlate1Service boilingPlate1Service, IPiezoService piezoService, IMixerService mixerService, MashSteps mashSteps, MashServiceStatus mashServiceStatus)
+        public BoilingPlate1Worker(IBoilingPlate1Service boilingPlate1Service, IPiezoService piezoService, IMixerService mixerService, MashSteps mashSteps)
         {
             _boilingPlate1Service = boilingPlate1Service;
             _piezoService = piezoService;
             _mixerService = mixerService;
             _brewProcessSteps = mashSteps;
-            _mashServiceStatus = mashServiceStatus;
         }
 
-        public MashServiceStatus GetStatus()
+        public bool GetPowerStatus()
         {
-            return _mashServiceStatus;
+            if (_serviceStatus == ServiceStatus.Stopped)
+                return false;
+            return true;
         }
 
         public void StopMashProcess()
         {
-            _mashServiceStatus.Status = ServiceStatus.Stopped;
+            _serviceStatus = ServiceStatus.Stopped;
             _boilingPlate1Service.PowerOff();
             _tempReachedAt = default(DateTime);
             _startedAt = default(DateTime);
@@ -45,36 +52,47 @@ namespace Brewery.Server.Logic.Service
 
         public void PauseMashProcess()
         {
-            _mashServiceStatus.Status = ServiceStatus.Paused;
+            _serviceStatus = ServiceStatus.Paused;
         }
 
         public void StartMashProcess()
         {
-            if (_mashServiceStatus.Status != ServiceStatus.Paused)
+            if (_serviceStatus != ServiceStatus.Paused)
             {
                 foreach (var brewProcessStep in _brewProcessSteps)
                 {
-                    brewProcessStep.ElapsedTime = null;
+                    brewProcessStep.Elapsed = default(TimeSpan);
                 }
             }
-            _mashServiceStatus.Status = ServiceStatus.Started;
+            _serviceStatus = ServiceStatus.Started;
         }
 
         public void MessageAcknowledged()
         {
             _messageOpen = false;
             _messageAcknowledged = true;
-            _mashServiceStatus.Message = null;
+        }
+
+        private async Task ManageTemperature(double temperatureCurrent, double temperature)
+        {
+            if (temperatureCurrent < temperature)
+            {
+                await _boilingPlate1Service.PowerOn();
+            }
+            else
+            {
+                await _boilingPlate1Service.PowerOff();
+            }
         }
 
         public async Task Execute()
         {
             await _piezoService.Power(false);
 
-            if (_mashServiceStatus.Status != ServiceStatus.Started)
+            if (_serviceStatus != ServiceStatus.Started)
                 return;
 
-            var currentStep = _brewProcessSteps[_currentStep];
+            var currentStep = GetCurrentStep();
             if (!currentStep.Active)
             {
                 SetNextStep();
@@ -85,23 +103,22 @@ namespace Brewery.Server.Logic.Service
                 _startedAt = DateTime.Now;
 
             var elapsed = (DateTime.Now - _startedAt);
-
-            currentStep.ElapsedTime = $"{elapsed.Hours.ToString("00")}:{elapsed.Minutes.ToString("00")}:{elapsed.Seconds.ToString("00")}";
-
-            await _boilingPlate1Service.ManageTemperature(currentStep.Temperature);
+            currentStep.Elapsed = elapsed;
+            
+            var currentTemperature = await _boilingPlate1Service.GetCurrenTemperature();
+            await ManageTemperature(currentTemperature, currentStep.Temperature);
             await _mixerService.Power(currentStep.Mixer);
-            var temperature1 = await _boilingPlate1Service.GetCurrenTemperature();
 
             //wenn ein nachfolgender Schritt eine niedrigere Temperatur benötigt als der Vorgängerschritt
             if (_currentStep > 0 && currentStep.Temperature < _brewProcessSteps[_currentStep - 1].Temperature && _tempReachedAt == default(DateTime))
             {
-                if (temperature1 <= currentStep.Temperature)
+                if (currentTemperature <= currentStep.Temperature)
                 {
                     _tempReachedAt = DateTime.Now;
                 }
             }
             //wenn Solltemperatur erreicht
-            else if (temperature1 >= currentStep.Temperature)
+            else if (currentTemperature >= currentStep.Temperature)
             {
                 if (_tempReachedAt == default(DateTime))
                     _tempReachedAt = DateTime.Now;
@@ -116,7 +133,6 @@ namespace Brewery.Server.Logic.Service
                         {
                             _messageOpen = true;
 
-                            _mashServiceStatus.Message = currentStep.ToString();
                             try
                             {
                                 //SendBrewStepNotification(currentStep); // wenn kein Netzwerk verfügbar Exception!?
@@ -149,6 +165,11 @@ namespace Brewery.Server.Logic.Service
             _tempReachedAt = default(DateTime);
             _startedAt = default(DateTime);
             _messageAcknowledged = false;
+        }
+
+        public MashStep GetCurrentStep()
+        {
+            return _brewProcessSteps[_currentStep];
         }
     }
 }

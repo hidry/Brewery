@@ -1,15 +1,16 @@
-﻿using Brewery.Core.Models;
+﻿using Brewery.Server.Core.Models;
 using System.Threading.Tasks;
 
 namespace Brewery.Server.Core.Service
 {
-    public interface IMashService
+    public interface IBoilingPlate1Worker
     {
         Task Execute();
-        MashServiceStatus GetStatus();
         void StopMashProcess();
         void PauseMashProcess();
         void StartMashProcess();
         void MessageAcknowledged();
+        MashStep GetCurrentStep();
+        bool GetPowerStatus();
     }
 }

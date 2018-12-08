@@ -12,7 +12,6 @@ namespace Brewery.ServiceAdapter
             IocContainer.Register<IMixerService, MixerService>();
             IocContainer.Register<IBoilingPlate1Service, BoilingPlate1Service>();
             IocContainer.Register<IBoilingPlate2Service, BoilingPlate2Service>();
-            IocContainer.Register<IMashService, MashService>();
         }
     }
 }

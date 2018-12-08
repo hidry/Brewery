@@ -1,26 +1,28 @@
 ﻿using Brewery.Server.Core;
 using Brewery.Server.Core.Service;
 using Brewery.Server.Logic.Api.Controller;
+using Restup.Webserver.File;
 using Restup.Webserver.Http;
 using Restup.Webserver.Rest;
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Brewery.Server.Logic
 {
     class Server : IServer
     {
-        private readonly IMashService _mashService;
+        private readonly IBoilingPlate1Worker _boilingPlate1Worker;
+        private readonly IBoilingPlate2Worker _boilingPlate2Worker;
 
-        public Server(IMashService mashService)
+        public Server(IBoilingPlate1Worker boilingPlate1Worker, IBoilingPlate2Worker boilingPlate2Worker)
         {
-            _mashService = mashService;
+            _boilingPlate1Worker = boilingPlate1Worker;
+            _boilingPlate2Worker = boilingPlate2Worker;
         }
 
         public async Task StartServerAsync()
         {
-            await Task.WhenAll(StartApiAsync(), StartBackgroundServiceAsync());
+            await Task.WhenAll(StartApiAsync(), StartBoilingPlate1WorkerAsync(), StartBoilingPlate2WorkerAsync());
         }
 
         private async Task StartApiAsync()
@@ -31,28 +33,28 @@ namespace Brewery.Server.Logic
             restRouteHandler.RegisterController<StatusController>();
             restRouteHandler.RegisterController<BoilingPlate1Controller>();
             restRouteHandler.RegisterController<BoilingPlate2Controller>();
-            restRouteHandler.RegisterController<MashServiceController>();
+            restRouteHandler.RegisterController<MashStepsController>();
 
             var configuration = new HttpServerConfiguration()
               .ListenOnPort(8800)
               .RegisterRoute("api", restRouteHandler)
-              //.RegisterRoute(new StaticFileRouteHandler(@"Web"))
+              .RegisterRoute(new StaticFileRouteHandler(@"Web"))
               .EnableCors();
 
             var httpServer = new HttpServer(configuration);
             await httpServer.StartServerAsync();
         }
 
-        private async Task StartBackgroundServiceAsync()
+        private async Task StartWorkerAsync(Task workerTask, int intervall)
         {
             var backgroundService = new Task(async () =>
             {
                 var dateTimeLastRun = default(DateTime);
                 while (true)
                 {
-                    if (DateTime.Now - dateTimeLastRun >= new TimeSpan(0, 0, 0, 1))
+                    if (DateTime.Now - dateTimeLastRun >= new TimeSpan(0, 0, 0, intervall))
                     {
-                        await _mashService.Execute();
+                        await workerTask;
                         dateTimeLastRun = DateTime.Now;
                     }
                 }
@@ -60,5 +62,15 @@ namespace Brewery.Server.Logic
             backgroundService.Start();
             await backgroundService;
         }
+
+        private async Task StartBoilingPlate1WorkerAsync()
+        {
+            await StartWorkerAsync(_boilingPlate1Worker.Execute(), 1);
+        }
+
+        private async Task StartBoilingPlate2WorkerAsync()
+        {
+            await StartWorkerAsync(_boilingPlate2Worker.Execute(), 1);
+        }         
     }
 }

@@ -108,14 +108,15 @@
   <ItemGroup>
     <Compile Include="Api\Controller\BoilingPlate2Controller.cs" />
     <Compile Include="Api\Controller\BoilingPlate1Controller.cs" />
-    <Compile Include="Api\Controller\MashServiceController.cs" />
+    <Compile Include="Api\Controller\MashStepsController.cs" />
     <Compile Include="Bootstrapper.cs" />
     <Compile Include="Api\Controller\PiezoController.cs" />
     <Compile Include="Api\Controller\StatusController.cs" />
     <Compile Include="Api\Controller\MixerController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Server.cs" />
-    <Compile Include="Service\MashService.cs" />
+    <Compile Include="Service\BoilingPlate2Worker.cs" />
+    <Compile Include="Service\BoilingPlate1Worker.cs" />
     <EmbeddedResource Include="Properties\Brewery.Server.Logic.rd.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -147,7 +148,6 @@
       <Name>Brewery.ServiceAdapter</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

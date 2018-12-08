@@ -23,12 +23,7 @@ namespace Brewery.ServiceAdapter
             var t = await _requestHelper.SendRequest<Response<bool>>("/boilingPlate1/powerStatus", MethodTypes.GET);
             return t.Value;
         }
-
-        public async Task ManageTemperature(double temperatureConfigured)
-        {
-            await _requestHelper.SendRequest<Response<bool>>($"/boilingPlate1/manageTemperature/{temperatureConfigured}", MethodTypes.PUT);
-        }
-
+        
         public async Task PowerOff()
         {
             await _requestHelper.SendRequest<Response<bool>>($"/boilingPlate1/power/{false}", MethodTypes.PUT);

@@ -14,8 +14,8 @@ namespace Brewery.ServiceAdapter
 
         public async Task<double> GetCurrenTemperature()
         {
-            var t = await _requestHelper.SendRequest<Response<double>>("/boilingPlate2/getCurrentTemperature", MethodTypes.GET);
-            return t.Value;
+            var t = await _requestHelper.SendRequest<double>("/boilingPlate2/getCurrentTemperature", MethodTypes.GET);
+            return t;
         }
 
         public async Task<bool> GetPowerStatus()
@@ -23,12 +23,7 @@ namespace Brewery.ServiceAdapter
             var t = await _requestHelper.SendRequest<Response<bool>>("/boilingPlate2/powerStatus", MethodTypes.GET);
             return t.Value;
         }
-
-        public async Task ManageTemperature(double temperatureConfigured)
-        {
-            await _requestHelper.SendRequest<Response<bool>>($"/boilingPlate2/manageTemperature/{temperatureConfigured}", MethodTypes.PUT);
-        }
-
+        
         public async Task PowerOff()
         {
             await _requestHelper.SendRequest<Response<bool>>($"/boilingPlate2/power/{false}", MethodTypes.PUT);

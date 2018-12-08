@@ -1,15 +1,10 @@
-﻿using Brewery.Core.Models;
-using GalaSoft.MvvmLight.Ioc;
+﻿using GalaSoft.MvvmLight.Ioc;
 using System.Diagnostics;
 
 namespace Brewery.Core
 {
     public static class IocContainer
     {
-        static IocContainer()
-        {
-            Register<MashServiceStatus>(); //todo: 
-        }
 
         public static void Register<TInterface, TClass>()
             where TInterface : class

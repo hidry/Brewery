@@ -1,5 +1,6 @@
 ﻿using Brewery.Core;
 using Brewery.Server.Core.Api;
+using Brewery.Server.Core.Service;
 using Restup.Webserver.Attributes;
 using Restup.Webserver.Models.Contracts;
 using Restup.Webserver.Models.Schemas;
@@ -10,6 +11,7 @@ namespace Brewery.Server.Logic.Api.Controller
     [RestController(InstanceCreationType.Singleton)]
     class BoilingPlate1Controller
     {
+        private readonly IBoilingPlate1Worker _boilingPlate1Worker;
         private readonly IGpioModule _gpioModule;
         private readonly ITemperatureModule _temperatureModule;
 
@@ -17,41 +19,42 @@ namespace Brewery.Server.Logic.Api.Controller
         {
             _gpioModule = IocContainer.GetInstance<IGpioModule>();
             _temperatureModule = IocContainer.GetInstance<ITemperatureModule>();
+            _boilingPlate1Worker = IocContainer.GetInstance<IBoilingPlate1Worker>();
         }
 
         [UriFormat("/boilingPlate1/powerStatus")]
         public IGetResponse GetPowerStatus()
         {
-            var status = _gpioModule.GetValue(Settings.BoilingPlate1Gpio.GpioNumber);
-            return new GetResponse(GetResponse.ResponseStatus.OK, new { Value = status });
-        }
-        [UriFormat("/boilingPlate1/power/{on}")]
-        public IPutResponse Power(bool on)
-        {
-            _gpioModule.Power(Settings.BoilingPlate1Gpio.GpioNumber, on);
-            return new PutResponse(PutResponse.ResponseStatus.OK);
+            return new GetResponse(GetResponse.ResponseStatus.OK, _boilingPlate1Worker.GetPowerStatus());
         }
         [UriFormat("/boilingPlate1/getCurrentTemperature")]
         public IGetResponse GetCurrenTemperature()
         {
-            return new GetResponse(GetResponse.ResponseStatus.OK, new { Value = GetTemperature() });
+            return new GetResponse(GetResponse.ResponseStatus.OK, GetTemperature());
         }
         private double GetTemperature()
         {
             return _temperatureModule.GetCurrenTemperature(Settings.TemperatureSensor1OneWireAddress);
         }
-        [UriFormat("/boilingPlate1/manageTemperature/{temperature}")]
-        public IPutResponse ManageTemperature(double temperature)
+        [UriFormat("/boilingPlate1/messageAcknowledged")]
+        public IPutResponse MessageAcknowledged()
         {
-            if (GetTemperature() < temperature)
-            {
-                Power(true);
-            }
-            else
-            {
-                Power(false);
-            }
+            _boilingPlate1Worker.MessageAcknowledged();
             return new PutResponse(PutResponse.ResponseStatus.OK);
-        }        
+        }
+
+        [UriFormat("/boilingPlate1/startMashProcess")]
+        public IPutResponse StartMashProcess()
+        {
+            _boilingPlate1Worker.StartMashProcess();
+            return new PutResponse(PutResponse.ResponseStatus.OK);
+        }
+
+        [UriFormat("/boilingPlate1/stopMashProcess")]
+        public IPutResponse StopMashProcess()
+        {
+            _boilingPlate1Worker.StopMashProcess();
+            return new PutResponse(PutResponse.ResponseStatus.OK);
+        }
     }
 }
