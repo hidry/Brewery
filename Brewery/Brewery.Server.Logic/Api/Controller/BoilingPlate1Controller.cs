@@ -36,10 +36,10 @@ namespace Brewery.Server.Logic.Api.Controller
         {
             return _temperatureModule.GetCurrenTemperature(Settings.TemperatureSensor1OneWireAddress);
         }
-        [UriFormat("/boilingPlate1/messageAcknowledged")]
-        public IPutResponse MessageAcknowledged()
+        [UriFormat("/boilingPlate1/acknowledgeMessage")]
+        public IPutResponse AcknowledgeMessage()
         {
-            _boilingPlate1Worker.MessageAcknowledged();
+            _boilingPlate1Worker.AcknowledgeMessage();
             return new PutResponse(PutResponse.ResponseStatus.OK);
         }
 

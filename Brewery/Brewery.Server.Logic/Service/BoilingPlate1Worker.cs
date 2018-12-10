@@ -67,7 +67,7 @@ namespace Brewery.Server.Logic.Service
             _serviceStatus = ServiceStatus.Started;
         }
 
-        public void MessageAcknowledged()
+        public void AcknowledgeMessage()
         {
             _messageOpen = false;
             _messageAcknowledged = true;

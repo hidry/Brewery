@@ -9,7 +9,7 @@ namespace Brewery.Server.Core.Service
         void StopMashProcess();
         void PauseMashProcess();
         void StartMashProcess();
-        void MessageAcknowledged();
+        void AcknowledgeMessage();
         MashStep GetCurrentStep();
         bool GetPowerStatus();
     }
