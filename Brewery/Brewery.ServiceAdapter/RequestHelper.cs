@@ -5,11 +5,6 @@ using System.Threading.Tasks;
 
 namespace Brewery.ServiceAdapter
 {
-    public class Response<T>
-    {
-        public T Value { get; set; }
-    }
-
     public class RequestHelper
     {
         private class EmptyBody { }

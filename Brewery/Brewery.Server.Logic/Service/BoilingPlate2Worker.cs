@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Diagnostics;
+using System.Threading.Tasks;
 using Brewery.Core.Contracts.ServiceAdapter;
 using Brewery.Server.Core.Api;
 using Brewery.Server.Core.Models;
@@ -22,21 +23,29 @@ namespace Brewery.Server.Logic.Service
         
         public async Task Execute()
         {
-            if (!_boilingPlate2Model.PowerStatus)
+            try
             {
-                _gpioModule.Power(Settings.BoilingPlate2Gpio.GpioNumber, false);
-                return;
+                if (!_boilingPlate2Model.PowerStatus)
+                {
+                    _gpioModule.Power(Settings.BoilingPlate2Gpio.GpioNumber, false);
+                    return;
+                }
+
+                var temperatureCurrent = await _boilingPlate2Service.GetCurrenTemperature();
+                if (temperatureCurrent < _boilingPlate2Model.Temperature)
+                {
+                    _gpioModule.Power(Settings.BoilingPlate2Gpio.GpioNumber, true);
+                }
+                else
+                {
+                    _gpioModule.Power(Settings.BoilingPlate2Gpio.GpioNumber, false);
+                }
+            }
+            catch (System.Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
             }
             
-            var temperatureCurrent = await _boilingPlate2Service.GetCurrenTemperature();
-            if (temperatureCurrent < _boilingPlate2Model.Temperature)
-            {
-                _gpioModule.Power(Settings.BoilingPlate2Gpio.GpioNumber, true);
-            }
-            else
-            {
-                _gpioModule.Power(Settings.BoilingPlate2Gpio.GpioNumber, false);
-            }
         }
     }
 }

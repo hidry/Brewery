@@ -65,12 +65,40 @@ namespace Brewery.Server.Logic
 
         private async Task StartBoilingPlate1WorkerAsync()
         {
-            await StartWorkerAsync(_boilingPlate1Worker.Execute(), 1);
+            //await StartWorkerAsync(_boilingPlate1Worker.Execute(), 3);
+            var backgroundService = new Task(async () =>
+            {
+                var dateTimeLastRun = default(DateTime);
+                while (true)
+                {
+                    if (DateTime.Now - dateTimeLastRun >= new TimeSpan(0, 0, 0, 3))
+                    {
+                        await _boilingPlate1Worker.Execute();
+                        dateTimeLastRun = DateTime.Now;
+                    }
+                }
+            });
+            backgroundService.Start();
+            await backgroundService;
         }
 
         private async Task StartBoilingPlate2WorkerAsync()
         {
-            await StartWorkerAsync(_boilingPlate2Worker.Execute(), 1);
+            //await StartWorkerAsync(_boilingPlate2Worker.Execute(), 3);
+            var backgroundService = new Task(async () =>
+            {
+                var dateTimeLastRun = default(DateTime);
+                while (true)
+                {
+                    if (DateTime.Now - dateTimeLastRun >= new TimeSpan(0, 0, 0, 3))
+                    {
+                        await _boilingPlate2Worker.Execute();
+                        dateTimeLastRun = DateTime.Now;
+                    }
+                }
+            });
+            backgroundService.Start();
+            await backgroundService;
         }         
     }
 }

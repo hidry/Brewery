@@ -1,6 +1,8 @@
 ﻿using Brewery.Core.Contracts.ServiceAdapter;
+using Brewery.Server.Core.Api;
 using Brewery.Server.Core.Models;
 using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace Brewery.Server.Logic.Service
@@ -26,12 +28,16 @@ namespace Brewery.Server.Logic.Service
         private bool _messageAcknowledged;
         private DateTime _startedAt = default(DateTime);
 
-        public BoilingPlate1Worker(IBoilingPlate1Service boilingPlate1Service, IPiezoService piezoService, IMixerService mixerService, MashSteps mashSteps)
+        public IGpioModule _gpioModule { get; }
+
+        public BoilingPlate1Worker(IGpioModule gpioModule, IBoilingPlate1Service boilingPlate1Service, IPiezoService piezoService, IMixerService mixerService, MashSteps mashSteps)
         {
+            _gpioModule = gpioModule;
             _boilingPlate1Service = boilingPlate1Service;
             _piezoService = piezoService;
             _mixerService = mixerService;
             _brewProcessSteps = mashSteps;
+            _piezoService.Power(false);
         }
 
         public bool GetPowerStatus()
@@ -44,10 +50,15 @@ namespace Brewery.Server.Logic.Service
         public void StopMashProcess()
         {
             _serviceStatus = ServiceStatus.Stopped;
-            _boilingPlate1Service.PowerOff();
+            Power(false);
             _tempReachedAt = default(DateTime);
             _startedAt = default(DateTime);
             _currentStep = 0;
+        }
+
+        private void Power(bool on)
+        {
+            _gpioModule.Power(Settings.BoilingPlate1Gpio.GpioNumber, false);
         }
 
         public void PauseMashProcess()
@@ -73,82 +84,92 @@ namespace Brewery.Server.Logic.Service
             _messageAcknowledged = true;
         }
 
-        private async Task ManageTemperature(double temperatureCurrent, double temperature)
+        private void ManageTemperature(double temperatureCurrent, double temperature)
         {
             if (temperatureCurrent < temperature)
             {
-                await _boilingPlate1Service.PowerOn();
+                Power(true);
             }
             else
             {
-                await _boilingPlate1Service.PowerOff();
+                Power(false);
             }
         }
 
         public async Task Execute()
         {
-            await _piezoService.Power(false);
-
-            if (_serviceStatus != ServiceStatus.Started)
-                return;
-
-            var currentStep = GetCurrentStep();
-            if (!currentStep.Active)
+            try
             {
-                SetNextStep();
-                return;
-            }
+                await _piezoService.Power(false);
 
-            if (_startedAt == default(DateTime))
-                _startedAt = DateTime.Now;
-
-            var elapsed = (DateTime.Now - _startedAt);
-            currentStep.Elapsed = elapsed;
-            
-            var currentTemperature = await _boilingPlate1Service.GetCurrenTemperature();
-            await ManageTemperature(currentTemperature, currentStep.Temperature);
-            await _mixerService.Power(currentStep.Mixer);
-
-            //wenn ein nachfolgender Schritt eine niedrigere Temperatur benötigt als der Vorgängerschritt
-            if (_currentStep > 0 && currentStep.Temperature < _brewProcessSteps[_currentStep - 1].Temperature && _tempReachedAt == default(DateTime))
-            {
-                if (currentTemperature <= currentStep.Temperature)
+                if (_serviceStatus != ServiceStatus.Started)
                 {
-                    _tempReachedAt = DateTime.Now;
+                    Power(false);
+                    return;
                 }
-            }
-            //wenn Solltemperatur erreicht
-            else if (currentTemperature >= currentStep.Temperature)
-            {
-                if (_tempReachedAt == default(DateTime))
-                    _tempReachedAt = DateTime.Now;
 
-                //Rast
-                if (_tempReachedAt.AddMinutes(currentStep.Rast) <= DateTime.Now)
+                var currentStep = GetCurrentStep();
+                if (!currentStep.Active)
                 {
-                    //Evtl. Meldung anzeigen und warten bis bestätigt
-                    if (currentStep.Alert && !_messageAcknowledged)
+                    SetNextStep();
+                    return;
+                }
+
+                if (_startedAt == default(DateTime))
+                    _startedAt = DateTime.Now;
+
+                var elapsed = (DateTime.Now - _startedAt);
+                currentStep.Elapsed = elapsed;
+
+                var currentTemperature = await _boilingPlate1Service.GetCurrenTemperature();
+                ManageTemperature(currentTemperature, currentStep.Temperature);
+                await _mixerService.Power(currentStep.Mixer);
+
+                //wenn ein nachfolgender Schritt eine niedrigere Temperatur benötigt als der Vorgängerschritt
+                if (_currentStep > 0 && currentStep.Temperature < _brewProcessSteps[_currentStep - 1].Temperature && _tempReachedAt == default(DateTime))
+                {
+                    if (currentTemperature <= currentStep.Temperature)
                     {
-                        if (!_messageOpen)
+                        _tempReachedAt = DateTime.Now;
+                    }
+                }
+                //wenn Solltemperatur erreicht
+                else if (currentTemperature >= currentStep.Temperature)
+                {
+                    if (_tempReachedAt == default(DateTime))
+                        _tempReachedAt = DateTime.Now;
+
+                    //Rast
+                    if (_tempReachedAt.AddMinutes(currentStep.Rast) <= DateTime.Now)
+                    {
+                        //Evtl. Meldung anzeigen und warten bis bestätigt
+                        if (currentStep.Alert && !_messageAcknowledged)
                         {
-                            _messageOpen = true;
+                            if (!_messageOpen)
+                            {
+                                _messageOpen = true;
 
-                            try
-                            {
-                                //SendBrewStepNotification(currentStep); // wenn kein Netzwerk verfügbar Exception!?
+                                try
+                                {
+                                    //SendBrewStepNotification(currentStep); // wenn kein Netzwerk verfügbar Exception!?
+                                }
+                                catch (Exception)
+                                {
+                                    //todo: logging
+                                }
                             }
-                            catch (Exception)
-                            {
-                                //todo: logging
-                            }
+                            await _piezoService.Power(true);
                         }
-                        await _piezoService.Power(true);
-                    }
-                    else
-                    {
-                        SetNextStep();
+                        else
+                        {
+                            SetNextStep();
+                        }
                     }
                 }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.ToString());
             }
         }
 
