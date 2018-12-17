@@ -1,0 +1,6 @@
+<div *ngIf="messageService.messages.length">
+  <p>
+    <button class="clear" (click)="messageService.clear()">clear</button>
+  </p>
+  <div *ngFor='let message of messageService.messages.slice().reverse()'> {{message}} </div>
+</div>

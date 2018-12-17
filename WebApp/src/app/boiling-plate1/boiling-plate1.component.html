@@ -1,0 +1,18 @@
+<p>
+  Einstellungen: <a routerLink="/mashSteps"><mat-icon>settings</mat-icon></a>
+</p>
+<p>
+  Steuerung: <mat-slide-toggle [(ngModel)]="Power" (change)="onPowerToggleChange($event)"></mat-slide-toggle>
+</p>
+<p>
+  Temperatur aktuell: {{TemperatureCurrent}} &deg;C
+</p>
+<p>
+  {{CurrentStepName}} noch ca. {{CurrentStepEstimatedRemainingTime}} Minuten
+</p>
+<p>
+  Gesamt noch ca. {{TotalEstimatedRemainingTime}} Minuten
+</p>
+<p>
+  <button mat-button (click)="acknowledgeMessage()">Nachricht bestätigen</button>
+</p>
