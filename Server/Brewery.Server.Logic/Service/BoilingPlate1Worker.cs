@@ -58,7 +58,7 @@ namespace Brewery.Server.Logic.Service
 
         private void Power(bool on)
         {
-            _gpioModule.Power(Settings.BoilingPlate1Gpio.GpioNumber, false);
+            _gpioModule.Power(Settings.BoilingPlate1Gpio.GpioNumber, on);
         }
 
         public void PauseMashProcess()
