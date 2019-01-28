@@ -10,4 +10,5 @@ export class Settings {
         headers: new HttpHeaders({ 'Content-Type': 'application/json' })
       };
     pollingInterval = 5000;
+    clientLogActive = false;
 }

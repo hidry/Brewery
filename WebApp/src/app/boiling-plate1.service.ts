@@ -16,8 +16,8 @@ export class BoilingPlate1Service extends ServiceBase {
   constructor(
     private http: HttpClient,
     messageService: MessageService,
-    private settings: Settings) {
-    super(messageService);
+    settings: Settings) {
+    super(messageService, settings);
   }
 
   acknowledgeMessage(): Observable<any> {

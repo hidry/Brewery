@@ -12,7 +12,7 @@ import { AgGridModule } from 'ag-grid-angular';
 import { MashStepsComponent } from './mash-steps/mash-steps.component';
 import { BoilingPlate2Component } from './boiling-plate2/boiling-plate2.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatCardModule, MatIconModule, MatSlideToggleModule, MatSliderModule } from '@angular/material';
+import { MatCardModule, MatIconModule, MatSlideToggleModule, MatSliderModule, MatCheckboxModule } from '@angular/material';
 import { BoilingPlate1Component } from './boiling-plate1/boiling-plate1.component';
 
 @NgModule({
@@ -30,7 +30,7 @@ import { BoilingPlate1Component } from './boiling-plate1/boiling-plate1.componen
     HttpClientModule,
     AgGridModule.withComponents(null),
     BrowserAnimationsModule,
-    MatCardModule, MatIconModule, MatSlideToggleModule, MatSliderModule
+    MatCardModule, MatIconModule, MatSlideToggleModule, MatSliderModule, MatCheckboxModule
     // ,
     // // The HttpClientInMemoryWebApiModule module intercepts HTTP requests
     // // and returns simulated server responses.

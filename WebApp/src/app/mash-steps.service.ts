@@ -17,8 +17,8 @@ export class MashStepsService extends ServiceBase {
   constructor(
     private http: HttpClient,
     messageService: MessageService,
-    private settings: Settings) {
-    super(messageService);
+    settings: Settings) {
+    super(messageService, settings);
   }
 
   /** GET mashSteps from the server */

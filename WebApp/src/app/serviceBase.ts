@@ -1,13 +1,16 @@
 import { MessageService } from './message.service';
 import { Observable, of } from 'rxjs';
+import { Settings } from './settings';
 
 export class ServiceBase {
 
-    constructor(protected messageService: MessageService) {}
+    constructor(protected messageService: MessageService, protected settings: Settings) {}
 
     /** Log a MashStepsService message with the MessageService */
     protected log(message: string) {
-      this.messageService.add(`MashStepsService: ${message}`);
+      if (this.settings.clientLogActive) {
+        this.messageService.add(`MashStepsService: ${message}`);
+      }
     }
 
     /**
