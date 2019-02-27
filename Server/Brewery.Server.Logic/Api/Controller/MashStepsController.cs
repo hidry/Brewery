@@ -36,9 +36,7 @@ namespace Brewery.Server.Logic.Api.Controller
         [UriFormat("/mashSteps/totalEstimatedRemainingTime")]
         public IGetResponse GetTotalEstimatedRemainingTime()
         {
-            var totalTime = _mashSteps.Sum(ms => ms.Elapsed.TotalMinutes > ms.Rast ? ms.Elapsed.TotalMinutes : ms.Rast);
-            var elapsedTime = _mashSteps.Sum(ms => ms.Elapsed.TotalMinutes);
-            return new GetResponse(GetResponse.ResponseStatus.OK, totalTime - elapsedTime);
+            return new GetResponse(GetResponse.ResponseStatus.OK, _mashSteps.Sum(ms => ms.EstimatedTime));
         }
 
         [UriFormat("/mashSteps")]

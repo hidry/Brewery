@@ -125,6 +125,8 @@ namespace Brewery.Server.Logic.Service
                 ManageTemperature(currentTemperature, currentStep.Temperature);
                 await _mixerService.Power(currentStep.Mixer);
 
+                CalculateRemainingTime(currentStep, currentTemperature);
+
                 //wenn ein nachfolgender Schritt eine niedrigere Temperatur benötigt als der Vorgängerschritt
                 if (_currentStep > 0 && currentStep.Temperature < _brewProcessSteps[_currentStep - 1].Temperature && _tempReachedAt == default(DateTime))
                 {
@@ -171,6 +173,47 @@ namespace Brewery.Server.Logic.Service
             {
                 Debug.WriteLine(ex.ToString());
             }
+        }
+
+        private void CalculateRemainingTime(MashStep currentStep, double currentTemperature)
+        {
+            var tempReached = true;
+            if (_tempReachedAt == default(DateTime))
+                tempReached = false;
+            CalculateRamainingTime(currentStep, currentTemperature, tempReached);
+            for (int i = _currentStep + 1; i < _brewProcessSteps.Count; i++)
+            {
+                if (_brewProcessSteps[i].Active)
+                    CalculateRamainingTime(_brewProcessSteps[i], _brewProcessSteps[i - 1].Temperature, false);
+            }
+        }
+
+        private void CalculateRamainingTime(MashStep currentStep, double startTemperature, bool tempReached)
+        {            
+            TimeSpan estimatedTime;
+            if (!tempReached)
+            {
+                var kw = 7;
+                var liter = 70;
+                var wirkungsgrad = 0.8;
+                var waermekapazitaetWasser = 4.1897;
+                var anzahlSekundenProMinute = 60;
+
+                if (currentStep.Temperature <= startTemperature)
+                {
+                    estimatedTime = TimeSpan.FromMinutes(currentStep.Rast);
+                }
+                else
+                {
+                    var calculatedTimeToReachTempareture = ((liter * waermekapazitaetWasser * (currentStep.Temperature - startTemperature)) / (wirkungsgrad * kw)) / anzahlSekundenProMinute;
+                    estimatedTime = TimeSpan.FromMinutes(currentStep.Rast + calculatedTimeToReachTempareture);
+                }
+            }
+            else
+            {
+                estimatedTime = TimeSpan.FromMinutes(currentStep.Rast - currentStep.Elapsed.Minutes);
+            }
+            currentStep.EstimatedTime = (int)Math.Round(estimatedTime.TotalMinutes);
         }
 
         private void SetNextStep()

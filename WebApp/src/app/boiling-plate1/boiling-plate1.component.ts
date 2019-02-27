@@ -38,8 +38,7 @@ export class BoilingPlate1Component implements OnInit, OnDestroy {
       )
       .subscribe(mashStep => {
         this.CurrentStepName = mashStep.Step;
-        const elapsedTime = Math.round(mashStep.ElapsedMinutes === undefined ? mashStep.Rast : mashStep.ElapsedMinutes);
-        this.CurrentStepEstimatedRemainingTime = Math.round(mashStep.Rast - elapsedTime);
+        this.CurrentStepEstimatedRemainingTime = mashStep.EstimatedTime;
       });
 
     // this.getTotalEstimatedRemainingTime();

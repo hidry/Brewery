@@ -5,6 +5,7 @@ import { HttpHeaders } from '@angular/common/http';
     providedIn: 'root',
   })
 export class Settings {
+    // ApiUrl = 'http://192.168.178.35:8800/api/';
     ApiUrl = 'http://minwinpc:8800/api/';
     httpOptions = {
         headers: new HttpHeaders({ 'Content-Type': 'application/json' })
