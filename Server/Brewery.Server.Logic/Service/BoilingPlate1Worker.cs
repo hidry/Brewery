@@ -109,12 +109,7 @@ namespace Brewery.Server.Logic.Service
                 }
 
                 var currentStep = GetCurrentStep();
-                if (!currentStep.Active)
-                {
-                    SetNextStep();
-                    return;
-                }
-
+                
                 if (_startedAt == default(DateTime))
                     _startedAt = DateTime.Now;
 
@@ -183,8 +178,7 @@ namespace Brewery.Server.Logic.Service
             CalculateRamainingTime(currentStep, currentTemperature, tempReached);
             for (int i = _currentStep + 1; i < _brewProcessSteps.Count; i++)
             {
-                if (_brewProcessSteps[i].Active)
-                    CalculateRamainingTime(_brewProcessSteps[i], _brewProcessSteps[i - 1].Temperature, false);
+                CalculateRamainingTime(_brewProcessSteps[i], _brewProcessSteps[i - 1].Temperature, false);
             }
         }
 
