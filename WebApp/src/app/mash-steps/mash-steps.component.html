@@ -1,6 +1,6 @@
 <ag-grid-angular id="api" style="width: 100%; height: 250px" class="ag-theme-balham" suppressRowClickSelection
     (gridReady)="onGridReady($event)" (cellValueChanged)="onCellValueChanged($event)" [rowData]="mashSteps"
-    [columnDefs]="columnDefs" [enableColResize]="true" rowSelection="multiple">
+    [columnDefs]="columnDefs" rowSelection="multiple">
 </ag-grid-angular>
 <button mat-button (click)="deleteSelectedRows()" [disabled]="!rowsSelected()">
     Schritt(e) löschen

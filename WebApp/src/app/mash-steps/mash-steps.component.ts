@@ -5,6 +5,7 @@ import { forkJoin, of, interval } from 'rxjs';
 
 @Component({
   selector: 'app-mash-steps',
+  standalone: false,
   templateUrl: './mash-steps.component.html',
   styleUrls: ['./mash-steps.component.css']
 })

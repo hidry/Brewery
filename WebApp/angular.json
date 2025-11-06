@@ -18,6 +18,10 @@
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
+            "inlineStyleLanguage": "css",
+            "optimization": {
+              "fonts": false
+            },
             "assets": [
               "src/favicon.ico",
               "src/assets"
@@ -39,7 +43,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
@@ -132,6 +135,4 @@
         }
       }
     }
-  },
-  "defaultProject": "brewery"
 }

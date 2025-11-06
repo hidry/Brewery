@@ -7,6 +7,7 @@ import { Settings } from '../settings';
 
 @Component({
   selector: 'app-boiling-plate1',
+  standalone: false,
   templateUrl: './boiling-plate1.component.html',
   styleUrls: ['./boiling-plate1.component.css']
 })

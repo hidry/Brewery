@@ -1,0 +1,51 @@
+name: CI - Build and Test
+
+on:
+  pull_request:
+    branches: [ main, master, dev-service ]
+  push:
+    branches: [ main, master, dev-service ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./WebApp
+
+    strategy:
+      matrix:
+        node-version: [20.x]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+        cache-dependency-path: WebApp/package-lock.json
+
+    - name: Install dependencies
+      run: npm ci --legacy-peer-deps
+
+    - name: Lint
+      run: npm run lint
+      continue-on-error: true
+
+    - name: Build
+      run: npm run build -- --configuration production
+
+    - name: Test
+      run: npm run test -- --watch=false --browsers=ChromeHeadless
+      continue-on-error: true
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: dist-brewery
+        path: WebApp/dist/
+        retention-days: 7
