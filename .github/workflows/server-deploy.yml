@@ -1,0 +1,100 @@
+name: Server Deploy - Raspberry Pi
+
+on:
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'production'
+        type: choice
+        options:
+          - production
+          - staging
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'Server/**'
+
+# This workflow requires a self-hosted runner on your Raspberry Pi
+# See documentation: https://docs.github.com/en/actions/hosting-your-own-runners
+
+jobs:
+  deploy-docker:
+    name: Deploy via Docker
+    runs-on: ubuntu-latest
+    if: github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && contains(github.event.head_commit.message, '[deploy]'))
+
+    steps:
+    - name: Deploy to Raspberry Pi via SSH
+      uses: appleboy/ssh-action@v1.0.0
+      with:
+        host: ${{ secrets.RPI_HOST }}
+        username: ${{ secrets.RPI_USERNAME }}
+        key: ${{ secrets.RPI_SSH_KEY }}
+        port: ${{ secrets.RPI_SSH_PORT || 22 }}
+        script: |
+          cd /opt/brewery
+          docker-compose pull
+          docker-compose up -d --force-recreate
+          docker system prune -f
+
+  deploy-systemd:
+    name: Deploy via systemd
+    runs-on: self-hosted
+    # Only runs if you have set up a self-hosted runner on your Raspberry Pi
+    # with the label 'raspberry-pi'
+    # To set up: Settings > Actions > Runners > New self-hosted runner
+    if: false # Set to true when self-hosted runner is configured
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Stop service
+      run: sudo systemctl stop brewery.service
+      continue-on-error: true
+
+    - name: Backup current version
+      run: |
+        if [ -d /opt/brewery ]; then
+          sudo cp -r /opt/brewery /opt/brewery.backup.$(date +%Y%m%d_%H%M%S)
+        fi
+
+    - name: Setup .NET 10
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
+
+    - name: Publish application
+      run: |
+        cd Server
+        dotnet publish Brewery.Server/Brewery.Server.csproj -c Release -o /tmp/brewery-publish
+
+    - name: Deploy to /opt/brewery
+      run: |
+        sudo mkdir -p /opt/brewery
+        sudo cp -r /tmp/brewery-publish/* /opt/brewery/
+        sudo chown -R $USER:$USER /opt/brewery
+
+    - name: Update systemd service
+      run: |
+        sudo cp Server/brewery.service /etc/systemd/system/
+        sudo systemctl daemon-reload
+
+    - name: Start service
+      run: sudo systemctl start brewery.service
+
+    - name: Check service status
+      run: sudo systemctl status brewery.service
+
+    - name: Verify API
+      run: |
+        sleep 5
+        curl -f http://localhost:8800/api/status/serverStatus || exit 1
+
+    - name: Cleanup
+      run: |
+        rm -rf /tmp/brewery-publish
+        # Keep only last 3 backups
+        cd /opt && ls -t brewery.backup.* 2>/dev/null | tail -n +4 | xargs -r sudo rm -rf
