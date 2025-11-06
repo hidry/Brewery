@@ -39,12 +39,12 @@ jobs:
       continue-on-error: true
 
     - name: Publish
-      run: dotnet publish Server/Brewery.Server/Brewery.Server.csproj -c Release -o ./publish
+      run: dotnet publish Brewery.Server/Brewery.Server.csproj -c Release -o ./publish
       working-directory: ./Server
 
     - name: Upload build artifacts
       uses: actions/upload-artifact@v4
       with:
         name: brewery-server
-        path: Server/publish/
+        path: ./Server/publish/
         retention-days: 7
