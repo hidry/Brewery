@@ -1,42 +1,38 @@
-﻿using Brewery.Server.Core.Api;
+using Brewery.Server.Core.Api;
 using Iot.Device.OneWire;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
-using UnitsNet;
 
 namespace Brewery.Server.Logic.RaspberryPi.Api
 {
     public class TemperatureModule : ITemperatureModule, IDisposable
     {
         private readonly object _locker = new object();
-        private readonly Dictionary<string, OneWireBus> _buses;
         private bool _initialized = false;
+        private const string OneWireBasePath = "/sys/bus/w1/devices";
 
         public TemperatureModule()
         {
-            _buses = new Dictionary<string, OneWireBus>();
             try
             {
-                // Initialize 1-Wire bus
-                foreach (var busId in OneWireBus.EnumerateBusIds())
+                // Check if 1-Wire is available
+                _initialized = Directory.Exists(OneWireBasePath);
+                if (_initialized)
                 {
-                    try
-                    {
-                        var bus = new OneWireBus(busId);
-                        _buses.Add(busId, bus);
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.WriteLine($"Failed to initialize 1-Wire bus {busId}: {ex}");
-                    }
+                    Debug.WriteLine("1-Wire interface initialized");
                 }
-                _initialized = _buses.Count > 0;
+                else
+                {
+                    Debug.WriteLine("1-Wire interface not available - /sys/bus/w1/devices not found");
+                }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Failed to enumerate 1-Wire buses: {ex}");
+                Debug.WriteLine($"Failed to initialize 1-Wire: {ex}");
+                _initialized = false;
             }
         }
 
@@ -44,33 +40,60 @@ namespace Brewery.Server.Logic.RaspberryPi.Api
         {
             lock (_locker)
             {
-                if (!_initialized || _buses.Count == 0)
+                if (!_initialized)
                 {
                     return 0;
                 }
 
                 try
                 {
-                    // Try to find the device on any bus
-                    foreach (var bus in _buses.Values)
+                    // Read temperature directly from sysfs
+                    // Format: 28-xxxxxxxxxxxx
+                    var devicePath = Path.Combine(OneWireBasePath, oneWireAddressString, "w1_slave");
+                    
+                    if (!File.Exists(devicePath))
                     {
-                        foreach (var deviceAddress in bus.EnumerateDeviceIds())
-                        {
-                            if (deviceAddress == oneWireAddressString)
-                            {
-                                // Read temperature from DS18B20
-                                var tempRaw = bus.ReadTemperature(deviceAddress);
-                                return tempRaw.DegreesCelsius;
-                            }
-                        }
+                        Debug.WriteLine($"Temperature sensor not found: {oneWireAddressString}");
+                        return 0;
                     }
+
+                    var lines = File.ReadAllLines(devicePath);
+                    if (lines.Length < 2)
+                    {
+                        Debug.WriteLine($"Invalid data from sensor: {oneWireAddressString}");
+                        return 0;
+                    }
+
+                    // Check CRC
+                    if (!lines[0].EndsWith("YES"))
+                    {
+                        Debug.WriteLine($"CRC check failed for sensor: {oneWireAddressString}");
+                        return 0;
+                    }
+
+                    // Parse temperature (format: t=23125)
+                    var tempPos = lines[1].IndexOf("t=");
+                    if (tempPos == -1)
+                    {
+                        Debug.WriteLine($"Temperature value not found for sensor: {oneWireAddressString}");
+                        return 0;
+                    }
+
+                    var tempString = lines[1].Substring(tempPos + 2);
+                    if (int.TryParse(tempString, out int tempRaw))
+                    {
+                        // Temperature is in millidegrees Celsius
+                        return tempRaw / 1000.0;
+                    }
+
+                    Debug.WriteLine($"Failed to parse temperature for sensor: {oneWireAddressString}");
+                    return 0;
                 }
                 catch (Exception ex)
                 {
                     Debug.WriteLine($"Error reading temperature from {oneWireAddressString}: {ex}");
+                    return 0;
                 }
-
-                return 0;
             }
         }
 
@@ -81,15 +104,6 @@ namespace Brewery.Server.Logic.RaspberryPi.Api
         {
             if (!disposedValue)
             {
-                if (disposing)
-                {
-                    foreach (var bus in _buses.Values)
-                    {
-                        bus?.Dispose();
-                    }
-                    _buses.Clear();
-                }
-
                 disposedValue = true;
             }
         }

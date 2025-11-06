@@ -50,7 +50,7 @@ namespace Brewery.Core
                 }
                 return _serviceProvider.GetRequiredService<T>();
             }
-            catch (Exception ex)
+            catch
             {
                 Debugger.Break();
                 throw;

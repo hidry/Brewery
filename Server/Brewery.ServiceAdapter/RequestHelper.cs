@@ -1,5 +1,6 @@
-﻿using System.IO;
-using System.Net;
+using System;
+using System.Net.Http;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -7,6 +8,11 @@ namespace Brewery.ServiceAdapter
 {
     public class RequestHelper
     {
+        private static readonly HttpClient _httpClient = new HttpClient
+        {
+            BaseAddress = new Uri("http://minwinpc:8800/api/")
+        };
+
         private class EmptyBody { }
 
         public async Task SendRequest(string method, MethodTypes methodType, string body = null)
@@ -16,35 +22,35 @@ namespace Brewery.ServiceAdapter
 
         public async Task<T> SendRequest<T>(string method, MethodTypes methodType, string body = null)
         {
-            var requestUri = $"http://minwinpc:8800/api/{method}";
+            HttpResponseMessage response;
 
-            var webRequest = WebRequest.CreateHttp(requestUri);
-            webRequest.Accept = "application/json";
-            webRequest.Method = methodType.ToString();
-
-            if (webRequest.Method != MethodTypes.GET.ToString() && !string.IsNullOrWhiteSpace(body))
+            if (methodType == MethodTypes.GET)
             {
-                webRequest.ContentType = "application/json";
-
-                using (var requestStream = await webRequest.GetRequestStreamAsync())
+                response = await _httpClient.GetAsync(method);
+            }
+            else if (methodType == MethodTypes.PUT)
+            {
+                HttpContent content = null;
+                if (!string.IsNullOrWhiteSpace(body))
                 {
-                    using (var streamWriter = new StreamWriter(requestStream))
-                    {
-                        await streamWriter.WriteAsync(body);
-                    }
+                    content = new StringContent(body, Encoding.UTF8, "application/json");
                 }
+                response = await _httpClient.PutAsync(method, content);
+            }
+            else
+            {
+                throw new NotSupportedException($"Method type {methodType} is not supported");
             }
 
-            using (var response = await webRequest.GetResponseAsync())
-            {
-                var responseStream = response.GetResponseStream();
-                using (var streamReader = new StreamReader(responseStream))
-                {
-                    var readAll = await streamReader.ReadToEndAsync();
+            response.EnsureSuccessStatusCode();
+            var responseBody = await response.Content.ReadAsStringAsync();
 
-                    return JsonSerializer.Deserialize<T>(readAll);
-                }
+            if (typeof(T) == typeof(EmptyBody))
+            {
+                return default(T);
             }
+
+            return JsonSerializer.Deserialize<T>(responseBody);
         }
     }
 
