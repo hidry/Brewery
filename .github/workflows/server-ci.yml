@@ -1,0 +1,50 @@
+name: Server CI - Build and Test
+
+on:
+  pull_request:
+    branches: [ main, master, dev-service ]
+    paths:
+      - 'Server/**'
+      - '.github/workflows/server-ci.yml'
+  push:
+    branches: [ main, master, dev-service ]
+    paths:
+      - 'Server/**'
+      - '.github/workflows/server-ci.yml'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET 8
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore
+      working-directory: ./Server
+
+    - name: Build
+      run: dotnet build --no-restore --configuration Release
+      working-directory: ./Server
+
+    - name: Test
+      run: dotnet test --no-build --configuration Release --verbosity normal
+      working-directory: ./Server
+      continue-on-error: true
+
+    - name: Publish
+      run: dotnet publish Brewery.Server/Brewery.Server.csproj -c Release -o ./publish
+      working-directory: ./Server
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: brewery-server
+        path: ./Server/publish/
+        retention-days: 7

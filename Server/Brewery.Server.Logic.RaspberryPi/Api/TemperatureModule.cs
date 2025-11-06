@@ -1,73 +1,114 @@
-﻿using Brewery.Server.Core.Api;
-using Rinsen.IoT.OneWire;
+using Brewery.Server.Core.Api;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
+using System.IO;
 
 namespace Brewery.Server.Logic.RaspberryPi.Api
 {
     public class TemperatureModule : ITemperatureModule, IDisposable
     {
         private readonly object _locker = new object();
-        private readonly IEnumerable<DS18B20> _devices;
-        private readonly OneWireDeviceHandler _handler;
+        private bool _initialized = false;
+        private const string OneWireBasePath = "/sys/bus/w1/devices";
 
         public TemperatureModule()
         {
             try
             {
-                _handler = new OneWireDeviceHandler(false, false);
-                _devices = _handler.OneWireDevices.GetDevices<DS18B20>();
+                // Check if 1-Wire is available
+                _initialized = Directory.Exists(OneWireBasePath);
+                if (_initialized)
+                {
+                    Debug.WriteLine("1-Wire interface initialized");
+                }
+                else
+                {
+                    Debug.WriteLine("1-Wire interface not available - /sys/bus/w1/devices not found");
+                }
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex.ToString());
-            }            
+                Debug.WriteLine($"Failed to initialize 1-Wire: {ex}");
+                _initialized = false;
+            }
         }
 
         public double GetCurrenTemperature(string oneWireAddressString)
         {
-            lock(_locker)
+            lock (_locker)
             {
-                var device = _devices?.FirstOrDefault(d => d.OneWireAddressString == oneWireAddressString);
-                return device == null ? 0 : device.GetTemperature();
+                if (!_initialized)
+                {
+                    return 0;
+                }
+
+                try
+                {
+                    // Read temperature directly from sysfs
+                    // Format: 28-xxxxxxxxxxxx
+                    var devicePath = Path.Combine(OneWireBasePath, oneWireAddressString, "w1_slave");
+                    
+                    if (!File.Exists(devicePath))
+                    {
+                        Debug.WriteLine($"Temperature sensor not found: {oneWireAddressString}");
+                        return 0;
+                    }
+
+                    var lines = File.ReadAllLines(devicePath);
+                    if (lines.Length < 2)
+                    {
+                        Debug.WriteLine($"Invalid data from sensor: {oneWireAddressString}");
+                        return 0;
+                    }
+
+                    // Check CRC
+                    if (!lines[0].EndsWith("YES"))
+                    {
+                        Debug.WriteLine($"CRC check failed for sensor: {oneWireAddressString}");
+                        return 0;
+                    }
+
+                    // Parse temperature (format: t=23125)
+                    var tempPos = lines[1].IndexOf("t=");
+                    if (tempPos == -1)
+                    {
+                        Debug.WriteLine($"Temperature value not found for sensor: {oneWireAddressString}");
+                        return 0;
+                    }
+
+                    var tempString = lines[1].Substring(tempPos + 2);
+                    if (int.TryParse(tempString, out int tempRaw))
+                    {
+                        // Temperature is in millidegrees Celsius
+                        return tempRaw / 1000.0;
+                    }
+
+                    Debug.WriteLine($"Failed to parse temperature for sensor: {oneWireAddressString}");
+                    return 0;
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Error reading temperature from {oneWireAddressString}: {ex}");
+                    return 0;
+                }
             }
         }
 
         #region IDisposable Support
-        private bool disposedValue = false; // Dient zur Erkennung redundanter Aufrufe.
+        private bool disposedValue = false;
 
         protected virtual void Dispose(bool disposing)
         {
             if (!disposedValue)
             {
-                if (disposing)
-                {
-                    // TODO: verwalteten Zustand (verwaltete Objekte) entsorgen.
-                    _handler.Dispose();
-                }
-
-                // TODO: nicht verwaltete Ressourcen (nicht verwaltete Objekte) freigeben und Finalizer weiter unten überschreiben.
-                // TODO: große Felder auf Null setzen.
-
                 disposedValue = true;
             }
         }
 
-        // TODO: Finalizer nur überschreiben, wenn Dispose(bool disposing) weiter oben Code für die Freigabe nicht verwalteter Ressourcen enthält.
-        // ~TemperatureModule() {
-        //   // Ändern Sie diesen Code nicht. Fügen Sie Bereinigungscode in Dispose(bool disposing) weiter oben ein.
-        //   Dispose(false);
-        // }
-
-        // Dieser Code wird hinzugefügt, um das Dispose-Muster richtig zu implementieren.
         public void Dispose()
         {
-            // Ändern Sie diesen Code nicht. Fügen Sie Bereinigungscode in Dispose(bool disposing) weiter oben ein.
             Dispose(true);
-            // TODO: Auskommentierung der folgenden Zeile aufheben, wenn der Finalizer weiter oben überschrieben wird.
-            // GC.SuppressFinalize(this);
+            GC.SuppressFinalize(this);
         }
         #endregion
     }

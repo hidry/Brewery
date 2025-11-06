@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Windows.Devices.Gpio;
+using System.Device.Gpio;
 using Brewery.Server.Core.Api;
 
 namespace Brewery.Server.Logic.RaspberryPi.Api
@@ -7,34 +7,34 @@ namespace Brewery.Server.Logic.RaspberryPi.Api
     public class GpioModule : IGpioModule
     {
         private readonly object _locker = new object();
-        private readonly GpioController _gpioController = GpioController.GetDefault();
-        private readonly Dictionary<int, GpioPin> _gpioPins = new Dictionary<int, GpioPin>();
-        
+        private readonly GpioController _gpioController = new GpioController();
+        private readonly Dictionary<int, int> _gpioPins = new Dictionary<int, int>();
+
         public void Power(int gpioName, bool on)
         {
             lock (_locker)
             {
-                GetPin(gpioName).Write(on ? GpioPinValue.High : GpioPinValue.Low);
+                OpenPinIfNeeded(gpioName);
+                _gpioController.Write(gpioName, on ? PinValue.High : PinValue.Low);
             }
         }
-        
+
         public bool GetValue(int gpioName)
         {
             lock (_locker)
             {
-                return GetPin(gpioName).Read() == GpioPinValue.High ? true : false;
+                OpenPinIfNeeded(gpioName);
+                return _gpioController.Read(gpioName) == PinValue.High;
             }
         }
 
-        private GpioPin GetPin(int gpioName)
+        private void OpenPinIfNeeded(int gpioName)
         {
             if (!_gpioPins.ContainsKey(gpioName))
             {
-                var gpioPin = _gpioController.OpenPin(gpioName);
-                gpioPin.SetDriveMode(GpioPinDriveMode.Output);
-                _gpioPins.Add(gpioName, gpioPin);
+                _gpioController.OpenPin(gpioName, PinMode.Output);
+                _gpioPins.Add(gpioName, gpioName);
             }
-            return _gpioPins[gpioName];
         }
     }
 }

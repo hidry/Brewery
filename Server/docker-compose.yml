@@ -1,0 +1,56 @@
+version: '3.8'
+
+services:
+  brewery-server:
+    image: ghcr.io/${GITHUB_REPOSITORY:-hidry/brewery}/brewery-server:latest
+    container_name: brewery-server
+    restart: unless-stopped
+    ports:
+      - "8800:8800"
+    # Required for GPIO and hardware access on Raspberry Pi
+    privileged: true
+    devices:
+      - /dev/gpiochip0:/dev/gpiochip0
+      - /dev/gpiochip1:/dev/gpiochip1
+    volumes:
+      # Mount 1-Wire devices for temperature sensors
+      - /sys/bus/w1/devices:/sys/bus/w1/devices:ro
+      - /sys/devices:/sys/devices:ro
+      # Optional: Persistent data
+      - ./data:/app/data
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8800
+      - DOTNET_PRINT_TELEMETRY_MESSAGE=false
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8800/api/status/serverStatus"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Optional: Watchtower for automatic updates
+  watchtower:
+    image: containrrr/watchtower
+    container_name: brewery-watchtower
+    restart: unless-stopped
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_POLL_INTERVAL=3600
+      - WATCHTOWER_INCLUDE_STOPPED=false
+      - WATCHTOWER_REVIVE_STOPPED=false
+    # Uncomment to enable automatic updates
+    # command: brewery-server
+    profiles:
+      - auto-update
+
+networks:
+  default:
+    name: brewery-network

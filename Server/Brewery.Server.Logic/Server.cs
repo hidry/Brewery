@@ -1,15 +1,18 @@
-﻿using Brewery.Server.Core;
+using Brewery.Server.Core;
 using Brewery.Server.Core.Service;
-using Brewery.Server.Logic.Api.Controller;
-using Restup.Webserver.File;
-using Restup.Webserver.Http;
-using Restup.Webserver.Rest;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Hosting;
 using System;
+using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Brewery.Server.Logic
 {
-    class Server : IServer
+    public class Server : IServer
     {
         private readonly IBoilingPlate1Worker _boilingPlate1Worker;
         private readonly IBoilingPlate2Worker _boilingPlate2Worker;
@@ -22,83 +25,63 @@ namespace Brewery.Server.Logic
 
         public async Task StartServerAsync()
         {
-            await Task.WhenAll(StartApiAsync(), StartBoilingPlate1WorkerAsync(), StartBoilingPlate2WorkerAsync());
-        }
+            var builder = WebApplication.CreateBuilder();
+            
+            // Configure services
+            builder.Services.AddControllers();
+            builder.Services.AddCors(options =>
+            {
+                options.AddDefaultPolicy(policy =>
+                {
+                    policy.AllowAnyOrigin()
+                          .AllowAnyMethod()
+                          .AllowAnyHeader();
+                });
+            });
 
-        private async Task StartApiAsync()
-        {
-            var restRouteHandler = new RestRouteHandler();
-            restRouteHandler.RegisterController<PiezoController>();
-            restRouteHandler.RegisterController<MixerController>();
-            restRouteHandler.RegisterController<StatusController>();
-            restRouteHandler.RegisterController<BoilingPlate1Controller>();
-            restRouteHandler.RegisterController<BoilingPlate2Controller>();
-            restRouteHandler.RegisterController<MashStepsController>();
+            var app = builder.Build();
 
-            var configuration = new HttpServerConfiguration()
-              .ListenOnPort(8800)
-              .RegisterRoute("api", restRouteHandler)
-              .RegisterRoute(new StaticFileRouteHandler(@"Web"))
-              .EnableCors();
-
-            var httpServer = new HttpServer(configuration);
-            await httpServer.StartServerAsync();
+            // Configure middleware
+            app.UseCors();
+            app.UseStaticFiles(new StaticFileOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(Directory.GetCurrentDirectory(), "Web")),
+                RequestPath = ""
+            });
+            
+            app.MapControllers();
+            
+            // Start workers
+            _ = Task.Run(() => StartBoilingPlate1WorkerAsync());
+            _ = Task.Run(() => StartBoilingPlate2WorkerAsync());
+            
+            // Start web server
+            await app.RunAsync("http://0.0.0.0:8800");
         }
 
         private async Task StartWorkerAsync(Func<Task> workerTask, int intervall)
         {
-            var backgroundService = new Task(async () =>
+            var dateTimeLastRun = default(DateTime);
+            while (true)
             {
-                var dateTimeLastRun = default(DateTime);
-                while (true)
+                if (DateTime.Now - dateTimeLastRun >= new TimeSpan(0, 0, 0, intervall))
                 {
-                    if (DateTime.Now - dateTimeLastRun >= new TimeSpan(0, 0, 0, intervall))
-                    {
-                        await workerTask.Invoke();
-                        dateTimeLastRun = DateTime.Now;
-                    }
+                    await workerTask.Invoke();
+                    dateTimeLastRun = DateTime.Now;
                 }
-            });
-            backgroundService.Start();
-            await backgroundService;
+                await Task.Delay(100);
+            }
         }
 
         private async Task StartBoilingPlate1WorkerAsync()
         {
-            await StartWorkerAsync(new Func<Task>(() => _boilingPlate1Worker.Execute()), 3);
-            //var backgroundService = new Task(async () =>
-            //{
-            //    var dateTimeLastRun = default(DateTime);
-            //    while (true)
-            //    {
-            //        if (DateTime.Now - dateTimeLastRun >= new TimeSpan(0, 0, 0, 3))
-            //        {
-            //            await _boilingPlate1Worker.Execute();
-            //            dateTimeLastRun = DateTime.Now;
-            //        }
-            //    }
-            //});
-            //backgroundService.Start();
-            //await backgroundService;
+            await StartWorkerAsync(() => _boilingPlate1Worker.Execute(), 3);
         }
 
         private async Task StartBoilingPlate2WorkerAsync()
         {
-            await StartWorkerAsync(new Func<Task>(() => _boilingPlate2Worker.Execute()), 3);
-            //var backgroundService = new Task(async () =>
-            //{
-            //    var dateTimeLastRun = default(DateTime);
-            //    while (true)
-            //    {
-            //        if (DateTime.Now - dateTimeLastRun >= new TimeSpan(0, 0, 0, 3))
-            //        {
-            //            await _boilingPlate2Worker.Execute();
-            //            dateTimeLastRun = DateTime.Now;
-            //        }
-            //    }
-            //});
-            //backgroundService.Start();
-            //await backgroundService;
-        }         
+            await StartWorkerAsync(() => _boilingPlate2Worker.Execute(), 3);
+        }
     }
 }

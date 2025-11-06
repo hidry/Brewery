@@ -1,13 +1,12 @@
-﻿using Brewery.Core;
+using Brewery.Core;
 using Brewery.Server.Core.Api;
-using Restup.Webserver.Attributes;
-using Restup.Webserver.Models.Contracts;
-using Restup.Webserver.Models.Schemas;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Brewery.Server.Logic.Api.Controller
 {
-    [RestController(InstanceCreationType.Singleton)]
-    class PiezoController
+    [ApiController]
+    [Route("api/[controller]")]
+    public class PiezoController : ControllerBase
     {
         private readonly IGpioModule _gpioModule;
 
@@ -16,11 +15,11 @@ namespace Brewery.Server.Logic.Api.Controller
             _gpioModule = IocContainer.GetInstance<IGpioModule>();
         }
 
-        [UriFormat("/piezo/power/{power}")]
-        public IPutResponse Power(bool power)
+        [HttpPut("power/{power}")]
+        public IActionResult Power(bool power)
         {
             _gpioModule.Power(21, power);
-            return new PutResponse(PutResponse.ResponseStatus.OK);
+            return Ok();
         }
     }
 }

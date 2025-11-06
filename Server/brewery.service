@@ -1,0 +1,28 @@
+[Unit]
+Description=Brewery Server - IoT Brewery Control System
+After=network.target
+
+[Service]
+Type=notify
+WorkingDirectory=/opt/brewery
+ExecStart=/usr/bin/dotnet /opt/brewery/Brewery.Server.dll
+Restart=on-failure
+RestartSec=10
+KillSignal=SIGINT
+SyslogIdentifier=brewery-server
+User=pi
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
+
+# Hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/brewery
+DeviceAllow=/dev/gpiochip0 rw
+DeviceAllow=/dev/gpiochip1 rw
+DevicePolicy=closed
+
+[Install]
+WantedBy=multi-user.target
