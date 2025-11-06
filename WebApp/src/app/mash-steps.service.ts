@@ -3,7 +3,7 @@ import { Observable, of } from 'rxjs';
 import { MessageService } from './message.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, map, tap } from 'rxjs/operators';
-import { MashStep } from './MashStep';
+import { MashStep } from './mashStep';
 import { Settings } from './settings';
 import { ServiceBase } from './serviceBase';
 

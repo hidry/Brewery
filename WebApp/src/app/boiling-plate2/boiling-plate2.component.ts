@@ -6,6 +6,7 @@ import { startWith, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-boiling-plate2',
+  standalone: false,
   templateUrl: './boiling-plate2.component.html',
   styleUrls: ['./boiling-plate2.component.css']
 })
