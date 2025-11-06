@@ -7,8 +7,10 @@ This file provides guidance for Claude AI when working with the Brewery control 
 The Brewery project is an automated brewing control system designed to run on Raspberry Pi. It consists of:
 
 - **Frontend**: Angular 7 web application (TypeScript) providing the user interface
-- **Backend**: C# UWP REST API server controlling brewing hardware
+- **Backend**: C# .NET 8 ASP.NET Core REST API server controlling brewing hardware
 - **Hardware**: Raspberry Pi with GPIO controls for boiling plates, mixers, valves, and 1-Wire temperature sensors
+
+**Note**: This project was successfully migrated from UWP to .NET 8 in 2024. See [MIGRATION.md](./MIGRATION.md) for details.
 
 ## Repository Structure
 
@@ -20,10 +22,13 @@ Brewery/
 │   └── package.json     # Node dependencies
 │
 ├── Server/              # C# backend application
-│   ├── Brewery.Server/                    # Main UWP app
-│   ├── Brewery.Server.Core/               # Core models and interfaces
-│   ├── Brewery.Server.Logic/              # Business logic and REST API
-│   ├── Brewery.Server.Logic.RaspberryPi/  # Hardware integration
+│   ├── Brewery.Server/                    # Main .NET 8 console application
+│   ├── Brewery.Core/                      # Core models and interfaces
+│   ├── Brewery.Server.Core/               # Server-specific core models
+│   ├── Brewery.Server.Logic/              # Business logic and ASP.NET Core API
+│   ├── Brewery.Server.Logic.RaspberryPi/  # Raspberry Pi hardware integration
+│   ├── Brewery.Server.Logic.RaspberryPiMock/  # Mock hardware for testing
+│   ├── Brewery.ServerMock/                # Mock server for development
 │   └── Brewery.ServiceAdapter/            # HTTP service layer
 │
 └── claude-ressources/   # Claude AI configuration and guidelines
@@ -53,10 +58,12 @@ Brewery/
 - **Testing**: Karma, Jasmine, Protractor
 
 ### Backend Stack
-- **Platform**: C# / .NET (UWP)
-- **API Framework**: Restup.Webserver (REST API on port 8800)
-- **DI Container**: MVVM Light SimpleIoC
-- **Hardware**: Raspberry Pi GPIO, 1-Wire sensors
+- **Platform**: C# / .NET 8
+- **API Framework**: ASP.NET Core (REST API on port 8800)
+- **DI Container**: Microsoft.Extensions.DependencyInjection
+- **Hardware**: Raspberry Pi GPIO via System.Device.Gpio (v3.2.0), 1-Wire DS18B20 sensors via Iot.Device.Bindings (v3.2.0)
+- **JSON Serialization**: System.Text.Json
+- **Temperature Units**: UnitsNet (v6.0.0)
 
 ## Working with This Repository
 
@@ -110,9 +117,27 @@ ng build --prod       # Production build
 ```
 
 ### Backend Development
-- Open `Server/Brewery.Server.sln` in Visual Studio
-- Set `Brewery.Server` or `Brewery.ServerMock` as startup project
-- Build target: UWP for ARM (Raspberry Pi) or x64/x86 (development)
+```bash
+cd Server
+dotnet restore
+dotnet build
+cd Brewery.Server
+dotnet run              # Run main server
+# OR
+cd Brewery.ServerMock
+dotnet run              # Run mock server for development without hardware
+```
+
+Alternatively, open `Server/Brewery.Server.sln` in Visual Studio or any .NET-compatible IDE.
+
+### Docker Deployment
+```bash
+cd Server
+docker build -t brewery-server:latest .
+docker run -p 8800:8800 --privileged brewery-server:latest
+```
+
+**Note**: The `--privileged` flag is required for GPIO access on Raspberry Pi. See [Server/DEPLOYMENT.md](./Server/DEPLOYMENT.md) for detailed deployment instructions.
 
 ## API Endpoint Structure
 
@@ -133,6 +158,13 @@ For detailed guidance on:
 - **UI/UX guidelines** → See constitution.md section 3
 - **Performance targets** → See constitution.md section 4
 - **Safety protocols** → See constitution.md section 5
+
+## Additional Documentation
+
+- **[README.md](./README.md)** - Project overview, installation, and usage guide
+- **[MIGRATION.md](./MIGRATION.md)** - Details of the UWP to .NET 8 migration
+- **[GITHUB_ACTIONS.md](./GITHUB_ACTIONS.md)** - CI/CD pipeline information
+- **[Server/DEPLOYMENT.md](./Server/DEPLOYMENT.md)** - Production deployment guide
 
 ---
 
