@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Brewery.Core\Brewery.Core.csproj" />
     <ProjectReference Include="..\Brewery.Server.Core\Brewery.Server.Core.csproj" />
     <ProjectReference Include="..\Brewery.Server.Logic.RaspberryPi\Brewery.Server.Logic.RaspberryPi.csproj" />
