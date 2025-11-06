@@ -1,16 +1,15 @@
-﻿using Brewery.Core;
+using Brewery.Core;
 using Brewery.Server.Core.Models;
 using Brewery.Server.Core.Service;
-using Restup.Webserver.Attributes;
-using Restup.Webserver.Models.Contracts;
-using Restup.Webserver.Models.Schemas;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Linq;
 
 namespace Brewery.Server.Logic.Api.Controller
 {
-    [RestController(InstanceCreationType.Singleton)]
-    class MashStepsController
+    [ApiController]
+    [Route("api/[controller]")]
+    public class MashStepsController : ControllerBase
     {
         private MashSteps _mashSteps { get; }
         private IBoilingPlate1Worker _boilingPlate1Worker { get; }
@@ -20,46 +19,46 @@ namespace Brewery.Server.Logic.Api.Controller
             _mashSteps = IocContainer.GetInstance<MashSteps>();
             _boilingPlate1Worker = IocContainer.GetInstance<IBoilingPlate1Worker>();
         }
-        
-        [UriFormat("/mashSteps")]
-        public IGetResponse GetMashSteps()
+
+        [HttpGet]
+        public IActionResult GetMashSteps()
         {
-            return new GetResponse(GetResponse.ResponseStatus.OK, _mashSteps.ToArray());
+            return Ok(_mashSteps.ToArray());
         }
 
-        [UriFormat("/mashSteps/currentStep")]
-        public IGetResponse GetCurrentMashStep()
+        [HttpGet("currentStep")]
+        public IActionResult GetCurrentMashStep()
         {
-            return new GetResponse(GetResponse.ResponseStatus.OK, _boilingPlate1Worker.GetCurrentStep());
+            return Ok(_boilingPlate1Worker.GetCurrentStep());
         }
 
-        [UriFormat("/mashSteps/totalEstimatedRemainingTime")]
-        public IGetResponse GetTotalEstimatedRemainingTime()
+        [HttpGet("totalEstimatedRemainingTime")]
+        public IActionResult GetTotalEstimatedRemainingTime()
         {
-            return new GetResponse(GetResponse.ResponseStatus.OK, _mashSteps.Sum(ms => ms.EstimatedTime));
+            return Ok(_mashSteps.Sum(ms => ms.EstimatedTime));
         }
 
-        [UriFormat("/mashSteps")]
-        public IPutResponse Update([FromContent] MashStep mashStep)
+        [HttpPut]
+        public IActionResult Update([FromBody] MashStep mashStep)
         {
             var index = _mashSteps.IndexOf(_mashSteps.First(ms => ms.Guid == mashStep.Guid));
             _mashSteps[index] = mashStep;
-            return new PutResponse(PutResponse.ResponseStatus.OK, mashStep);
+            return Ok(mashStep);
         }
 
-        [UriFormat("/mashSteps/{guid}")]
-        public IDeleteResponse Delete(string guid)
+        [HttpDelete("{guid}")]
+        public IActionResult Delete(string guid)
         {
             _mashSteps.Remove(_mashSteps.First(ms => ms.Guid == guid));
-            return new DeleteResponse(DeleteResponse.ResponseStatus.OK);
+            return Ok();
         }
 
-        [UriFormat("/mashSteps")]
-        public IPostResponse Insert([FromContent] MashStep mashStep)
+        [HttpPost]
+        public IActionResult Insert([FromBody] MashStep mashStep)
         {
             mashStep.Guid = Guid.NewGuid().ToString();
             _mashSteps.Add(mashStep);
-            return new PostResponse(PostResponse.ResponseStatus.Created, null, mashStep);
+            return CreatedAtAction(nameof(GetMashSteps), null, mashStep);
         }
     }
 }

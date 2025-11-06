@@ -1,16 +1,15 @@
-﻿using Restup.Webserver.Attributes;
-using Restup.Webserver.Models.Contracts;
-using Restup.Webserver.Models.Schemas;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Brewery.Server.Logic.Api.Controller
 {
-    [RestController(InstanceCreationType.Singleton)]
-    class StatusController
+    [ApiController]
+    [Route("api/[controller]")]
+    public class StatusController : ControllerBase
     {
-        [UriFormat("/serverStatus")]
-        public IGetResponse GetStatus()
+        [HttpGet("serverStatus")]
+        public IActionResult GetStatus()
         {
-            return new GetResponse(GetResponse.ResponseStatus.OK, new { Message = "Server is up and running..." });
+            return Ok(new { Message = "Server is up and running..." });
         }
     }
 }

@@ -1,42 +1,81 @@
 ﻿using Brewery.Server.Core.Api;
-using Rinsen.IoT.OneWire;
+using Iot.Device.OneWire;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using UnitsNet;
 
 namespace Brewery.Server.Logic.RaspberryPi.Api
 {
     public class TemperatureModule : ITemperatureModule, IDisposable
     {
         private readonly object _locker = new object();
-        private readonly IEnumerable<DS18B20> _devices;
-        private readonly OneWireDeviceHandler _handler;
+        private readonly Dictionary<string, OneWireBus> _buses;
+        private bool _initialized = false;
 
         public TemperatureModule()
         {
+            _buses = new Dictionary<string, OneWireBus>();
             try
             {
-                _handler = new OneWireDeviceHandler(false, false);
-                _devices = _handler.OneWireDevices.GetDevices<DS18B20>();
+                // Initialize 1-Wire bus
+                foreach (var busId in OneWireBus.EnumerateBusIds())
+                {
+                    try
+                    {
+                        var bus = new OneWireBus(busId);
+                        _buses.Add(busId, bus);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.WriteLine($"Failed to initialize 1-Wire bus {busId}: {ex}");
+                    }
+                }
+                _initialized = _buses.Count > 0;
             }
             catch (Exception ex)
             {
-                Debug.WriteLine(ex.ToString());
-            }            
+                Debug.WriteLine($"Failed to enumerate 1-Wire buses: {ex}");
+            }
         }
 
         public double GetCurrenTemperature(string oneWireAddressString)
         {
-            lock(_locker)
+            lock (_locker)
             {
-                var device = _devices?.FirstOrDefault(d => d.OneWireAddressString == oneWireAddressString);
-                return device == null ? 0 : device.GetTemperature();
+                if (!_initialized || _buses.Count == 0)
+                {
+                    return 0;
+                }
+
+                try
+                {
+                    // Try to find the device on any bus
+                    foreach (var bus in _buses.Values)
+                    {
+                        foreach (var deviceAddress in bus.EnumerateDeviceIds())
+                        {
+                            if (deviceAddress == oneWireAddressString)
+                            {
+                                // Read temperature from DS18B20
+                                var tempRaw = bus.ReadTemperature(deviceAddress);
+                                return tempRaw.DegreesCelsius;
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.WriteLine($"Error reading temperature from {oneWireAddressString}: {ex}");
+                }
+
+                return 0;
             }
         }
 
         #region IDisposable Support
-        private bool disposedValue = false; // Dient zur Erkennung redundanter Aufrufe.
+        private bool disposedValue = false;
 
         protected virtual void Dispose(bool disposing)
         {
@@ -44,30 +83,21 @@ namespace Brewery.Server.Logic.RaspberryPi.Api
             {
                 if (disposing)
                 {
-                    // TODO: verwalteten Zustand (verwaltete Objekte) entsorgen.
-                    _handler.Dispose();
+                    foreach (var bus in _buses.Values)
+                    {
+                        bus?.Dispose();
+                    }
+                    _buses.Clear();
                 }
-
-                // TODO: nicht verwaltete Ressourcen (nicht verwaltete Objekte) freigeben und Finalizer weiter unten überschreiben.
-                // TODO: große Felder auf Null setzen.
 
                 disposedValue = true;
             }
         }
 
-        // TODO: Finalizer nur überschreiben, wenn Dispose(bool disposing) weiter oben Code für die Freigabe nicht verwalteter Ressourcen enthält.
-        // ~TemperatureModule() {
-        //   // Ändern Sie diesen Code nicht. Fügen Sie Bereinigungscode in Dispose(bool disposing) weiter oben ein.
-        //   Dispose(false);
-        // }
-
-        // Dieser Code wird hinzugefügt, um das Dispose-Muster richtig zu implementieren.
         public void Dispose()
         {
-            // Ändern Sie diesen Code nicht. Fügen Sie Bereinigungscode in Dispose(bool disposing) weiter oben ein.
             Dispose(true);
-            // TODO: Auskommentierung der folgenden Zeile aufheben, wenn der Finalizer weiter oben überschrieben wird.
-            // GC.SuppressFinalize(this);
+            GC.SuppressFinalize(this);
         }
         #endregion
     }

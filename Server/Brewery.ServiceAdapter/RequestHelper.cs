@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
-using System.IO;
+﻿using System.IO;
 using System.Net;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace Brewery.ServiceAdapter
@@ -42,7 +42,7 @@ namespace Brewery.ServiceAdapter
                 {
                     var readAll = await streamReader.ReadToEndAsync();
 
-                    return JsonConvert.DeserializeObject<T>(readAll);
+                    return JsonSerializer.Deserialize<T>(readAll);
                 }
             }
         }

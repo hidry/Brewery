@@ -1,15 +1,13 @@
-﻿using Brewery.Core;
+using Brewery.Core;
 using Brewery.Server.Core.Api;
 using Brewery.Server.Core.Service;
-using Restup.Webserver.Attributes;
-using Restup.Webserver.Models.Contracts;
-using Restup.Webserver.Models.Schemas;
-using System;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Brewery.Server.Logic.Api.Controller
 {
-    [RestController(InstanceCreationType.Singleton)]
-    class BoilingPlate1Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    public class BoilingPlate1Controller : ControllerBase
     {
         private readonly IBoilingPlate1Worker _boilingPlate1Worker;
         private readonly IGpioModule _gpioModule;
@@ -22,39 +20,42 @@ namespace Brewery.Server.Logic.Api.Controller
             _boilingPlate1Worker = IocContainer.GetInstance<IBoilingPlate1Worker>();
         }
 
-        [UriFormat("/boilingPlate1/powerStatus")]
-        public IGetResponse GetPowerStatus()
+        [HttpGet("powerStatus")]
+        public IActionResult GetPowerStatus()
         {
-            return new GetResponse(GetResponse.ResponseStatus.OK, _boilingPlate1Worker.GetPowerStatus());
+            return Ok(_boilingPlate1Worker.GetPowerStatus());
         }
-        [UriFormat("/boilingPlate1/getCurrentTemperature")]
-        public IGetResponse GetCurrenTemperature()
+
+        [HttpGet("getCurrentTemperature")]
+        public IActionResult GetCurrentTemperature()
         {
-            return new GetResponse(GetResponse.ResponseStatus.OK, GetTemperature());
+            return Ok(GetTemperature());
         }
+
         private double GetTemperature()
         {
             return _temperatureModule.GetCurrenTemperature(Settings.TemperatureSensor1OneWireAddress);
         }
-        [UriFormat("/boilingPlate1/acknowledgeMessage")]
-        public IPutResponse AcknowledgeMessage()
+
+        [HttpPut("acknowledgeMessage")]
+        public IActionResult AcknowledgeMessage()
         {
             _boilingPlate1Worker.AcknowledgeMessage();
-            return new PutResponse(PutResponse.ResponseStatus.OK);
+            return Ok();
         }
 
-        [UriFormat("/boilingPlate1/startMashProcess")]
-        public IPutResponse StartMashProcess()
+        [HttpPut("startMashProcess")]
+        public IActionResult StartMashProcess()
         {
             _boilingPlate1Worker.StartMashProcess();
-            return new PutResponse(PutResponse.ResponseStatus.OK);
+            return Ok();
         }
 
-        [UriFormat("/boilingPlate1/stopMashProcess")]
-        public IPutResponse StopMashProcess()
+        [HttpPut("stopMashProcess")]
+        public IActionResult StopMashProcess()
         {
             _boilingPlate1Worker.StopMashProcess();
-            return new PutResponse(PutResponse.ResponseStatus.OK);
+            return Ok();
         }
     }
 }
