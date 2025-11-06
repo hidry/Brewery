@@ -1,20 +1,20 @@
-# UWP to .NET 10 Migration Summary
+# UWP to .NET 8 Migration Summary
 
 ## Overview
-This migration successfully converted the Brewery project from Universal Windows Platform (UWP) to .NET 10, targeting Raspberry Pi OS (Linux).
+This migration successfully converted the Brewery project from Universal Windows Platform (UWP) to .NET 8, targeting Raspberry Pi OS (Linux).
 
 ## Completed Changes
 
 ### 1. Core Libraries Migration
-- **Brewery.Core**: Migrated to .NET 10 SDK-style project
+- **Brewery.Core**: Migrated to .NET 8 SDK-style project
   - Replaced `GalaSoft.MvvmLight.Ioc` with `Microsoft.Extensions.DependencyInjection`
   - Updated IocContainer to use the new DI framework
 
-- **Brewery.Server.Core**: Migrated to .NET 10 SDK-style project
+- **Brewery.Server.Core**: Migrated to .NET 8 SDK-style project
   - No external dependencies needed
   - Clean migration
 
-- **Brewery.ServiceAdapter**: Migrated to .NET 10
+- **Brewery.ServiceAdapter**: Migrated to .NET 8
   - Replaced `Newtonsoft.Json` with `System.Text.Json`
   - Updated JSON serialization calls
 
@@ -50,21 +50,21 @@ This migration successfully converted the Brewery project from Universal Windows
   - Configured for cross-platform execution
 
 ### 5. Test Projects
-- **Brewery.Server.Logic.RaspberryPiMock**: Migrated to .NET 10
-- **Brewery.ServerMock**: Migrated to .NET 10 console application
+- **Brewery.Server.Logic.RaspberryPiMock**: Migrated to .NET 8
+- **Brewery.ServerMock**: Migrated to .NET 8 console application
 
 ### 6. Deployment
 - Created `Dockerfile` for containerized deployment
   - Multi-stage build for optimized image size
   - Includes GPIO access libraries for Raspberry Pi
   - Exposes port 8800
-  - Based on official .NET 10 images
+  - Based on official .NET 8 images
 
 ## Key Dependencies Changed
 
 | Old Dependency | New Dependency | Version |
 |---------------|----------------|---------|
-| Microsoft.NETCore.UniversalWindowsPlatform | .NET 10 SDK | 10.0 |
+| Microsoft.NETCore.UniversalWindowsPlatform | .NET 8 SDK | 10.0 |
 | GalaSoft.MvvmLight.Ioc | Microsoft.Extensions.DependencyInjection | 9.0.0 |
 | Newtonsoft.Json | System.Text.Json | 9.0.0 |
 | Restup | ASP.NET Core | Built-in |
@@ -99,7 +99,7 @@ All REST API endpoints have been preserved with the same paths and methods:
 ## Testing Requirements
 
 ### Prerequisites
-- .NET 10 SDK
+- .NET 8 SDK
 - Raspberry Pi OS (Bookworm or later) for hardware testing
 - Docker (optional, for containerized deployment)
 
@@ -146,7 +146,7 @@ Note: `--privileged` flag is required for GPIO access on Raspberry Pi
 
 ## Performance Improvements
 
-- **Smaller Memory Footprint**: .NET 10 runtime is more efficient than UWP
+- **Smaller Memory Footprint**: .NET 8 runtime is more efficient than UWP
 - **Faster Startup**: No UWP initialization overhead
 - **Native Linux Support**: No compatibility layers needed
 - **Modern APIs**: Better async/await support and performance optimizations
@@ -158,7 +158,7 @@ Note: `--privileged` flag is required for GPIO access on Raspberry Pi
 3. Update any CI/CD pipelines
 4. Consider implementing systemd service for automatic startup
 5. Add unit tests for migrated code
-6. Update documentation for .NET 10 deployment
+6. Update documentation for .NET 8 deployment
 
 ## Estimated Timeline Saved
 

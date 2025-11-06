@@ -9,7 +9,7 @@ Dieses Dokument beschreibt die GitHub Actions Workflows für den Brewery Server 
 
 **Was macht es:**
 - Checkt den Code aus
-- Installiert .NET 10
+- Installiert .NET 8
 - Restored Dependencies
 - Baut das Projekt
 - Führt Tests aus (falls vorhanden)
@@ -214,7 +214,7 @@ sudo journalctl -u brewery.service -f
 ### Problem: Docker Build schlägt fehl
 
 **Lösung:**
-- Prüfe, ob .NET 10 SDK installiert ist
+- Prüfe, ob .NET 8 SDK installiert ist
 - Schaue in die Workflow-Logs
 - Stelle sicher, dass alle Projekte erfolgreich builden
 
