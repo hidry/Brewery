@@ -1,10 +1,7 @@
 using Brewery.Server.Core.Api;
-using Iot.Device.OneWire;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 
 namespace Brewery.Server.Logic.RaspberryPi.Api
 {
