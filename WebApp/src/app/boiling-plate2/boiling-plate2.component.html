@@ -1,0 +1,9 @@
+<p>
+  Steuerung: <mat-slide-toggle [(ngModel)]="Power" (change)="onPowerToggleChange($event)"></mat-slide-toggle>
+</p>
+<p>
+  Temperatur soll: <mat-slider (input)="onTemperatureSliderChange($event)" thumbLabel="true" [(ngModel)]="Temperature"></mat-slider> {{Temperature}} &deg;C
+</p>
+<p>
+  Temperatur aktuell: {{TemperatureCurrent}} &deg;C
+</p>
