@@ -126,6 +126,17 @@ If dependencies are missing, run the setup script manually:
 bash .devcontainer/setup.sh
 ```
 
+### Peer Dependency Warnings
+
+The project uses `angular-in-memory-web-api` which doesn't have a version compatible with Angular 19. The setup script uses `--legacy-peer-deps` to work around this. This is safe for development purposes.
+
+If you need to manually install frontend dependencies:
+
+```bash
+cd WebApp
+npm install --legacy-peer-deps
+```
+
 ### Port conflicts
 
 If ports 8800 or 4200 are already in use, you can change them:
