@@ -13,6 +13,7 @@
     <ProjectReference Include="..\Brewery.Core\Brewery.Core.csproj" />
     <ProjectReference Include="..\Brewery.Server.Core\Brewery.Server.Core.csproj" />
     <ProjectReference Include="..\Brewery.Server.Logic\Brewery.Server.Logic.csproj" />
+    <ProjectReference Include="..\Brewery.Server.Logic.RaspberryPiMock\Brewery.Server.Logic.RaspberryPiMock.csproj" />
     <ProjectReference Include="..\Brewery.ServiceAdapter\Brewery.ServiceAdapter.csproj" />
   </ItemGroup>
 
