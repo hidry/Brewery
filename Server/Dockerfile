@@ -1,4 +1,6 @@
-FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+# Use build platform for SDK operations to avoid QEMU issues
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+ARG TARGETARCH
 WORKDIR /src
 
 # Copy project files
@@ -9,19 +11,20 @@ COPY ["Brewery.Server.Logic.RaspberryPi/Brewery.Server.Logic.RaspberryPi.csproj"
 COPY ["Brewery.Server.Logic/Brewery.Server.Logic.csproj", "Brewery.Server.Logic/"]
 COPY ["Brewery.Server/Brewery.Server.csproj", "Brewery.Server/"]
 
-# Restore dependencies
-RUN dotnet restore "Brewery.Server/Brewery.Server.csproj"
+# Restore dependencies for target architecture
+RUN dotnet restore "Brewery.Server/Brewery.Server.csproj" -a $TARGETARCH
 
 # Copy source code
 COPY . .
 
-# Build
+# Build for target architecture
 WORKDIR "/src/Brewery.Server"
-RUN dotnet build "Brewery.Server.csproj" -c Release -o /app/build
+RUN dotnet build "Brewery.Server.csproj" -c Release -a $TARGETARCH -o /app/build --no-restore
 
 # Publish
 FROM build AS publish
-RUN dotnet publish "Brewery.Server.csproj" -c Release -o /app/publish /p:UseAppHost=false
+ARG TARGETARCH
+RUN dotnet publish "Brewery.Server.csproj" -c Release -a $TARGETARCH -o /app/publish --no-restore /p:UseAppHost=false
 
 # Runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
