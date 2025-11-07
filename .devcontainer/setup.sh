@@ -28,7 +28,8 @@ fi
 
 # Install frontend dependencies
 echo "📦 Installing frontend dependencies..."
-if cd WebApp && npm install && cd ..; then
+echo "ℹ️  Using --legacy-peer-deps due to angular-in-memory-web-api compatibility"
+if cd WebApp && npm install --legacy-peer-deps && cd ..; then
   echo "✅ Frontend dependencies installed"
 else
   echo "❌ Failed to install frontend dependencies"
