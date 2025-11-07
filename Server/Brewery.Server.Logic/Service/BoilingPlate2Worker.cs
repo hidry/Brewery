@@ -6,7 +6,7 @@ using Brewery.Server.Core.Models;
 
 namespace Brewery.Server.Logic.Service
 {
-    class BoilingPlate2Worker : Core.Service.IBoilingPlate2Worker
+    public class BoilingPlate2Worker : Core.Service.IBoilingPlate2Worker
     {
         private readonly IGpioModule _gpioModule;
         private readonly ITemperatureModule _temperatureModule;

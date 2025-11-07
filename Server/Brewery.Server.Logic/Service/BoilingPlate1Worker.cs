@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Brewery.Server.Logic.Service
 {
-    class BoilingPlate1Worker : Core.Service.IBoilingPlate1Worker
+    public class BoilingPlate1Worker : Core.Service.IBoilingPlate1Worker
     {
         enum ServiceStatus
         {
