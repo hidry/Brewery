@@ -1,0 +1,56 @@
+{
+  "name": "Brewery Development",
+  "image": "mcr.microsoft.com/devcontainers/dotnet:1-8.0-bookworm",
+
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20"
+    },
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {
+      "version": "latest",
+      "dockerDashComposeVersion": "v2"
+    },
+    "ghcr.io/devcontainers/features/git:1": {
+      "version": "latest"
+    }
+  },
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-dotnettools.csharp",
+        "ms-dotnettools.csdevkit",
+        "angular.ng-template",
+        "johnpapa.angular2",
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "editorconfig.editorconfig",
+        "ms-azuretools.vscode-docker"
+      ],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "bash",
+        "dotnet.defaultSolution": "Server/Brewery.Server.sln"
+      }
+    }
+  },
+
+  "forwardPorts": [8800, 4200],
+  "portsAttributes": {
+    "8800": {
+      "label": "Backend API",
+      "onAutoForward": "notify"
+    },
+    "4200": {
+      "label": "Angular Dev Server",
+      "onAutoForward": "notify"
+    }
+  },
+
+  "postCreateCommand": "bash .devcontainer/setup.sh",
+
+  "remoteUser": "vscode",
+
+  "mounts": [
+    "source=${localWorkspaceFolder}/.devcontainer/.bashrc,target=/home/vscode/.bashrc,type=bind,consistency=cached"
+  ]
+}

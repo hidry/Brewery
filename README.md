@@ -82,6 +82,28 @@ Brewery/
 
 ## Installation
 
+### 🚀 Quick Start with GitHub Codespaces (Recommended)
+
+The easiest way to get started is using GitHub Codespaces, which provides a fully configured development environment in your browser:
+
+1. Open the repository on GitHub
+2. Click the **Code** button → **Codespaces** tab
+3. Click **Create codespace on [branch]**
+
+The environment will automatically install all dependencies. Once ready, use these commands:
+
+```bash
+# Run the mock backend server (no hardware required)
+backend
+
+# Run the Angular frontend (in a new terminal)
+frontend
+```
+
+The API will be available at port 8800 and the web interface at port 4200. GitHub Codespaces will automatically forward these ports to your browser.
+
+See [.devcontainer/README.md](.devcontainer/README.md) for more details on the Codespaces configuration.
+
 ### Backend Setup
 
 ```bash
