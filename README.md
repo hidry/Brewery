@@ -128,6 +128,54 @@ docker run -p 8800:8800 --privileged brewery-server:latest
 
 For Docker Compose deployment, see `Server/docker-compose.yml`.
 
+## Raspberry Pi Pin Configuration
+
+### GPIO Pin Usage
+
+The Brewery system uses the following GPIO pins on the Raspberry Pi:
+
+| GPIO Number | Physical Pin | Purpose | Component |
+|-------------|--------------|---------|-----------|
+| **GPIO 12** | Pin 32 | Mixer Control | Controls the mixer motor/pump for stirring the mash |
+| **GPIO 16** | Pin 36 | Boiling Plate 1 | Controls heating element for mash kettle (Heizplatte 1) |
+| **GPIO 20** | Pin 38 | Boiling Plate 2 | Controls heating element for boil kettle (Heizplatte 2) |
+| **GPIO 21** | Pin 40 | Piezo Buzzer | Controls piezo buzzer for alerts and notifications |
+| **GPIO 4** | Pin 7 | 1-Wire Data | Data line for DS18B20 temperature sensors |
+
+**Note**: All GPIO output pins (12, 16, 20, 21) control relay modules that switch the high-power devices. Ensure proper electrical isolation between the Raspberry Pi and the heating elements.
+
+### Temperature Sensors
+
+The system uses two DS18B20 1-Wire temperature sensors on GPIO 4:
+
+| Sensor | 1-Wire Address | Purpose |
+|--------|----------------|---------|
+| **Sensor 1** | `28-FF-EE-6B-91-16-04-90` | Monitors temperature for Boiling Plate 1 |
+| **Sensor 2** | `28-FF-FA-4C-90-16-05-F0` | Monitors temperature for Boiling Plate 2 |
+
+These sensor addresses are configured in `Server/Brewery.Server.Core/Api/Settings.cs`. If you use different sensors, update the addresses in the configuration file.
+
+### Wiring Diagram
+
+```
+Raspberry Pi GPIO Header
+┌─────────────────────────────────┐
+│  3.3V  (1)  (2)  5V             │
+│  GPIO2 (3)  (4)  5V             │
+│  GPIO3 (5)  (6)  GND            │
+│ *GPIO4 (7)  (8)  GPIO14         │  ← 1-Wire Data (Temp Sensors)
+│  GND   (9)  (10) GPIO15         │
+│  ...                            │
+│ *GPIO12(32) (33) GPIO13         │  ← Mixer Control
+│  GND   (34) (35) GPIO19         │
+│ *GPIO16(36) (37) GPIO26         │  ← Boiling Plate 1
+│ *GPIO20(38) (39) GND            │  ← Boiling Plate 2
+│ *GPIO21(40)                     │  ← Piezo Buzzer
+└─────────────────────────────────┘
+
+* = Used by Brewery system
+```
+
 ## Configuration
 
 ### Enable 1-Wire on Raspberry Pi
