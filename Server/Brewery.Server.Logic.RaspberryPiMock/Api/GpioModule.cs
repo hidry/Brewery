@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System;
 using System.Collections.Generic;
 
-namespace Brewery.Server.Logic.RaspberryPi.Api
+namespace Brewery.Server.Logic.RaspberryPiMock.Api
 {
     public class GpioModule : IGpioModule
     {
