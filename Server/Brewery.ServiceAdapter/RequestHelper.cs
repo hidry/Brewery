@@ -29,23 +29,32 @@ namespace Brewery.ServiceAdapter
         public async Task<T> SendRequest<T>(string method, MethodTypes methodType, string body = null)
         {
             HttpResponseMessage response;
+            HttpContent content = null;
 
-            if (methodType == MethodTypes.GET)
+            if (!string.IsNullOrWhiteSpace(body))
             {
-                response = await _httpClient.GetAsync(method);
+                content = new StringContent(body, Encoding.UTF8, "application/json");
             }
-            else if (methodType == MethodTypes.PUT)
+
+            switch (methodType)
             {
-                HttpContent content = null;
-                if (!string.IsNullOrWhiteSpace(body))
-                {
-                    content = new StringContent(body, Encoding.UTF8, "application/json");
-                }
-                response = await _httpClient.PutAsync(method, content);
-            }
-            else
-            {
-                throw new NotSupportedException($"Method type {methodType} is not supported");
+                case MethodTypes.GET:
+                    response = await _httpClient.GetAsync(method);
+                    break;
+                case MethodTypes.POST:
+                    response = await _httpClient.PostAsync(method, content);
+                    break;
+                case MethodTypes.PUT:
+                    response = await _httpClient.PutAsync(method, content);
+                    break;
+                case MethodTypes.DELETE:
+                    response = await _httpClient.DeleteAsync(method);
+                    break;
+                case MethodTypes.PATCH:
+                    response = await _httpClient.PatchAsync(method, content);
+                    break;
+                default:
+                    throw new NotSupportedException($"Method type {methodType} is not supported");
             }
 
             response.EnsureSuccessStatusCode();
@@ -63,6 +72,9 @@ namespace Brewery.ServiceAdapter
     public enum MethodTypes
     {
         GET = 0,
-        PUT = 1
+        PUT = 1,
+        POST = 2,
+        DELETE = 3,
+        PATCH = 4
     }
 }
