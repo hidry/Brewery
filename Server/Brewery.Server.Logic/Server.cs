@@ -23,10 +23,10 @@ namespace Brewery.Server.Logic
             _boilingPlate2Worker = boilingPlate2Worker;
         }
 
-        public async Task StartServerAsync()
+        public async Task StartServerAsync(int port = 8800)
         {
             var builder = WebApplication.CreateBuilder();
-            
+
             // Configure services
             builder.Services.AddControllers();
             builder.Services.AddCors(options =>
@@ -49,15 +49,16 @@ namespace Brewery.Server.Logic
                     Path.Combine(Directory.GetCurrentDirectory(), "Web")),
                 RequestPath = ""
             });
-            
+
             app.MapControllers();
-            
+
             // Start workers
             _ = Task.Run(() => StartBoilingPlate1WorkerAsync());
             _ = Task.Run(() => StartBoilingPlate2WorkerAsync());
-            
+
             // Start web server
-            await app.RunAsync("http://0.0.0.0:8800");
+            Console.WriteLine($"Starting web server on http://0.0.0.0:{port}");
+            await app.RunAsync($"http://0.0.0.0:{port}");
         }
 
         private async Task StartWorkerAsync(Func<Task> workerTask, int intervall)

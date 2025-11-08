@@ -4,6 +4,6 @@ namespace Brewery.Server.Core
 {
     public interface IServer
     {
-        Task StartServerAsync();
+        Task StartServerAsync(int port = 8800);
     }
 }
