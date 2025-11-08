@@ -33,6 +33,13 @@
             "scripts": []
           },
           "configurations": {
+            "development": {
+              "optimization": false,
+              "sourceMap": true,
+              "namedChunks": true,
+              "vendorChunk": true,
+              "buildOptimizer": false
+            },
             "production": {
               "fileReplacements": [
                 {
@@ -64,6 +71,9 @@
             "buildTarget": "brewery:build"
           },
           "configurations": {
+            "development": {
+              "buildTarget": "brewery:build:development"
+            },
             "production": {
               "buildTarget": "brewery:build:production"
             }
