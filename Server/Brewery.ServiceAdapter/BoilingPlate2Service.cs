@@ -26,12 +26,12 @@ namespace Brewery.ServiceAdapter
 
         public async Task PowerOff()
         {
-            await _requestHelper.SendRequest<bool>($"boilingPlate2/power/{false}", MethodTypes.PUT);
+            await _requestHelper.SendRequest<bool>($"boilingPlate2/power/{false.ToString().ToLower()}", MethodTypes.PUT);
         }
 
         public async Task PowerOn()
         {
-            await _requestHelper.SendRequest<bool>($"boilingPlate2/power/{true}", MethodTypes.PUT);
+            await _requestHelper.SendRequest<bool>($"boilingPlate2/power/{true.ToString().ToLower()}", MethodTypes.PUT);
         }
     }
 }

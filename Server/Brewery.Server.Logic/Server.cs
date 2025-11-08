@@ -28,7 +28,8 @@ namespace Brewery.Server.Logic
             var builder = WebApplication.CreateBuilder();
 
             // Configure services
-            builder.Services.AddControllers();
+            builder.Services.AddControllers()
+                .AddApplicationPart(typeof(Server).Assembly);
             builder.Services.AddCors(options =>
             {
                 options.AddDefaultPolicy(policy =>
