@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpHeaders } from '@angular/common/http';
+import { environment } from '../environments/environment';
 
 @Injectable({
     providedIn: 'root',
   })
 export class Settings {
-    // ApiUrl = 'http://192.168.178.35:8800/api/';
-    ApiUrl = 'http://minwinpc:8800/api/';
+    ApiUrl = environment.apiUrl;
     httpOptions = {
         headers: new HttpHeaders({ 'Content-Type': 'application/json' })
       };
