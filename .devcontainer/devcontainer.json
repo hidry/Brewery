@@ -48,5 +48,13 @@
 
   "postCreateCommand": "bash .devcontainer/setup.sh",
 
-  "remoteUser": "vscode"
+  "postStartCommand": "echo '🐛 Devcontainer is configured for debug mode. Use the aliases (backend, frontend) or press F5 to start debugging.'",
+
+  "remoteUser": "vscode",
+
+  "containerEnv": {
+    "ASPNETCORE_ENVIRONMENT": "Development",
+    "DOTNET_ENVIRONMENT": "Development",
+    "NODE_ENV": "development"
+  }
 }
