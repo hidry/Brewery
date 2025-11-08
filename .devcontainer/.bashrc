@@ -6,7 +6,7 @@ if [ -f /etc/bash.bashrc ]; then
 fi
 
 # Helpful aliases for Brewery development
-alias backend="cd /workspaces/Brewery/Server/Brewery.ServerMock && dotnet run"
+alias backend="cd /workspaces/Brewery/Server/Brewery.ServerMock && dotnet run 8800"
 alias backend-main="cd /workspaces/Brewery/Server/Brewery.Server && dotnet run"
 alias frontend="cd /workspaces/Brewery/WebApp && ng serve --host 0.0.0.0"
 alias build-backend="cd /workspaces/Brewery/Server && dotnet build"
