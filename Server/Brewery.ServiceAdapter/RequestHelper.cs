@@ -10,8 +10,14 @@ namespace Brewery.ServiceAdapter
     {
         private static readonly HttpClient _httpClient = new HttpClient
         {
-            BaseAddress = new Uri("http://minwinpc:8800/api/")
+            BaseAddress = new Uri(GetApiUrl())
         };
+
+        private static string GetApiUrl()
+        {
+            var apiUrl = Environment.GetEnvironmentVariable("BREWERY_API_URL");
+            return string.IsNullOrWhiteSpace(apiUrl) ? "http://localhost:8800/api/" : apiUrl;
+        }
 
         private class EmptyBody { }
 
