@@ -34,22 +34,10 @@
     }
   },
 
-  "forwardPorts": [8800, 8801, 8802, 8803, 4200],
+  "forwardPorts": [8800, 4200],
   "portsAttributes": {
     "8800": {
-      "label": "Server (DevContainer)",
-      "onAutoForward": "notify"
-    },
-    "8801": {
-      "label": "ServerMock (DevContainer)",
-      "onAutoForward": "notify"
-    },
-    "8802": {
-      "label": "Server (VSCode Debug)",
-      "onAutoForward": "notify"
-    },
-    "8803": {
-      "label": "ServerMock (VSCode Debug)",
+      "label": "Backend API Server",
       "onAutoForward": "notify"
     },
     "4200": {
