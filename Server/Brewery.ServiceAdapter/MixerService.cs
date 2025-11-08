@@ -14,7 +14,7 @@ namespace Brewery.ServiceAdapter
 
         public async Task Power(bool on)
         {
-            await _requestHelper.SendRequest($"/mixer/power/{on}", MethodTypes.PUT);
+            await _requestHelper.SendRequest($"mixer/power/{on}", MethodTypes.PUT);
         }
     }
 }

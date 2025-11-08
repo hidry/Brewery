@@ -14,13 +14,13 @@ namespace Brewery.ServiceAdapter
 
         public async Task<double> GetCurrenTemperature()
         {
-            var t = await _requestHelper.SendRequest<double>("/boilingPlate1/getCurrentTemperature", MethodTypes.GET);
+            var t = await _requestHelper.SendRequest<double>("boilingPlate1/getCurrentTemperature", MethodTypes.GET);
             return t;
         }
 
         public async Task<bool> GetPowerStatus()
         {
-            var t = await _requestHelper.SendRequest<bool>("/boilingPlate1/powerStatus", MethodTypes.GET);
+            var t = await _requestHelper.SendRequest<bool>("boilingPlate1/powerStatus", MethodTypes.GET);
             return t;
         }
     }

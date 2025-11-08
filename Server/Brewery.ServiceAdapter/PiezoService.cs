@@ -13,7 +13,7 @@ namespace Brewery.ServiceAdapter
 
         public async Task Power(bool on)
         {
-            await _requestHelper.SendRequest($"/piezo/power/{on}", MethodTypes.PUT);
+            await _requestHelper.SendRequest($"piezo/power/{on}", MethodTypes.PUT);
         }
     }
 }
