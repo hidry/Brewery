@@ -61,18 +61,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "brewery:build"
+            "buildTarget": "brewery:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "brewery:build:production"
+              "buildTarget": "brewery:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "brewery:build"
+            "buildTarget": "brewery:build"
           }
         },
         "test": {
