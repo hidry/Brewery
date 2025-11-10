@@ -44,6 +44,15 @@ namespace Brewery.Server.Logic
 
             // Configure middleware
             app.UseCors();
+
+            // Enable default files (index.html) for root path
+            app.UseDefaultFiles(new DefaultFilesOptions
+            {
+                FileProvider = new PhysicalFileProvider(
+                    Path.Combine(Directory.GetCurrentDirectory(), "Web")),
+                RequestPath = ""
+            });
+
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(
