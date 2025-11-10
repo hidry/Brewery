@@ -68,7 +68,14 @@ namespace Brewery.Server.Logic
 
             // Start web server
             Console.WriteLine($"Starting web server on http://0.0.0.0:{port}");
-            await app.RunAsync($"http://0.0.0.0:{port}");
+
+            // Use StartAsync instead of RunAsync to start the server without blocking
+            await app.StartAsync($"http://0.0.0.0:{port}");
+            Console.WriteLine($"Web server started and listening on http://0.0.0.0:{port}");
+
+            // Wait for the application lifetime to end (keeps server running indefinitely)
+            await app.WaitForShutdownAsync();
+            Console.WriteLine("Web server is shutting down...");
         }
 
         private async Task StartWorkerAsync(Func<Task> workerTask, int intervall)
