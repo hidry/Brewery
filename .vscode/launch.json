@@ -27,8 +27,10 @@
             "stopAtEntry": false,
             "console": "internalConsole",
             "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            }
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "DOTNET_SHUTDOWNTIMEOUTSECONDS": "3600"
+            },
+            "requireExactSource": false
         },
         {
             "name": "ServerMock (.NET)",
@@ -41,8 +43,10 @@
             "stopAtEntry": false,
             "console": "internalConsole",
             "env": {
-                "ASPNETCORE_ENVIRONMENT": "Development"
-            }
+                "ASPNETCORE_ENVIRONMENT": "Development",
+                "DOTNET_SHUTDOWNTIMEOUTSECONDS": "3600"
+            },
+            "requireExactSource": false
         },
         {
             "name": "Attach to Server (.NET)",
