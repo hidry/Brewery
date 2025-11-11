@@ -14,8 +14,8 @@ namespace Brewery.ServerMock
 
             try
             {
-                // Determine port: command-line args > environment variable > default (8801)
-                int port = GetPort(args, defaultPort: 8801);
+                // Determine port: command-line args > environment variable > default (8800)
+                int port = GetPort(args, defaultPort: 8800);
 
                 // Setup IoC container with MOCK implementations
                 BootstrapperMock.SetUpServerLogicMock();
