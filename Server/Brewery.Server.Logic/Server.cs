@@ -52,14 +52,14 @@ namespace Brewery.Server.Logic
             app.UseDefaultFiles(new DefaultFilesOptions
             {
                 FileProvider = new PhysicalFileProvider(
-                    Path.Combine(Directory.GetCurrentDirectory(), "Web")),
+                    Path.Combine(AppContext.BaseDirectory, "Web")),
                 RequestPath = ""
             });
 
             app.UseStaticFiles(new StaticFileOptions
             {
                 FileProvider = new PhysicalFileProvider(
-                    Path.Combine(Directory.GetCurrentDirectory(), "Web")),
+                    Path.Combine(AppContext.BaseDirectory, "Web")),
                 RequestPath = ""
             });
 
