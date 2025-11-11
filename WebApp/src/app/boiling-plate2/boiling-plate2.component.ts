@@ -18,6 +18,7 @@ export class BoilingPlate2Component implements OnInit, OnDestroy {
   powerStatusSubscription: any;
   currentTemperatureSubscription: any;
   temperatureSubscription: any;
+  isUserChangingTemperature: boolean = false;
 
   constructor(private boilingPlate2Service: BoilingPlate2Service, private settings: Settings) { }
 
@@ -28,7 +29,11 @@ export class BoilingPlate2Component implements OnInit, OnDestroy {
         startWith(0),
         switchMap(() => this.boilingPlate2Service.getTemperature())
       )
-      .subscribe(t => this.Temperature = Math.round(t));
+      .subscribe(t => {
+        if (!this.isUserChangingTemperature) {
+          this.Temperature = Math.round(t);
+        }
+      });
 
     // this.getCurrentTemperature();
     this.currentTemperatureSubscription = interval(this.settings.pollingInterval)
@@ -70,6 +75,13 @@ export class BoilingPlate2Component implements OnInit, OnDestroy {
   }
 
   onTemperatureSliderChange(event) {
-    this.boilingPlate2Service.setTemperature(event.value).subscribe();
+    this.isUserChangingTemperature = true;
+    this.Temperature = event.value;
+  }
+
+  onTemperatureSliderChangeEnd(event) {
+    this.boilingPlate2Service.setTemperature(event.value).subscribe(() => {
+      this.isUserChangingTemperature = false;
+    });
   }
 }
