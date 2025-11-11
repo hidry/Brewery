@@ -44,7 +44,26 @@ Reboot:
 sudo reboot
 ```
 
-### 3. Deploy Application
+### 3. Build Frontend Application
+
+Before deploying the backend, build and deploy the frontend:
+
+```bash
+# From the repository root
+cd WebApp
+
+# Install dependencies (first time only)
+npm install
+
+# Build and deploy frontend to Server/Web
+npm run build:deploy
+```
+
+This creates a production build of the Angular application and automatically copies it to the shared `Server/Web` directory. The .NET projects are configured to include these files in their published output.
+
+**Note**: The build process has been simplified. Previously, compiled files needed to be manually copied to three separate directories. Now, a single `npm run build:deploy` command handles everything automatically.
+
+### 4. Deploy Application
 
 #### Option A: Manual Deployment
 
@@ -77,7 +96,7 @@ docker run -d \
   brewery-server:latest
 ```
 
-### 4. Configure systemd Service (Manual Deployment)
+### 5. Configure systemd Service (Manual Deployment)
 
 ```bash
 # Copy service file
@@ -96,7 +115,7 @@ sudo systemctl start brewery.service
 sudo systemctl status brewery.service
 ```
 
-### 5. Verify Installation
+### 6. Verify Installation
 
 ```bash
 # Check if service is running

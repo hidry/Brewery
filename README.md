@@ -133,10 +133,15 @@ npm install
 ng serve
 
 # Production build
-ng build --prod
+ng build
+
+# Production build and deploy to Server/Web directory
+npm run build:deploy
 ```
 
 The web application will be available at `http://localhost:4200` during development.
+
+**Note**: The `build:deploy` script automatically copies the compiled Angular application to the shared `Server/Web` directory, eliminating the need to manually copy files to multiple locations.
 
 ### Docker Deployment
 
@@ -264,8 +269,11 @@ npm install
 ng serve              # Development server on port 4200
 npm test              # Run unit tests
 npm run e2e           # Run end-to-end tests
-ng build --prod       # Production build
+ng build              # Production build
+npm run build:deploy  # Build and deploy to Server/Web (recommended)
 ```
+
+**Simplified Deployment**: The frontend now uses a centralized `Server/Web` directory. Both `Brewery.Server` and `Brewery.ServerMock` reference this shared directory, eliminating the need to copy files to multiple locations.
 
 ### Backend Development
 
