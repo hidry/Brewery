@@ -15,7 +15,7 @@ export class MashStepsComponent implements OnInit {
   private api;
   private columnApi;
 
-  mashSteps: MashStep[];
+  mashSteps: MashStep[] = [];
   trueFalseValues: string[] = ['true', 'false'];
   trueFalseCellEditorParams = { values: this.trueFalseValues };
 
