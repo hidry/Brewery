@@ -27,6 +27,9 @@ namespace Brewery.Server.Logic
         {
             var builder = WebApplication.CreateBuilder();
 
+            // Configure the server URL
+            builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
+
             // Configure services
             builder.Services.AddControllers()
                 .AddApplicationPart(typeof(Server).Assembly);
@@ -70,7 +73,7 @@ namespace Brewery.Server.Logic
             Console.WriteLine($"Starting web server on http://0.0.0.0:{port}");
 
             // Use StartAsync instead of RunAsync to start the server without blocking
-            await app.StartAsync($"http://0.0.0.0:{port}");
+            await app.StartAsync();
             Console.WriteLine($"Web server started and listening on http://0.0.0.0:{port}");
 
             // Wait for the application lifetime to end (keeps server running indefinitely)
