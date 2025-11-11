@@ -194,7 +194,7 @@ If ports 8800 or 4200 are already in use, you can change them:
 ```bash
 # Backend with custom port
 cd Server/Brewery.ServerMock
-dotnet run --urls "http://localhost:8801"
+dotnet run -- 9000
 
 # Frontend with custom port
 cd WebApp
