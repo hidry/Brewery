@@ -52,16 +52,16 @@ export class MashStepsService extends ServiceBase {
 
   updateMashStep(mashStep: MashStep): Observable<any> {
     return this.http.put(this.endpointUrl, mashStep, this.settings.httpOptions).pipe(
-      tap(_ => this.log(`updated mashStep guid=${mashStep.Guid}`)),
+      tap(_ => this.log(`updated mashStep guid=${mashStep.guid}`)),
       catchError(this.handleError<any>('updateMashStep'))
     );
   }
 
   /** DELETE: delete the mashStep from the server */
   deleteMashStep(mashStep: MashStep): Observable<MashStep> {
-    const url = `${this.endpointUrl}/${mashStep.Guid}`;
+    const url = `${this.endpointUrl}/${mashStep.guid}`;
     return this.http.delete<MashStep>(url, this.settings.httpOptions).pipe(
-      tap(_ => this.log(`deleted mashStep guid=${mashStep.Guid}`)),
+      tap(_ => this.log(`deleted mashStep guid=${mashStep.guid}`)),
       catchError(this.handleError<MashStep>('deleteMashStep'))
     );
   }
@@ -69,7 +69,7 @@ export class MashStepsService extends ServiceBase {
   /** POST: add a new MashStep to the server */
   addMashStep(mashStep: MashStep): Observable<MashStep> {
     return this.http.post<MashStep>(this.endpointUrl, mashStep, this.settings.httpOptions).pipe(
-      tap((ms: MashStep) => this.log(`added mashStep guid=${ms.Guid}`)),
+      tap((ms: MashStep) => this.log(`added mashStep guid=${ms.guid}`)),
       catchError(this.handleError<MashStep>('addMashStep'))
     );
   }
