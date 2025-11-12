@@ -1,6 +1,8 @@
 {
   "name": "Brewery Development",
-  "image": "mcr.microsoft.com/dotnet/sdk:10.0-preview",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
 
   "features": {
     "ghcr.io/devcontainers/features/common-utils:2": {
