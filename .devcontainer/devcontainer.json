@@ -1,8 +1,13 @@
 {
   "name": "Brewery Development",
-  "image": "mcr.microsoft.com/devcontainers/dotnet:1-10.0-bookworm",
+  "image": "mcr.microsoft.com/dotnet/sdk:10.0-preview",
 
   "features": {
+    "ghcr.io/devcontainers/features/common-utils:2": {
+      "username": "vscode",
+      "userUid": "1000",
+      "userGid": "1000"
+    },
     "ghcr.io/devcontainers/features/node:1": {
       "version": "20"
     },
