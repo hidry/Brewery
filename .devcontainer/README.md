@@ -6,7 +6,7 @@ This directory contains the configuration for GitHub Codespaces, allowing you to
 
 The devcontainer provides:
 
-- **.NET 10 Preview SDK** - For backend development (with .NET 9 also available)
+- **.NET 10 SDK** - For backend development (with .NET 9 also available)
 - **Node.js 20** - For Angular frontend development
 - **Angular CLI** - Pre-installed globally
 - **Docker-in-Docker** - For building and testing containers

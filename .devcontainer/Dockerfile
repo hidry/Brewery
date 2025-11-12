@@ -2,7 +2,7 @@
 # This ensures all devcontainer tooling is properly configured
 FROM mcr.microsoft.com/devcontainers/dotnet:9.0
 
-# Install .NET 10 Preview SDK
+# Install .NET 10 SDK (GA)
 RUN wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh \
     && chmod +x dotnet-install.sh \
     && ./dotnet-install.sh --channel 10.0 --install-dir /usr/share/dotnet \
