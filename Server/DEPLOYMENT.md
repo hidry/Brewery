@@ -3,15 +3,15 @@
 ## Prerequisites
 
 1. **Raspberry Pi** (3, 4, or 5) with Raspberry Pi OS (64-bit recommended)
-2. **.NET 8 Runtime** installed
+2. **.NET 10 Runtime** installed
 3. **1-Wire and GPIO** enabled
 
 ## Installation Steps
 
-### 1. Install .NET 8 Runtime
+### 1. Install .NET 10 Runtime
 
 ```bash
-# Download and install .NET 8 SDK
+# Download and install .NET 10 SDK
 curl -sSL https://dot.net/v1/dotnet-install.sh | bash /dev/stdin --channel 10.0
 
 # Add to PATH
@@ -324,4 +324,4 @@ chmod +x /home/pi/backup-brewery.sh
 For issues or questions, refer to:
 - Project repository issues
 - Migration documentation (MIGRATION.md)
-- .NET 8 documentation: https://docs.microsoft.com/dotnet/
+- .NET 10 documentation: https://docs.microsoft.com/dotnet/
