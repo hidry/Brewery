@@ -1,10 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MashStepsService } from '../mash-steps.service';
-import { BoilingPlate1Service } from '../boiling-plate1.service';
 import { SignalRBoilingPlate1Service } from '../signalr-boiling-plate1.service';
 import { SignalRMashStepsService } from '../signalr-mash-steps.service';
 import { Subscription } from 'rxjs';
-import { Settings } from '../settings';
 
 @Component({
   selector: 'app-boiling-plate1',
@@ -25,11 +22,8 @@ export class BoilingPlate1Component implements OnInit, OnDestroy {
   powerStatusSubscription: Subscription;
 
   constructor(
-    private mashStepsService: MashStepsService,
-    private boilingPlate1Service: BoilingPlate1Service,
     private signalRBoilingPlate1Service: SignalRBoilingPlate1Service,
-    private signalRMashStepsService: SignalRMashStepsService,
-    private settings: Settings) { }
+    private signalRMashStepsService: SignalRMashStepsService) { }
 
   ngOnInit() {
     // Subscribe to SignalR real-time updates instead of polling

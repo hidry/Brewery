@@ -1,8 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { BoilingPlate2Service } from '../boiling-plate2.service';
 import { SignalRBoilingPlate2Service } from '../signalr-boiling-plate2.service';
 import { Subscription } from 'rxjs';
-import { Settings } from '../settings';
 
 @Component({
   selector: 'app-boiling-plate2',
@@ -20,10 +18,7 @@ export class BoilingPlate2Component implements OnInit, OnDestroy {
   temperatureSubscription: Subscription;
   isUserChangingTemperature: boolean = false;
 
-  constructor(
-    private boilingPlate2Service: BoilingPlate2Service,
-    private signalRBoilingPlate2Service: SignalRBoilingPlate2Service,
-    private settings: Settings) { }
+  constructor(private signalRBoilingPlate2Service: SignalRBoilingPlate2Service) { }
 
   ngOnInit() {
     // Subscribe to SignalR real-time updates instead of polling

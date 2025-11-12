@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MashStep } from '../mashStep';
-import { MashStepsService } from '../mash-steps.service';
 import { SignalRMashStepsService } from '../signalr-mash-steps.service';
-import { forkJoin, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-mash-steps',
@@ -29,9 +28,7 @@ export class MashStepsComponent implements OnInit, OnDestroy {
     { headerName: 'Rast', field: 'Rast', editable: true, valueParser: 'Number(newValue)' }
   ];
 
-  constructor(
-    private mashStepsService: MashStepsService,
-    private signalRMashStepsService: SignalRMashStepsService) { }
+  constructor(private signalRMashStepsService: SignalRMashStepsService) { }
 
   ngOnInit() {
     this.getMashSteps();
@@ -62,32 +59,32 @@ export class MashStepsComponent implements OnInit, OnDestroy {
   }
 
   getMashSteps(): void {
-    this.mashStepsService.getMashSteps()
-      .subscribe(mashSteps => this.mashSteps = mashSteps);
+    this.signalRMashStepsService.getMashSteps()
+      .then(mashSteps => this.mashSteps = mashSteps)
+      .catch(error => console.error('Error loading mash steps:', error));
   }
 
   onCellValueChanged(params: any) {
-    this.mashStepsService.updateMashStep(params.data)
-      .subscribe(
-        ms => {
-          // console.log('MashStep Saved');
-          this.getMashSteps();
-        },
-        error => console.log(error)
-      );
+    this.signalRMashStepsService.updateMashStep(params.data)
+      .then(() => {
+        // MashStep saved - data will be refreshed via SignalR
+      })
+      .catch(error => console.error('Error updating mash step:', error));
   }
 
   deleteSelectedRows() {
     const selectRows = this.api.getSelectedRows();
-    // create an Observable for each row to delete
-    const deleteSubscriptions = selectRows.map((rowToDelete) => {
-      return this.mashStepsService.deleteMashStep(rowToDelete);
-    });
-    // then subscribe to these and once all done, refresh the grid data
-    // deleteSubscriptions.forkJoin().subscribe(results => this.getMashSteps());
 
-    forkJoin(...deleteSubscriptions)
-      .subscribe(results => this.getMashSteps());
+    // Delete each selected row via SignalR
+    const deletePromises = selectRows.map((rowToDelete) => {
+      return this.signalRMashStepsService.deleteMashStep(rowToDelete.Guid);
+    });
+
+    Promise.all(deletePromises)
+      .then(() => {
+        // Data will be refreshed via SignalR
+      })
+      .catch(error => console.error('Error deleting mash steps:', error));
   }
 
   addNewMashStep() {
@@ -95,6 +92,10 @@ export class MashStepsComponent implements OnInit, OnDestroy {
     newMashStep.Step = 'new step';
     newMashStep.Active = false;
     newMashStep.Rast = 60;
-    this.mashStepsService.addMashStep(newMashStep).subscribe(r => this.getMashSteps());
+    this.signalRMashStepsService.insertMashStep(newMashStep)
+      .then(() => {
+        // Data will be refreshed via SignalR
+      })
+      .catch(error => console.error('Error adding mash step:', error));
   }
 }
