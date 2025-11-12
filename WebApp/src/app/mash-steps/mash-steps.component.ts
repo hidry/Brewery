@@ -17,8 +17,6 @@ export class MashStepsComponent implements OnInit {
 
   mashSteps: MashStep[] = [];
   hasSelectedRows = false;
-  trueFalseValues: string[] = ['true', 'false'];
-  trueFalseCellEditorParams = { values: this.trueFalseValues };
 
   columnDefs = [
     { headerName: 'Schritt', field: 'step', editable: true, checkboxSelection: true },
@@ -26,19 +24,15 @@ export class MashStepsComponent implements OnInit {
       headerName: 'Rührwerk',
       field: 'mixer',
       editable: true,
-      cellEditor: 'agSelectCellEditor',
-      cellEditorParams: { values: this.trueFalseValues },
-      valueFormatter: (params) => params.value ? 'true' : 'false',
-      valueParser: (params) => params.newValue === 'true'
+      cellRenderer: 'agCheckboxCellRenderer',
+      cellEditor: 'agCheckboxCellEditor'
     },
     {
       headerName: 'Alarm',
       field: 'alert',
       editable: true,
-      cellEditor: 'agSelectCellEditor',
-      cellEditorParams: { values: this.trueFalseValues },
-      valueFormatter: (params) => params.value ? 'true' : 'false',
-      valueParser: (params) => params.newValue === 'true'
+      cellRenderer: 'agCheckboxCellRenderer',
+      cellEditor: 'agCheckboxCellEditor'
     },
     { headerName: 'Temperatur', field: 'temperature', editable: true, valueParser: 'Number(newValue)' },
     { headerName: 'Rast', field: 'rast', editable: true, valueParser: 'Number(newValue)' }
