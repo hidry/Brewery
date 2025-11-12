@@ -2,6 +2,7 @@ using Brewery.Server.Core;
 using Brewery.Server.Core.Service;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
@@ -33,17 +34,27 @@ namespace Brewery.Server.Logic
             // Configure services
             builder.Services.AddControllers()
                 .AddApplicationPart(typeof(Server).Assembly);
+
+            // Add SignalR
+            builder.Services.AddSignalR();
+
             builder.Services.AddCors(options =>
             {
                 options.AddDefaultPolicy(policy =>
                 {
-                    policy.AllowAnyOrigin()
+                    policy.SetIsOriginAllowed(_ => true)
                           .AllowAnyMethod()
-                          .AllowAnyHeader();
+                          .AllowAnyHeader()
+                          .AllowCredentials();
                 });
             });
 
             var app = builder.Build();
+
+            // Initialize hub context provider for workers
+            Api.Hub.HubContextProvider.BoilingPlate1HubContext = app.Services.GetRequiredService<IHubContext<Api.Hub.BoilingPlate1Hub>>();
+            Api.Hub.HubContextProvider.BoilingPlate2HubContext = app.Services.GetRequiredService<IHubContext<Api.Hub.BoilingPlate2Hub>>();
+            Api.Hub.HubContextProvider.MashStepsHubContext = app.Services.GetRequiredService<IHubContext<Api.Hub.MashStepsHub>>();
 
             // Configure middleware
             app.UseCors();
@@ -64,6 +75,11 @@ namespace Brewery.Server.Logic
             });
 
             app.MapControllers();
+
+            // Map SignalR hubs
+            app.MapHub<Api.Hub.BoilingPlate1Hub>("/hubs/boilingPlate1");
+            app.MapHub<Api.Hub.BoilingPlate2Hub>("/hubs/boilingPlate2");
+            app.MapHub<Api.Hub.MashStepsHub>("/hubs/mashSteps");
 
             // Start workers
             _ = Task.Run(() => StartBoilingPlate1WorkerAsync());

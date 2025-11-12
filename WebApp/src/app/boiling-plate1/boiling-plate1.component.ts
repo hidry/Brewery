@@ -1,8 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MashStepsService } from '../mash-steps.service';
 import { BoilingPlate1Service } from '../boiling-plate1.service';
-import { interval } from 'rxjs';
-import { startWith, switchMap } from 'rxjs/operators';
+import { SignalRBoilingPlate1Service } from '../signalr-boiling-plate1.service';
+import { SignalRMashStepsService } from '../signalr-mash-steps.service';
+import { Subscription } from 'rxjs';
 import { Settings } from '../settings';
 
 @Component({
@@ -18,53 +19,32 @@ export class BoilingPlate1Component implements OnInit, OnDestroy {
   CurrentStepEstimatedRemainingTime: number;
   TotalEstimatedRemainingTime: number;
   Power: boolean;
-  currentStepSubscription: any;
-  totalEstimatedRemainingTimeSubscription: any;
-  currentTemperatureSubscription: any;
-  powerStatusSubscription: any;
+  currentStepSubscription: Subscription;
+  totalEstimatedRemainingTimeSubscription: Subscription;
+  currentTemperatureSubscription: Subscription;
+  powerStatusSubscription: Subscription;
 
   constructor(
     private mashStepsService: MashStepsService,
     private boilingPlate1Service: BoilingPlate1Service,
+    private signalRBoilingPlate1Service: SignalRBoilingPlate1Service,
+    private signalRMashStepsService: SignalRMashStepsService,
     private settings: Settings) { }
 
   ngOnInit() {
+    // Subscribe to SignalR real-time updates instead of polling
+    this.currentStepSubscription = this.signalRBoilingPlate1Service.currentStep$.subscribe(data => {
+      this.CurrentStepName = data.Step;
+      this.CurrentStepEstimatedRemainingTime = data.EstimatedTime;
+    });
 
-    // this.getCurrentStep();
-    this.currentStepSubscription = interval(this.settings.pollingInterval)
-      .pipe(
-        startWith(0),
-        switchMap(() => this.mashStepsService.getCurrentMashStep()
-        )
-      )
-      .subscribe(mashStep => {
-        this.CurrentStepName = mashStep.Step;
-        this.CurrentStepEstimatedRemainingTime = mashStep.EstimatedTime;
-      });
-
-    // this.getTotalEstimatedRemainingTime();
-    this.totalEstimatedRemainingTimeSubscription = interval(this.settings.pollingInterval)
-      .pipe(
-        startWith(0),
-        switchMap(() => this.mashStepsService.getTotalEstimatedRemainingTime())
-      )
+    this.totalEstimatedRemainingTimeSubscription = this.signalRMashStepsService.totalEstimatedRemainingTime$
       .subscribe(t => this.TotalEstimatedRemainingTime = Math.round(t));
 
-
-    // this.getCurrentTemperature();
-    this.currentTemperatureSubscription = interval(this.settings.pollingInterval)
-      .pipe(
-        startWith(0),
-        switchMap(() => this.boilingPlate1Service.getCurrentTemperature())
-      )
+    this.currentTemperatureSubscription = this.signalRBoilingPlate1Service.currentTemperature$
       .subscribe(ct => this.TemperatureCurrent = Math.round(ct));
 
-    // this.getPowerStatus();
-    this.powerStatusSubscription = interval(this.settings.pollingInterval)
-      .pipe(
-        startWith(0),
-        switchMap(() => this.boilingPlate1Service.getPowerStatus())
-      )
+    this.powerStatusSubscription = this.signalRBoilingPlate1Service.powerStatus$
       .subscribe(p => this.Power = p);
   }
 
@@ -75,37 +55,15 @@ export class BoilingPlate1Component implements OnInit, OnDestroy {
     this.currentStepSubscription.unsubscribe();
   }
 
-  // getPowerStatus(): void {
-  //   this.boilingPlate1Service.getPowerStatus().subscribe(p => this.Power = p);
-  // }
-
-  // getCurrentTemperature(): void {
-  //   this.boilingPlate1Service.getCurrentTemperature().subscribe(ct => this.TemperatureCurrent = ct);
-  // }
-
-  // getTotalEstimatedRemainingTime(): void {
-  //   this.mashStepsService.getTotalEstimatedRemainingTime()
-  //     .subscribe(t => this.TotalEstimatedRemainingTime = t);
-  // }
-
-  // getCurrentStep(): void {
-  //   this.mashStepsService.getCurrentMashStep()
-  //     .subscribe(mashStep => {
-  //       this.CurrentStepName = mashStep.Step;
-  //       const elapsedTime = mashStep.ElapsedMinutes === undefined ? mashStep.Rast : mashStep.ElapsedMinutes;
-  //       this.CurrentStepEstimatedRemainingTime = mashStep.Rast - elapsedTime;
-  //     });
-  // }
-
   onPowerToggleChange(event) {
     if (event.checked) {
-      this.boilingPlate1Service.start().subscribe();
+      this.signalRBoilingPlate1Service.startMashProcess();
     } else {
-      this.boilingPlate1Service.stop().subscribe();
+      this.signalRBoilingPlate1Service.stopMashProcess();
     }
   }
 
   acknowledgeMessage() {
-    this.boilingPlate1Service.acknowledgeMessage().subscribe();
+    this.signalRBoilingPlate1Service.acknowledgeMessage();
   }
 }

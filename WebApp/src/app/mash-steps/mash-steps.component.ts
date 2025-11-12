@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MashStep } from '../mashStep';
 import { MashStepsService } from '../mash-steps.service';
-import { forkJoin, of, interval } from 'rxjs';
+import { SignalRMashStepsService } from '../signalr-mash-steps.service';
+import { forkJoin, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-mash-steps',
@@ -9,7 +10,7 @@ import { forkJoin, of, interval } from 'rxjs';
   templateUrl: './mash-steps.component.html',
   styleUrls: ['./mash-steps.component.css']
 })
-export class MashStepsComponent implements OnInit {
+export class MashStepsComponent implements OnInit, OnDestroy {
 
   // gridApi and columnApi
   private api;
@@ -18,6 +19,7 @@ export class MashStepsComponent implements OnInit {
   mashSteps: MashStep[] = [];
   trueFalseValues: string[] = ['true', 'false'];
   trueFalseCellEditorParams = { values: this.trueFalseValues };
+  mashStepsChangedSubscription: Subscription;
 
   columnDefs = [
     { headerName: 'Schritt', field: 'Step', editable: true, checkboxSelection: true },
@@ -27,10 +29,24 @@ export class MashStepsComponent implements OnInit {
     { headerName: 'Rast', field: 'Rast', editable: true, valueParser: 'Number(newValue)' }
   ];
 
-  constructor(private mashStepsService: MashStepsService) { }
+  constructor(
+    private mashStepsService: MashStepsService,
+    private signalRMashStepsService: SignalRMashStepsService) { }
 
   ngOnInit() {
     this.getMashSteps();
+
+    // Subscribe to SignalR real-time updates
+    this.mashStepsChangedSubscription = this.signalRMashStepsService.mashStepsChanged$
+      .subscribe(() => {
+        this.getMashSteps();
+      });
+  }
+
+  ngOnDestroy() {
+    if (this.mashStepsChangedSubscription) {
+      this.mashStepsChangedSubscription.unsubscribe();
+    }
   }
 
   // on grid initialisation, grap the APIs and auto resize the columns to fit the available space

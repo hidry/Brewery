@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Brewery.Core.Contracts.ServiceAdapter;
 using Brewery.Server.Core.Api;
 using Brewery.Server.Core.Models;
+using Brewery.Server.Logic.Api.Hub;
 
 namespace Brewery.Server.Logic.Service
 {
@@ -40,12 +41,21 @@ namespace Brewery.Server.Logic.Service
                 {
                     _gpioModule.Power(Settings.BoilingPlate2Gpio.GpioNumber, false);
                 }
+
+                // Broadcast updates via SignalR
+                var hubContext = HubContextProvider.BoilingPlate2HubContext;
+                if (hubContext != null)
+                {
+                    await BoilingPlate2Hub.BroadcastPowerStatus(hubContext, _boilingPlate2Model.PowerStatus);
+                    await BoilingPlate2Hub.BroadcastCurrentTemperature(hubContext, temperatureCurrent);
+                    await BoilingPlate2Hub.BroadcastTemperatureSetpoint(hubContext, _boilingPlate2Model.Temperature);
+                }
             }
             catch (System.Exception ex)
             {
                 Debug.WriteLine(ex.ToString());
             }
-            
+
         }
     }
 }

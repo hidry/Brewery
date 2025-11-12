@@ -1,8 +1,10 @@
 ﻿using Brewery.Core.Contracts.ServiceAdapter;
 using Brewery.Server.Core.Api;
 using Brewery.Server.Core.Models;
+using Brewery.Server.Logic.Api.Hub;
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Brewery.Server.Logic.Service
@@ -161,6 +163,23 @@ namespace Brewery.Server.Logic.Service
                         {
                             SetNextStep();
                         }
+                    }
+                }
+
+                // Broadcast updates via SignalR
+                var hubContext = HubContextProvider.BoilingPlate1HubContext;
+                if (hubContext != null)
+                {
+                    await BoilingPlate1Hub.BroadcastPowerStatus(hubContext, GetPowerStatus());
+                    await BoilingPlate1Hub.BroadcastCurrentTemperature(hubContext, currentTemperature);
+                    await BoilingPlate1Hub.BroadcastCurrentStep(hubContext, currentStep.Step, currentStep.EstimatedTime);
+
+                    // Also broadcast mash steps updates
+                    var mashStepsHubContext = HubContextProvider.MashStepsHubContext;
+                    if (mashStepsHubContext != null)
+                    {
+                        await MashStepsHub.BroadcastCurrentStep(mashStepsHubContext, currentStep);
+                        await MashStepsHub.BroadcastTotalEstimatedRemainingTime(mashStepsHubContext, _brewProcessSteps.Sum(ms => ms.EstimatedTime));
                     }
                 }
             }
