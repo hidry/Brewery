@@ -21,8 +21,24 @@ export class MashStepsComponent implements OnInit {
 
   columnDefs = [
     { headerName: 'Schritt', field: 'Step', editable: true, checkboxSelection: true },
-    { headerName: 'Rührwerk', field: 'Mixer', editable: true, cellEditor: 'select', cellEditorParams: this.trueFalseCellEditorParams },
-    { headerName: 'Alarm', field: 'Alert', editable: true, cellEditor: 'select', cellEditorParams: this.trueFalseCellEditorParams },
+    {
+      headerName: 'Rührwerk',
+      field: 'Mixer',
+      editable: true,
+      cellEditor: 'agSelectCellEditor',
+      cellEditorParams: { values: this.trueFalseValues },
+      valueFormatter: (params) => params.value ? 'true' : 'false',
+      valueParser: (params) => params.newValue === 'true'
+    },
+    {
+      headerName: 'Alarm',
+      field: 'Alert',
+      editable: true,
+      cellEditor: 'agSelectCellEditor',
+      cellEditorParams: { values: this.trueFalseValues },
+      valueFormatter: (params) => params.value ? 'true' : 'false',
+      valueParser: (params) => params.newValue === 'true'
+    },
     { headerName: 'Temperatur', field: 'Temperature', editable: true, valueParser: 'Number(newValue)' },
     { headerName: 'Rast', field: 'Rast', editable: true, valueParser: 'Number(newValue)' }
   ];
