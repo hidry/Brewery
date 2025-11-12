@@ -61,10 +61,10 @@ jobs:
           sudo cp -r /opt/brewery /opt/brewery.backup.$(date +%Y%m%d_%H%M%S)
         fi
 
-    - name: Setup .NET 8
+    - name: Setup .NET 10
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '8.0.x'
+        dotnet-version: '10.0.x'
 
     - name: Publish application
       run: |

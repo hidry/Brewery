@@ -1,5 +1,5 @@
 # Use build platform for SDK operations to avoid QEMU issues
-FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+FROM --platform=$BUILDPLATFORM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG TARGETARCH
 WORKDIR /src
 
@@ -27,7 +27,7 @@ ARG TARGETARCH
 RUN dotnet publish "Brewery.Server.csproj" -c Release -a $TARGETARCH -o /app/publish --no-restore /p:UseAppHost=false
 
 # Runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
 WORKDIR /app
 EXPOSE 8800
 

@@ -28,7 +28,7 @@ The Brewery project is a full-stack IoT solution that combines hardware control 
 - **Testing**: Karma, Jasmine, Protractor
 
 ### Backend
-- **Platform**: C# / .NET 8
+- **Platform**: C# / .NET 10
 - **API Framework**: ASP.NET Core
 - **Dependency Injection**: Microsoft.Extensions.DependencyInjection
 - **Hardware**: Raspberry Pi GPIO via System.Device.Gpio
@@ -75,7 +75,7 @@ Brewery/
 - Power supplies appropriate for your heating elements
 
 ### Software
-- **.NET 8 SDK** or later
+- **.NET 10 SDK** or later
 - **Node.js 14+** and npm (for frontend development)
 - **Docker** (optional, for containerized deployment)
 - **Raspberry Pi OS** (Bookworm or later) for production deployment
@@ -353,8 +353,8 @@ When contributing to this project:
 
 | Component | Technology | Version |
 |-----------|-----------|---------|
-| Backend Runtime | .NET | 8.0 |
-| Backend Framework | ASP.NET Core | 8.0 |
+| Backend Runtime | .NET | 10.0 |
+| Backend Framework | ASP.NET Core | 10.0 |
 | Frontend Framework | Angular | 7 |
 | Language (Frontend) | TypeScript | 3.1 |
 | Language (Backend) | C# | Latest |
