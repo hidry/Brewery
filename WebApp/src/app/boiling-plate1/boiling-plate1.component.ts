@@ -38,8 +38,8 @@ export class BoilingPlate1Component implements OnInit, OnDestroy {
         )
       )
       .subscribe(mashStep => {
-        this.CurrentStepName = mashStep.Step;
-        this.CurrentStepEstimatedRemainingTime = mashStep.EstimatedTime;
+        this.CurrentStepName = mashStep.step;
+        this.CurrentStepEstimatedRemainingTime = mashStep.estimatedTime;
       });
 
     // this.getTotalEstimatedRemainingTime();
@@ -91,9 +91,9 @@ export class BoilingPlate1Component implements OnInit, OnDestroy {
   // getCurrentStep(): void {
   //   this.mashStepsService.getCurrentMashStep()
   //     .subscribe(mashStep => {
-  //       this.CurrentStepName = mashStep.Step;
-  //       const elapsedTime = mashStep.ElapsedMinutes === undefined ? mashStep.Rast : mashStep.ElapsedMinutes;
-  //       this.CurrentStepEstimatedRemainingTime = mashStep.Rast - elapsedTime;
+  //       this.CurrentStepName = mashStep.step;
+  //       const elapsedTime = mashStep.ElapsedMinutes === undefined ? mashStep.rast : mashStep.ElapsedMinutes;
+  //       this.CurrentStepEstimatedRemainingTime = mashStep.rast - elapsedTime;
   //     });
   // }
 

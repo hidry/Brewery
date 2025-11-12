@@ -20,10 +20,10 @@ export class MashStepsComponent implements OnInit {
   trueFalseCellEditorParams = { values: this.trueFalseValues };
 
   columnDefs = [
-    { headerName: 'Schritt', field: 'Step', editable: true, checkboxSelection: true },
+    { headerName: 'Schritt', field: 'step', editable: true, checkboxSelection: true },
     {
       headerName: 'Rührwerk',
-      field: 'Mixer',
+      field: 'mixer',
       editable: true,
       cellEditor: 'agSelectCellEditor',
       cellEditorParams: { values: this.trueFalseValues },
@@ -32,15 +32,15 @@ export class MashStepsComponent implements OnInit {
     },
     {
       headerName: 'Alarm',
-      field: 'Alert',
+      field: 'alert',
       editable: true,
       cellEditor: 'agSelectCellEditor',
       cellEditorParams: { values: this.trueFalseValues },
       valueFormatter: (params) => params.value ? 'true' : 'false',
       valueParser: (params) => params.newValue === 'true'
     },
-    { headerName: 'Temperatur', field: 'Temperature', editable: true, valueParser: 'Number(newValue)' },
-    { headerName: 'Rast', field: 'Rast', editable: true, valueParser: 'Number(newValue)' }
+    { headerName: 'Temperatur', field: 'temperature', editable: true, valueParser: 'Number(newValue)' },
+    { headerName: 'Rast', field: 'rast', editable: true, valueParser: 'Number(newValue)' }
   ];
 
   constructor(private mashStepsService: MashStepsService) { }
@@ -92,9 +92,9 @@ export class MashStepsComponent implements OnInit {
 
   addNewMashStep() {
     const newMashStep = new MashStep();
-    newMashStep.Step = 'new step';
-    newMashStep.Active = false;
-    newMashStep.Rast = 60;
+    newMashStep.step = 'new step';
+    newMashStep.active = false;
+    newMashStep.rast = 60;
     this.mashStepsService.addMashStep(newMashStep).subscribe(r => this.getMashSteps());
   }
 }
