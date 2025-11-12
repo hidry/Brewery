@@ -16,6 +16,7 @@ export class MashStepsComponent implements OnInit {
   private columnApi;
 
   mashSteps: MashStep[] = [];
+  hasSelectedRows = false;
   trueFalseValues: string[] = ['true', 'false'];
   trueFalseCellEditorParams = { values: this.trueFalseValues };
 
@@ -55,6 +56,10 @@ export class MashStepsComponent implements OnInit {
     this.columnApi = params.columnApi;
 
     this.api.sizeColumnsToFit();
+  }
+
+  onSelectionChanged(): void {
+    this.hasSelectedRows = this.api && this.api.getSelectedRows().length > 0;
   }
 
   rowsSelected() {
