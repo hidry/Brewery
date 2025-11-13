@@ -21,11 +21,23 @@ export class MashStepsComponent implements OnInit, OnDestroy {
   mashStepsChangedSubscription: Subscription;
 
   columnDefs = [
-    { headerName: 'Schritt', field: 'Step', editable: true, checkboxSelection: true },
-    { headerName: 'Rührwerk', field: 'Mixer', editable: true, cellEditor: 'select', cellEditorParams: this.trueFalseCellEditorParams },
-    { headerName: 'Alarm', field: 'Alert', editable: true, cellEditor: 'select', cellEditorParams: this.trueFalseCellEditorParams },
-    { headerName: 'Temperatur', field: 'Temperature', editable: true, valueParser: 'Number(newValue)' },
-    { headerName: 'Rast', field: 'Rast', editable: true, valueParser: 'Number(newValue)' }
+    { headerName: 'Schritt', field: 'step', editable: true, checkboxSelection: true },
+    {
+      headerName: 'Rührwerk',
+      field: 'mixer',
+      editable: true,
+      cellRenderer: 'agCheckboxCellRenderer',
+      cellEditor: 'agCheckboxCellEditor'
+    },
+    {
+      headerName: 'Alarm',
+      field: 'alert',
+      editable: true,
+      cellRenderer: 'agCheckboxCellRenderer',
+      cellEditor: 'agCheckboxCellEditor'
+    },
+    { headerName: 'Temperatur', field: 'temperature', editable: true, valueParser: 'Number(newValue)' },
+    { headerName: 'Rast', field: 'rast', editable: true, valueParser: 'Number(newValue)' }
   ];
 
   constructor(private signalRMashStepsService: SignalRMashStepsService) { }
@@ -52,6 +64,10 @@ export class MashStepsComponent implements OnInit, OnDestroy {
     this.columnApi = params.columnApi;
 
     this.api.sizeColumnsToFit();
+  }
+
+  onSelectionChanged(): void {
+    this.hasSelectedRows = this.api && this.api.getSelectedRows().length > 0;
   }
 
   rowsSelected() {

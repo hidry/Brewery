@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Brewery.Core.Contracts.ServiceAdapter;
 using Brewery.Server.Core.Api;
 using Brewery.Server.Core.Models;
-using Brewery.Server.Logic.Api.Hub;
+using Brewery.Server.Logic.Api.Hubs;
 
 namespace Brewery.Server.Logic.Service
 {

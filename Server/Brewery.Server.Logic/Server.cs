@@ -52,9 +52,9 @@ namespace Brewery.Server.Logic
             var app = builder.Build();
 
             // Initialize hub context provider for workers
-            Api.Hub.HubContextProvider.BoilingPlate1HubContext = app.Services.GetRequiredService<IHubContext<Api.Hub.BoilingPlate1Hub>>();
-            Api.Hub.HubContextProvider.BoilingPlate2HubContext = app.Services.GetRequiredService<IHubContext<Api.Hub.BoilingPlate2Hub>>();
-            Api.Hub.HubContextProvider.MashStepsHubContext = app.Services.GetRequiredService<IHubContext<Api.Hub.MashStepsHub>>();
+            Api.Hubs.HubContextProvider.BoilingPlate1HubContext = app.Services.GetRequiredService<IHubContext<Api.Hubs.BoilingPlate1Hub>>();
+            Api.Hubs.HubContextProvider.BoilingPlate2HubContext = app.Services.GetRequiredService<IHubContext<Api.Hubs.BoilingPlate2Hub>>();
+            Api.Hubs.HubContextProvider.MashStepsHubContext = app.Services.GetRequiredService<IHubContext<Api.Hubs.MashStepsHub>>();
 
             // Configure middleware
             app.UseCors();
@@ -77,9 +77,9 @@ namespace Brewery.Server.Logic
             app.MapControllers();
 
             // Map SignalR hubs
-            app.MapHub<Api.Hub.BoilingPlate1Hub>("/hubs/boilingPlate1");
-            app.MapHub<Api.Hub.BoilingPlate2Hub>("/hubs/boilingPlate2");
-            app.MapHub<Api.Hub.MashStepsHub>("/hubs/mashSteps");
+            app.MapHub<Api.Hubs.BoilingPlate1Hub>("/hubs/boilingPlate1");
+            app.MapHub<Api.Hubs.BoilingPlate2Hub>("/hubs/boilingPlate2");
+            app.MapHub<Api.Hubs.MashStepsHub>("/hubs/mashSteps");
 
             // Start workers
             _ = Task.Run(() => StartBoilingPlate1WorkerAsync());

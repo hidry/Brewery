@@ -48,7 +48,7 @@ export class BoilingPlate2Component implements OnInit, OnDestroy {
 
   onTemperatureSliderChange(event) {
     this.isUserChangingTemperature = true;
-    this.Temperature = event.value;
+    // For dragStart event, the value is already in this.Temperature due to ngModel binding
   }
 
   onTemperatureSliderChangeEnd(event) {

@@ -1,7 +1,7 @@
 ﻿using Brewery.Core.Contracts.ServiceAdapter;
 using Brewery.Server.Core.Api;
 using Brewery.Server.Core.Models;
-using Brewery.Server.Logic.Api.Hub;
+using Brewery.Server.Logic.Api.Hubs;
 using System;
 using System.Diagnostics;
 using System.Linq;
