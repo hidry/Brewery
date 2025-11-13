@@ -1,9 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { MashStepsService } from '../mash-steps.service';
 import { BoilingPlate1Service } from '../boiling-plate1.service';
-import { interval } from 'rxjs';
-import { startWith, switchMap } from 'rxjs/operators';
-import { Settings } from '../settings';
+import { SignalRService } from '../signalr.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-boiling-plate1',
@@ -18,61 +16,41 @@ export class BoilingPlate1Component implements OnInit, OnDestroy {
   CurrentStepEstimatedRemainingTime: number;
   TotalEstimatedRemainingTime: number;
   Power: boolean;
-  currentStepSubscription: any;
-  totalEstimatedRemainingTimeSubscription: any;
-  currentTemperatureSubscription: any;
-  powerStatusSubscription: any;
+
+  private currentStepSubscription: Subscription;
+  private totalEstimatedRemainingTimeSubscription: Subscription;
+  private currentTemperatureSubscription: Subscription;
+  private powerStatusSubscription: Subscription;
 
   constructor(
-    private mashStepsService: MashStepsService,
     private boilingPlate1Service: BoilingPlate1Service,
-    private settings: Settings) { }
+    private signalRService: SignalRService) { }
 
   ngOnInit() {
-
-    // this.getCurrentStep();
-    this.currentStepSubscription = interval(this.settings.pollingInterval)
-      .pipe(
-        startWith(0),
-        switchMap(() => this.mashStepsService.getCurrentMashStep()
-        )
-      )
+    // Subscribe to SignalR real-time updates instead of polling
+    this.currentStepSubscription = this.signalRService.currentStep$
       .subscribe(mashStep => {
-        this.CurrentStepName = mashStep.step;
-        this.CurrentStepEstimatedRemainingTime = mashStep.estimatedTime;
+        if (mashStep) {
+          this.CurrentStepName = mashStep.step;
+          this.CurrentStepEstimatedRemainingTime = mashStep.estimatedTime;
+        }
       });
 
-    // this.getTotalEstimatedRemainingTime();
-    this.totalEstimatedRemainingTimeSubscription = interval(this.settings.pollingInterval)
-      .pipe(
-        startWith(0),
-        switchMap(() => this.mashStepsService.getTotalEstimatedRemainingTime())
-      )
+    this.totalEstimatedRemainingTimeSubscription = this.signalRService.totalEstimatedRemainingTime$
       .subscribe(t => this.TotalEstimatedRemainingTime = Math.round(t));
 
-
-    // this.getCurrentTemperature();
-    this.currentTemperatureSubscription = interval(this.settings.pollingInterval)
-      .pipe(
-        startWith(0),
-        switchMap(() => this.boilingPlate1Service.getCurrentTemperature())
-      )
+    this.currentTemperatureSubscription = this.signalRService.currentTemperature$
       .subscribe(ct => this.TemperatureCurrent = Math.round(ct));
 
-    // this.getPowerStatus();
-    this.powerStatusSubscription = interval(this.settings.pollingInterval)
-      .pipe(
-        startWith(0),
-        switchMap(() => this.boilingPlate1Service.getPowerStatus())
-      )
+    this.powerStatusSubscription = this.signalRService.powerStatus$
       .subscribe(p => this.Power = p);
   }
 
   ngOnDestroy() {
-    this.powerStatusSubscription.unsubscribe();
-    this.currentTemperatureSubscription.unsubscribe();
-    this.totalEstimatedRemainingTimeSubscription.unsubscribe();
-    this.currentStepSubscription.unsubscribe();
+    this.powerStatusSubscription?.unsubscribe();
+    this.currentTemperatureSubscription?.unsubscribe();
+    this.totalEstimatedRemainingTimeSubscription?.unsubscribe();
+    this.currentStepSubscription?.unsubscribe();
   }
 
   // getPowerStatus(): void {
@@ -97,15 +75,15 @@ export class BoilingPlate1Component implements OnInit, OnDestroy {
   //     });
   // }
 
-  onPowerToggleChange(event) {
+  async onPowerToggleChange(event) {
     if (event.checked) {
-      this.boilingPlate1Service.start().subscribe();
+      await this.signalRService.startMashProcess();
     } else {
-      this.boilingPlate1Service.stop().subscribe();
+      await this.signalRService.stopMashProcess();
     }
   }
 
-  acknowledgeMessage() {
-    this.boilingPlate1Service.acknowledgeMessage().subscribe();
+  async acknowledgeMessage() {
+    await this.signalRService.acknowledgeMessage();
   }
 }

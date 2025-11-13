@@ -1,8 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { BoilingPlate2Service } from '../boiling-plate2.service';
-import { interval } from 'rxjs';
-import { Settings } from '../settings';
-import { startWith, switchMap } from 'rxjs/operators';
+import { SignalRService } from '../signalr.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-boiling-plate2',
@@ -15,47 +14,36 @@ export class BoilingPlate2Component implements OnInit, OnDestroy {
   Temperature: number;
   TemperatureCurrent: number;
   Power: boolean;
-  powerStatusSubscription: any;
-  currentTemperatureSubscription: any;
-  temperatureSubscription: any;
   isUserChangingTemperature: boolean = false;
 
-  constructor(private boilingPlate2Service: BoilingPlate2Service, private settings: Settings) { }
+  private powerStatusSubscription: Subscription;
+  private currentTemperatureSubscription: Subscription;
+  private temperatureSubscription: Subscription;
+
+  constructor(
+    private boilingPlate2Service: BoilingPlate2Service,
+    private signalRService: SignalRService) { }
 
   ngOnInit() {
-    // this.getTemperature();
-    this.temperatureSubscription = interval(this.settings.pollingInterval)
-      .pipe(
-        startWith(0),
-        switchMap(() => this.boilingPlate2Service.getTemperature())
-      )
+    // Subscribe to SignalR real-time updates instead of polling
+    this.temperatureSubscription = this.signalRService.boilingPlate2TemperatureSetpoint$
       .subscribe(t => {
         if (!this.isUserChangingTemperature) {
           this.Temperature = Math.round(t);
         }
       });
 
-    // this.getCurrentTemperature();
-    this.currentTemperatureSubscription = interval(this.settings.pollingInterval)
-      .pipe(
-        startWith(0),
-        switchMap(() => this.boilingPlate2Service.getCurrentTemperature())
-      )
+    this.currentTemperatureSubscription = this.signalRService.boilingPlate2CurrentTemperature$
       .subscribe(ct => this.TemperatureCurrent = Math.round(ct));
 
-    // this.getPowerStatus();
-    this.powerStatusSubscription = interval(this.settings.pollingInterval)
-      .pipe(
-        startWith(0),
-        switchMap(() => this.boilingPlate2Service.getPowerStatus())
-      )
+    this.powerStatusSubscription = this.signalRService.boilingPlate2PowerStatus$
       .subscribe(p => this.Power = p);
   }
 
   ngOnDestroy() {
-    this.powerStatusSubscription.unsubscribe();
-    this.currentTemperatureSubscription.unsubscribe();
-    this.temperatureSubscription.unsubscribe();
+    this.powerStatusSubscription?.unsubscribe();
+    this.currentTemperatureSubscription?.unsubscribe();
+    this.temperatureSubscription?.unsubscribe();
   }
 
   // getTemperature() {
@@ -70,8 +58,8 @@ export class BoilingPlate2Component implements OnInit, OnDestroy {
   //   this.boilingPlate2Service.getCurrentTemperature().subscribe(ct => this.TemperatureCurrent = ct);
   // }
 
-  onPowerToggleChange(event) {
-    this.boilingPlate2Service.power(event.checked).subscribe();
+  async onPowerToggleChange(event) {
+    await this.signalRService.setBoilingPlate2Power(event.checked);
   }
 
   onTemperatureSliderChange(event) {
@@ -79,10 +67,9 @@ export class BoilingPlate2Component implements OnInit, OnDestroy {
     // For dragStart event, the value is already in this.Temperature due to ngModel binding
   }
 
-  onTemperatureSliderChangeEnd(event) {
+  async onTemperatureSliderChangeEnd(event) {
     // For dragEnd event, the value is already in this.Temperature due to ngModel binding
-    this.boilingPlate2Service.setTemperature(this.Temperature).subscribe(() => {
-      this.isUserChangingTemperature = false;
-    });
+    await this.signalRService.setBoilingPlate2Temperature(this.Temperature);
+    this.isUserChangingTemperature = false;
   }
 }
