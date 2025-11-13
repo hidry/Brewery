@@ -23,6 +23,9 @@ export class SignalRService {
   private boilingPlate2CurrentTemperatureSubject = new BehaviorSubject<number>(0);
   private boilingPlate2TemperatureSetpointSubject = new BehaviorSubject<number>(0);
 
+  // Observables for MashSteps CRUD operations
+  private mashStepsSubject = new BehaviorSubject<MashStep[]>([]);
+
   public powerStatus$ = this.powerStatusSubject.asObservable();
   public currentTemperature$ = this.currentTemperatureSubject.asObservable();
   public currentStep$ = this.currentStepSubject.asObservable();
@@ -31,6 +34,8 @@ export class SignalRService {
   public boilingPlate2PowerStatus$ = this.boilingPlate2PowerStatusSubject.asObservable();
   public boilingPlate2CurrentTemperature$ = this.boilingPlate2CurrentTemperatureSubject.asObservable();
   public boilingPlate2TemperatureSetpoint$ = this.boilingPlate2TemperatureSetpointSubject.asObservable();
+
+  public mashSteps$ = this.mashStepsSubject.asObservable();
 
   constructor(private settings: Settings) {
     this.initializeConnections();
@@ -94,6 +99,35 @@ export class SignalRService {
 
     this.mashStepsConnection.on('TotalEstimatedRemainingTimeUpdated', (totalTime: number) => {
       this.totalEstimatedRemainingTimeSubject.next(totalTime);
+    });
+
+    // Event handlers for MashSteps CRUD operations
+    this.mashStepsConnection.on('MashStepsChanged', async () => {
+      // When MashSteps change, fetch the updated list
+      await this.refreshMashSteps();
+    });
+
+    this.mashStepsConnection.on('MashStepUpdated', async (mashStep: MashStep) => {
+      // Update the specific step in the local list
+      const currentSteps = this.mashStepsSubject.value;
+      const index = currentSteps.findIndex(ms => ms.guid === mashStep.guid);
+      if (index !== -1) {
+        currentSteps[index] = mashStep;
+        this.mashStepsSubject.next([...currentSteps]);
+      }
+    });
+
+    this.mashStepsConnection.on('MashStepDeleted', (guid: string) => {
+      // Remove the deleted step from the local list
+      const currentSteps = this.mashStepsSubject.value;
+      const filteredSteps = currentSteps.filter(ms => ms.guid !== guid);
+      this.mashStepsSubject.next(filteredSteps);
+    });
+
+    this.mashStepsConnection.on('MashStepInserted', (mashStep: MashStep) => {
+      // Add the new step to the local list
+      const currentSteps = this.mashStepsSubject.value;
+      this.mashStepsSubject.next([...currentSteps, mashStep]);
     });
 
     // Start connections
@@ -205,8 +239,22 @@ export class SignalRService {
 
       const totalTime = await this.mashStepsConnection.invoke<number>('GetTotalEstimatedRemainingTime');
       this.totalEstimatedRemainingTimeSubject.next(totalTime);
+
+      const mashSteps = await this.mashStepsConnection.invoke<MashStep[]>('GetMashSteps');
+      this.mashStepsSubject.next(mashSteps);
     } catch (err) {
       console.error('Error fetching initial values from MashSteps Hub:', err);
+    }
+  }
+
+  private async refreshMashSteps(): Promise<void> {
+    try {
+      if (this.mashStepsConnection.state === signalR.HubConnectionState.Connected) {
+        const mashSteps = await this.mashStepsConnection.invoke<MashStep[]>('GetMashSteps');
+        this.mashStepsSubject.next(mashSteps);
+      }
+    } catch (err) {
+      console.error('Error refreshing mash steps:', err);
     }
   }
 
@@ -240,6 +288,26 @@ export class SignalRService {
     if (this.boilingPlate2Connection.state === signalR.HubConnectionState.Connected) {
       await this.boilingPlate2Connection.invoke('SetTemperature', temperature);
     }
+  }
+
+  // Methods to invoke MashSteps server methods
+  public async updateMashStep(mashStep: MashStep): Promise<void> {
+    if (this.mashStepsConnection.state === signalR.HubConnectionState.Connected) {
+      await this.mashStepsConnection.invoke('UpdateMashStep', mashStep);
+    }
+  }
+
+  public async deleteMashStep(guid: string): Promise<void> {
+    if (this.mashStepsConnection.state === signalR.HubConnectionState.Connected) {
+      await this.mashStepsConnection.invoke('DeleteMashStep', guid);
+    }
+  }
+
+  public async insertMashStep(mashStep: MashStep): Promise<MashStep> {
+    if (this.mashStepsConnection.state === signalR.HubConnectionState.Connected) {
+      return await this.mashStepsConnection.invoke<MashStep>('InsertMashStep', mashStep);
+    }
+    return mashStep;
   }
 
   // Cleanup

@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MashStep } from '../mashStep';
-import { MashStepsService } from '../mash-steps.service';
-import { forkJoin, of, interval } from 'rxjs';
+import { SignalRService } from '../signalr.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-mash-steps',
@@ -9,7 +9,7 @@ import { forkJoin, of, interval } from 'rxjs';
   templateUrl: './mash-steps.component.html',
   styleUrls: ['./mash-steps.component.css']
 })
-export class MashStepsComponent implements OnInit {
+export class MashStepsComponent implements OnInit, OnDestroy {
 
   // gridApi and columnApi
   private api;
@@ -17,6 +17,8 @@ export class MashStepsComponent implements OnInit {
 
   mashSteps: MashStep[] = [];
   hasSelectedRows = false;
+
+  private mashStepsSubscription: Subscription;
 
   columnDefs = [
     { headerName: 'Schritt', field: 'step', editable: true, checkboxSelection: true },
@@ -38,10 +40,18 @@ export class MashStepsComponent implements OnInit {
     { headerName: 'Rast', field: 'rast', editable: true, valueParser: 'Number(newValue)' }
   ];
 
-  constructor(private mashStepsService: MashStepsService) { }
+  constructor(private signalRService: SignalRService) { }
 
   ngOnInit() {
-    this.getMashSteps();
+    // Subscribe to SignalR real-time updates instead of polling
+    this.mashStepsSubscription = this.signalRService.mashSteps$
+      .subscribe(mashSteps => {
+        this.mashSteps = mashSteps;
+      });
+  }
+
+  ngOnDestroy() {
+    this.mashStepsSubscription?.unsubscribe();
   }
 
   // on grid initialisation, grap the APIs and auto resize the columns to fit the available space
@@ -60,40 +70,38 @@ export class MashStepsComponent implements OnInit {
     return this.api && this.api.getSelectedRows().length > 0;
   }
 
-  getMashSteps(): void {
-    this.mashStepsService.getMashSteps()
-      .subscribe(mashSteps => this.mashSteps = mashSteps);
+  async onCellValueChanged(params: any) {
+    try {
+      await this.signalRService.updateMashStep(params.data);
+      // SignalR will automatically broadcast the update to all clients
+    } catch (error) {
+      console.error('Error updating mash step:', error);
+    }
   }
 
-  onCellValueChanged(params: any) {
-    this.mashStepsService.updateMashStep(params.data)
-      .subscribe(
-        ms => {
-          // console.log('MashStep Saved');
-          this.getMashSteps();
-        },
-        error => console.log(error)
-      );
+  async deleteSelectedRows() {
+    const selectedRows = this.api.getSelectedRows();
+    try {
+      // Delete all selected rows via SignalR
+      for (const rowToDelete of selectedRows) {
+        await this.signalRService.deleteMashStep(rowToDelete.guid);
+      }
+      // SignalR will automatically broadcast the deletions to all clients
+    } catch (error) {
+      console.error('Error deleting mash steps:', error);
+    }
   }
 
-  deleteSelectedRows() {
-    const selectRows = this.api.getSelectedRows();
-    // create an Observable for each row to delete
-    const deleteSubscriptions = selectRows.map((rowToDelete) => {
-      return this.mashStepsService.deleteMashStep(rowToDelete);
-    });
-    // then subscribe to these and once all done, refresh the grid data
-    // deleteSubscriptions.forkJoin().subscribe(results => this.getMashSteps());
-
-    forkJoin(...deleteSubscriptions)
-      .subscribe(results => this.getMashSteps());
-  }
-
-  addNewMashStep() {
+  async addNewMashStep() {
     const newMashStep = new MashStep();
     newMashStep.step = 'new step';
     newMashStep.active = false;
     newMashStep.rast = 60;
-    this.mashStepsService.addMashStep(newMashStep).subscribe(r => this.getMashSteps());
+    try {
+      await this.signalRService.insertMashStep(newMashStep);
+      // SignalR will automatically broadcast the insertion to all clients
+    } catch (error) {
+      console.error('Error adding mash step:', error);
+    }
   }
 }
