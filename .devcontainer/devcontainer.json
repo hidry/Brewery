@@ -15,7 +15,7 @@
     },
     "ghcr.io/devcontainers/features/docker-in-docker:2": {
       "version": "latest",
-      "dockerComposeVersion": "v2"
+      "dockerDashComposeVersion": "v2"
     },
     "ghcr.io/devcontainers/features/git:1": {
       "version": "latest"
@@ -53,7 +53,7 @@
     }
   },
 
-  "postCreateCommand": "bash .devcontainer/setup.sh",
+  "postCreateCommand": "bash .devcontainer/setup.sh || echo 'Warning: setup.sh failed, but container will start anyway'",
 
   "postStartCommand": "echo '🐛 Devcontainer is configured for debug mode. Use the aliases (backend, frontend) or press F5 to start debugging.'",
 

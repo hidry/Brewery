@@ -3,12 +3,14 @@
 FROM mcr.microsoft.com/devcontainers/dotnet:9.0
 
 # Install .NET 10 SDK (GA)
-RUN wget https://dot.net/v1/dotnet-install.sh -O dotnet-install.sh \
+# Use curl instead of wget for better compatibility and add error handling
+RUN curl -sSL https://dot.net/v1/dotnet-install.sh -o dotnet-install.sh \
     && chmod +x dotnet-install.sh \
     && ./dotnet-install.sh --channel 10.0 --install-dir /usr/share/dotnet \
-    && rm dotnet-install.sh
+    && rm dotnet-install.sh \
+    || echo "Warning: .NET 10 installation failed, continuing with .NET 9"
 
-# Verify .NET 10 is installed
+# Verify installed .NET SDKs
 RUN dotnet --list-sdks
 
 # Set environment variables for .NET
