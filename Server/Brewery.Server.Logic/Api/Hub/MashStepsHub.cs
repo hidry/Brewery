@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Brewery.Server.Logic.Api.Hub
 {
-    public class MashStepsHub : Hub
+    public class MashStepsHub : Microsoft.AspNetCore.SignalR.Hub
     {
         private MashSteps _mashSteps { get; }
         private IBoilingPlate1Worker _boilingPlate1Worker { get; }

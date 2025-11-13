@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Brewery.Server.Logic.Api.Hub
 {
-    public class BoilingPlate1Hub : Hub
+    public class BoilingPlate1Hub : Microsoft.AspNetCore.SignalR.Hub
     {
         private readonly IBoilingPlate1Worker _boilingPlate1Worker;
         private readonly IGpioModule _gpioModule;
